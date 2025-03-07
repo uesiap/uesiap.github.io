@@ -1,0 +1,13 @@
+# robots.txt for UESI Vidhyardhi Geethavali Songs
+
+User-agent: *
+Allow: /missions
+Allow: /smtc
+Allow: /ecamp
+
+# Sitemap location
+Sitemap: https://uesiap.github.io/sitemap.xml
+
+# Optional notes for humans (not used by bots)
+# Site Name: UESI Vidhyardhi Geethavali Songs
+# Owner: UESI AP
