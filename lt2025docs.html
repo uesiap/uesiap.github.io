@@ -110,7 +110,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            max-height: -webkit-fill-available;
+            /*max-height: -webkit-fill-available;*/
         }
 
         .user-bar {
@@ -158,6 +158,7 @@
         .conversation {
             flex-grow: 1;
             overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
             background: #e5ddd5 url("https://web.whatsapp.com/img/bg-chat-tile-light_a4be512e7195b6b733d9110b408f075d.png") repeat;
             padding: 60px 10px calc(60px + env(safe-area-inset-bottom));
             display: flex;
@@ -724,10 +725,13 @@
             return h + ":" + t;
         }
 
-        function scrollToBottom() {
-            const chatMessages = document.querySelector('.conversation');
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
+       function scrollToBottom() {
+    const chatMessages = document.querySelector('.conversation');
+    requestAnimationFrame(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+}
+
 
         // Event listeners
         sendButton.addEventListener('click', handleUserMessage);
