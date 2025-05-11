@@ -156,12 +156,12 @@
         }
 
         .conversation {
-           flex-grow: 1;
-           overflow-y: auto;
-           background: #e5ddd5 url("https://web.whatsapp.com/img/bg-chat-tile-light_a4be512e7195b6b733d9110b408f075d.png") repeat;
-           padding: 60px 10px calc(60px + env(safe-area-inset-bottom));
-           display: flex;
-           flex-direction: column;
+            flex-grow: 1;
+            overflow-y: auto;
+            background: #e5ddd5 url("https://web.whatsapp.com/img/bg-chat-tile-light_a4be512e7195b6b733d9110b408f075d.png") repeat;
+            padding: 60px 10px calc(60px + env(safe-area-inset-bottom));
+            display: flex;
+            flex-direction: column;
         }
 
         .message {
@@ -462,7 +462,8 @@
                 <div class="message-content">Welcome to LT Camp Docs! <br><br>Ask for documents with the talk Name or
                     type a category name
                     <br><strong>1. Doctrines,<br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions. </strong>
-                    <br>to download all documents in that category!<br>Also ask me <strong>Results</strong> to know your <strong>Team Score</strong>
+                    <br>to download all documents in that category!<br>Also ask me <strong>Results</strong> to know your
+                    <strong>Team Score</strong>
                 </div>
                 <div class="message-meta">
                     <span class="message-time" id="current-time"></span>
@@ -482,8 +483,8 @@
         <div id="results-frame-header">
             <strong><i class="zmdi zmdi-arrow-left" onclick="closeResultsFrame()"></i>&ensp;Results</strong>
         </div>
-        <div id="results-spinner" class="spinner"></div>
-        <iframe id="results-frame" src="about:blank" onload="hideResultsSpinner()"></iframe>
+        <div id="results-spinner" style="display: none;">Loading...</div>
+        <iframe id="results-frame" style="display: none;"></iframe>
     </div>
 
     <div class="connection-status" id="connectionStatus">
@@ -724,8 +725,8 @@
         }
 
         function scrollToBottom() {
-    const chatMessages = document.querySelector('.conversation');
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+            const chatMessages = document.querySelector('.conversation');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         // Event listeners
@@ -774,35 +775,48 @@
         }
 
         function openResultsFrame() {
-    const container = document.getElementById('results-frame-container');
-    const iframe = document.getElementById('results-frame');
-    const spinner = document.getElementById('results-frame-spinner');
+            const container = document.getElementById('results-frame-container');
+            const iframe = document.getElementById('results-frame');
+            const spinner = document.getElementById('results-spinner'); // Fixed ID
 
-    if (!iframe) {
-        console.error('Iframe element not found');
-        return;
-    }
+            // Check for missing elements
+            if (!container || !iframe || !spinner) {
+                console.error('Required elements not found:', {
+                    container: !!container,
+                    iframe: !!iframe,
+                    spinner: !!spinner
+                });
+                return;
+            }
 
-    console.log('Setting iframe src to:', "http://rahul.serv00.net/LT2025Results");
+            console.log('Setting iframe src to:', "http://rahul.serv00.net/LT2025Results");
 
-    container.classList.add('active');
-    spinner.style.display = 'block';
-    iframe.style.display = 'none';
-    iframe.src = "http://rahul.serv00.net/LT2025Results";
+            container.classList.add('active');
+            spinner.style.display = 'block';
+            iframe.style.display = 'none';
+            iframe.src = "http://rahul.serv00.net/LT2025Results";
 
-    iframe.onload = () => {
-        console.log('Iframe loaded successfully');
-        hideResultsSpinner();
-    };
+            iframe.onload = () => {
+                console.log('Iframe loaded successfully');
+                hideResultsSpinner();
+            };
 
-    iframe.onerror = (e) => {
-        console.error('Iframe failed to load:', e);
-    };
+            iframe.onerror = (e) => {
+                console.error('Iframe failed to load:', e);
+            };
         }
 
         function closeResultsFrame() {
             const container = document.getElementById('results-frame-container');
             const iframe = document.getElementById('results-frame');
+
+            if (!container || !iframe) {
+                console.error('Required elements not found:', {
+                    container: !!container,
+                    iframe: !!iframe
+                });
+                return;
+            }
 
             container.classList.remove('active');
 
@@ -814,6 +828,14 @@
         function hideResultsSpinner() {
             const spinner = document.getElementById('results-spinner');
             const iframe = document.getElementById('results-frame');
+
+            if (!spinner || !iframe) {
+                console.error('Required elements not found:', {
+                    spinner: !!spinner,
+                    iframe: !!iframe
+                });
+                return;
+            }
 
             spinner.style.display = 'none';
             iframe.style.display = 'block';
