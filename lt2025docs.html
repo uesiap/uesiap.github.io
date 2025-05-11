@@ -83,13 +83,11 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>LT Camp WhatsApp Chat</title>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css">
     <style>
         * {
             box-sizing: border-box;
@@ -126,7 +124,7 @@
             left: 0;
             right: 0;
             z-index: 100;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .avatar {
@@ -179,14 +177,14 @@
             background: #dcf8c6;
             margin-left: auto;
             border-top-right-radius: 0;
-            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
         }
 
         .message.received {
             background: #fff;
             margin-right: auto;
             border-top-left-radius: 0;
-            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+            box-shadow: 0 1px 0.5px rgba(0,0,0,0.13);
         }
 
         .message-content {
@@ -234,7 +232,7 @@
             left: 0;
             right: 0;
             z-index: 100;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
         }
 
         .message-input {
@@ -306,16 +304,8 @@
         }
 
         @keyframes typingAnimation {
-
-            0%,
-            60%,
-            100% {
-                transform: translateY(0);
-            }
-
-            30% {
-                transform: translateY(-3px);
-            }
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-3px); }
         }
 
         .connection-status {
@@ -331,7 +321,7 @@
             display: none;
             z-index: 50;
         }
-
+        
         .connection-footer {
             position: fixed;
             bottom: 60px;
@@ -383,7 +373,7 @@
                 width: 45px;
                 height: 45px;
             }
-
+            
             .send-button i {
                 font-size: 28px;
             }
@@ -396,294 +386,276 @@
         }
     </style>
 </head>
-
 <body>
-    <div class="chat-container">
-        <div class="user-bar">
-            <div class="avatar">
-                <img src="https://uesiap.github.io/vidhyardhi-geethavali/Icon192.jpg" alt="Ico">
-            </div>
-            <div class="user-info">
-                <div class="name">LT Camp 2025 Docs</div>
-                <div class="status" id="status-indicator">online</div>
-            </div>
+<div class="chat-container">
+    <div class="user-bar">
+        <div class="avatar">
+            <img src="https://uesiap.github.io/vidhyardhi-geethavali/Icon192.jpg" alt="Ico">
         </div>
-
-        <div class="conversation" id="chat-messages">
-            <div class="message received">
-                <div class="message-content">Welcome to LT Camp Docs! <br><br>Ask for documents with the talk Name or
-                    type a category name
-                    <br><strong>1. Doctrines,<br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions. </strong>
-                    <br>to download all documents in that category!
-                </div>
-                <div class="message-meta">
-                    <span class="message-time" id="current-time"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="input-area">
-            <input type="text" class="message-input" id="message-input" placeholder="Type a message" autocomplete="off"
-                autofocus>
-            <button class="send-button" id="send-button">
-                <i class="zmdi zmdi-mail-send"></i>
-            </button>
+        <div class="user-info">
+            <div class="name">LT Camp 2025 Docs</div>
+            <div class="status" id="status-indicator">online</div>
         </div>
     </div>
 
-    <div class="connection-status" id="connectionStatus">
-        Designed with ❤ by Rahul.
+    <div class="conversation" id="chat-messages">
+        <div class="message received">
+            <div class="message-content">Welcome to LT Camp Docs! <br><br>Ask for documents with the talk Name or type a category name 
+            <br><strong>1. Doctrines,<br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions. </strong> <br>to download all documents in that category!</div>
+            <div class="message-meta">
+                <span class="message-time" id="current-time"></span>
+            </div>
+        </div>
     </div>
-    <div class="connection-footer" id="con">
-        Designed with ❤ by Rahul.
+
+    <div class="input-area">
+        <input type="text" class="message-input" id="message-input" placeholder="Type a message" autocomplete="off" autofocus>
+        <button class="send-button" id="send-button">
+            <i class="zmdi zmdi-mail-send"></i>
+        </button>
     </div>
+</div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script>
-        // Initialize Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyAaQdWKBdtqqe3pu9XDdPoFuvcEm2YG_wA",
-            authDomain: "melam-rahul.firebaseapp.com",
-            projectId: "melam-rahul",
-            storageBucket: "melam-rahul.appspot.com",
-            messagingSenderId: "742315739002",
-            appId: "1:742315739002:web:329ea957fa38f66ab078c3",
-            measurementId: "G-SCNKZYJ3TT"
-            databaseURL: "https://melam-rahul-default-rtdb.firebaseio.com"
-        };
+<div class="connection-status" id="connectionStatus">
+    Designed with ❤ by Rahul.
+</div>
+<div class="connection-footer" id="con">
+    Designed with ❤ by Rahul.
+</div>
 
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script>
+    // Initialize Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAaQdWKBdtqqe3pu9XDdPoFuvcEm2YG_wA",
+        authDomain: "melam-rahul.firebaseapp.com",
+        projectId: "melam-rahul",
+        storageBucket: "melam-rahul.appspot.com",
+        messagingSenderId: "742315739002",
+        appId: "1:742315739002:web:329ea957fa38f66ab078c3",
+        measurementId: "G-SCNKZYJ3TT"
+    };
 
-        function updatePageVisit(pagePath) {
-            const now = new Date();
-            const formattedDate = `${String(now.getDate()).padStart(2, "0")}/${String(now.getMonth() + 1).padStart(2, "0")}/${now.getFullYear()}`;
-            const totalVisitsRef = database.ref(`AMSVisitorsLog/${pagePath}/${formattedDate}/TotalVisits`);
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-            totalVisitsRef.transaction((currentValue) => (currentValue || 0) + 1);
+    // DOM elements
+    const chatMessages = document.getElementById('chat-messages');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const statusIndicator = document.getElementById('status-indicator');
+    const connectionStatus = document.getElementById('connectionStatus');
+    const currentTimeElement = document.getElementById('current-time');
+
+    // Set initial time
+    currentTimeElement.textContent = getCurrentTime();
+
+    // Track connection state
+    let isOnline = true;
+    database.ref('.info/connected').on('value', (snapshot) => {
+        isOnline = snapshot.val() === true;
+        connectionStatus.style.display = isOnline ? 'none' : 'block';
+        statusIndicator.textContent = isOnline ? 'online' : 'offline';
+    });
+
+    // Add a new message to the chat
+    function addMessage(text, isUser) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = message ${isUser ? 'sent' : 'received'};
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        messageContent.textContent = text;
+        
+        const messageMeta = document.createElement('div');
+        messageMeta.className = 'message-meta';
+        
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'message-time';
+        timeSpan.textContent = getCurrentTime();
+        
+        messageMeta.appendChild(timeSpan);
+        
+        if (isUser) {
+            const statusSpan = document.createElement('span');
+            statusSpan.className = 'message-status';
+            statusSpan.innerHTML = '<i class="zmdi zmdi-check-all"></i>';
+            messageMeta.appendChild(statusSpan);
         }
+        
+        messageDiv.appendChild(messageContent);
+        messageDiv.appendChild(messageMeta);
+        
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
+    }
 
-        updatePageVisit("moreOptions");
-
-        // DOM elements
-        const chatMessages = document.getElementById('chat-messages');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-        const statusIndicator = document.getElementById('status-indicator');
-        const connectionStatus = document.getElementById('connectionStatus');
-        const currentTimeElement = document.getElementById('current-time');
-
-        // Set initial time
-        currentTimeElement.textContent = getCurrentTime();
-
-        // Track connection state
-        let isOnline = true;
-        database.ref('.info/connected').on('value', (snapshot) => {
-            isOnline = snapshot.val() === true;
-            connectionStatus.style.display = isOnline ? 'none' : 'block';
-            statusIndicator.textContent = isOnline ? 'online' : 'offline';
-        });
-
-        // Add a new message to the chat
-        function addMessage(text, isUser) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = message ${ isUser ? 'sent' : 'received' };
-
-            const messageContent = document.createElement('div');
-            messageContent.className = 'message-content';
-            messageContent.textContent = text;
-
-            const messageMeta = document.createElement('div');
-            messageMeta.className = 'message-meta';
-
-            const timeSpan = document.createElement('span');
-            timeSpan.className = 'message-time';
-            timeSpan.textContent = getCurrentTime();
-
-            messageMeta.appendChild(timeSpan);
-
-            if (isUser) {
-                const statusSpan = document.createElement('span');
-                statusSpan.className = 'message-status';
-                statusSpan.innerHTML = '<i class="zmdi zmdi-check-all"></i>';
-                messageMeta.appendChild(statusSpan);
-            }
-
-            messageDiv.appendChild(messageContent);
-            messageDiv.appendChild(messageMeta);
-
-            chatMessages.appendChild(messageDiv);
-            scrollToBottom();
-        }
-
-        // Add a document link message with download icon
-        function addDocumentMessage(title, url, category) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message received';
-
-            const messageContent = document.createElement('div');
-            messageContent.className = 'message-content';
-            messageContent.innerHTML = `${category ? Document from ${ category }: : 'Here\'s the document you requested:'
-        } <br>
+    // Add a document link message with download icon
+    function addDocumentMessage(title, url, category) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message received';
+        
+        const messageContent = document.createElement('div');
+        messageContent.className = 'message-content';
+        messageContent.innerHTML = `${category ? Document from ${category}: : 'Here\'s the document you requested:'}<br>
             <a href="${url}" target="_blank" class="document-link">
                 <i class="zmdi zmdi-file"></i> ${title}
             </a>
             <a href="${url}" download class="download-icon">
                 <i class="zmdi zmdi-download"></i>
             </a>`;
-
-            const messageMeta = document.createElement('div');
-            messageMeta.className = 'message-meta';
-
-            const timeSpan = document.createElement('span');
-            timeSpan.className = 'message-time';
-            timeSpan.textContent = getCurrentTime();
-
-            messageMeta.appendChild(timeSpan);
-            messageDiv.appendChild(messageContent);
-            messageDiv.appendChild(messageMeta);
-
-            chatMessages.appendChild(messageDiv);
-            scrollToBottom();
+        
+        const messageMeta = document.createElement('div');
+        messageMeta.className = 'message-meta';
+        
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'message-time';
+        timeSpan.textContent = getCurrentTime();
+        
+        messageMeta.appendChild(timeSpan);
+        messageDiv.appendChild(messageContent);
+        messageDiv.appendChild(messageMeta);
+        
+        chatMessages.appendChild(messageDiv);
+        scrollToBottom();
     }
 
-            // Show all documents in a category
-            function showCategoryDocuments(category, path) {
-                database.ref(path).once('value')
-                    .then((snapshot) => {
-                        const documents = snapshot.val();
-                        if (documents) {
-                            addMessage(Available documents in ${ category }:, false);
+    // Show all documents in a category
+    function showCategoryDocuments(category, path) {
+        database.ref(path).once('value')
+            .then((snapshot) => {
+                const documents = snapshot.val();
+                if (documents) {
+                    addMessage(Available documents in ${category}:, false);
                     Object.keys(documents).forEach((key) => {
                         const title = key.replace(/-/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
-            const url = documents[key];
-            addDocumentMessage(title, url, category);
+                        const url = documents[key];
+                        addDocumentMessage(title, url, category);
                     });
                 } else {
-                addMessage(No documents found in ${ category }., false);
+                    addMessage(No documents found in ${category}., false);
                 }
             })
             .catch((error) => {
-                console.error(Error fetching ${ category } documents:, error);
-            addMessage(Sorry, I couldn\'t access the ${category} documents right now. Please try again later., false);
+                console.error(Error fetching ${category} documents:, error);
+                addMessage(Sorry, I couldn\'t access the ${category} documents right now. Please try again later., false);
             });
     }
 
-            // Show typing indicator
-            function showTypingIndicator() {
+    // Show typing indicator
+    function showTypingIndicator() {
         const typingDiv = document.createElement('div');
-            typingDiv.className = 'typing-indicator';
-            typingDiv.id = 'typing-indicator';
-            typingDiv.innerHTML = `
+        typingDiv.className = 'typing-indicator';
+        typingDiv.id = 'typing-indicator';
+        typingDiv.innerHTML = `
             <span class="typing-dot" style="animation-delay: 0s"></span>
             <span class="typing-dot" style="animation-delay: 0.2s"></span>
             <span class="typing-dot" style="animation-delay: 0.4s"></span>
-            `;
-            chatMessages.appendChild(typingDiv);
-            scrollToBottom();
+        `;
+        chatMessages.appendChild(typingDiv);
+        scrollToBottom();
     }
 
-            // Remove typing indicator
-            function removeTypingIndicator() {
+    // Remove typing indicator
+    function removeTypingIndicator() {
         const typingDiv = document.getElementById('typing-indicator');
-            if (typingDiv) typingDiv.remove();
+        if (typingDiv) typingDiv.remove();
     }
 
-            // Handle user message
-            function handleUserMessage() {
+    // Handle user message
+    function handleUserMessage() {
         const message = messageInput.value.trim();
-            if (message === '') return;
-
-            addMessage(message, true);
-            messageInput.value = '';
-
-            showTypingIndicator();
+        if (message === '') return;
+        
+        addMessage(message, true);
+        messageInput.value = '';
+        
+        showTypingIndicator();
         
         setTimeout(() => {
-                removeTypingIndicator();
-
+            removeTypingIndicator();
+            
             // Check for category requests
             const lowerMessage = message.toLowerCase().trim();
             if (lowerMessage === 'doctrines') {
                 showCategoryDocuments('Doctrines', 'lt2025camp/doctrines');
-            return;
+                return;
             } else if (lowerMessage === 'pbs/gbs' || lowerMessage === 'pbs' || lowerMessage === 'gbs') {
                 showCategoryDocuments('PBS/GBS', 'lt2025camp/pbs-gbs');
-            return;
+                return;
             } else if (lowerMessage === 'practical talk' || lowerMessage === 'practical talks') {
                 showCategoryDocuments('Practical Talk', 'lt2025camp/practicle-talk');
-            return;
+                return;
             } else if (lowerMessage === 'devotions') {
                 showCategoryDocuments('Devotions', 'lt2025camp/devotions');
-            return;
+                return;
             }
 
             // Check for specific document in all categories
             const docId = message.toUpperCase().replace(/\s+/g, '-');
             const categories = [
-            {name: 'Doctrines', path: lt2025camp/doctrines/${docId} },
-            {name: 'PBS/GBS', path: lt2025camp/pbs-gbs/${docId} },
-            {name: 'Practical Talk', path: lt2025camp/practicle-talk/${docId} },
-            {name: 'Devotions', path: lt2025camp/devotions/${docId} }
+                { name: 'Doctrines', path: lt2025camp/doctrines/${docId} },
+                { name: 'PBS/GBS', path: lt2025camp/pbs-gbs/${docId} },
+                { name: 'Practical Talk', path: lt2025camp/practicle-talk/${docId} },
+                { name: 'Devotions', path: lt2025camp/devotions/${docId} }
             ];
 
             let found = false;
             let promises = categories.map(category =>
                 database.ref(category.path).once('value').then(snapshot => {
                     const docUrl = snapshot.val();
-            if (docUrl) {
-                found = true;
-            addDocumentMessage(message, docUrl, category.name);
+                    if (docUrl) {
+                        found = true;
+                        addDocumentMessage(message, docUrl, category.name);
                     }
-            return docUrl;
+                    return docUrl;
                 })
             );
 
             Promise.all(promises)
                 .then(() => {
                     if (!found) {
-                addMessage('I couldn\'t find a document for that. Try a category name (Doctrines, PBS/GBS, Practical Talk, Devotions) or a specific document name like "HOLY SCRIPTURES".', false);
+                        addMessage('I couldn\'t find a document for that. Try a category name (Doctrines, PBS/GBS, Practical Talk, Devotions) or a specific document name like "HOLY SCRIPTURES".', false);
                     }
                 })
                 .catch((error) => {
-                console.error("Error getting document:", error);
-            addMessage('Sorry, I couldn\'t access the documents right now. Please try again later.', false);
+                    console.error("Error getting document:", error);
+                    addMessage('Sorry, I couldn\'t access the documents right now. Please try again later.', false);
                 });
         }, 1500);
     }
 
-            // Helper functions
-            function getCurrentTime() {
+    // Helper functions
+    function getCurrentTime() {
         const d = new Date();
-            let h = d.getHours();
-            let t = d.getMinutes();
-            h = h < 10 ? "0" + h : h;
-            t = t < 10 ? "0" + t : t;
-            return h + ":" + t;
+        let h = d.getHours();
+        let t = d.getMinutes();
+        h = h < 10 ? "0" + h : h;
+        t = t < 10 ? "0" + t : t;
+        return h + ":" + t;
     }
 
-            function scrollToBottom() {
-                chatMessages.scrollTop = chatMessages.scrollHeight;
+    function scrollToBottom() {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-            // Event listeners
-            sendButton.addEventListener('click', handleUserMessage);
+    // Event listeners
+    sendButton.addEventListener('click', handleUserMessage);
     messageInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
+            e.preventDefault();
             handleUserMessage();
         }
     });
 
     // Handle focus on input to ensure conversation is visible
     messageInput.addEventListener('focus', () => {
-                setTimeout(scrollToBottom, 300);
+        setTimeout(scrollToBottom, 300);
     });
 
-            // Auto-focus input on load
-            messageInput.focus();
-    </script>
+    // Auto-focus input on load
+    messageInput.focus();
+</script>
 </body>
-
 </html>
