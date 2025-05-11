@@ -352,7 +352,7 @@
             }
 
             .conversation {
-                padding: 65px 8px 8px;
+                padding: 5px 8px 8px;
             }
 
             .message {
@@ -535,7 +535,7 @@
         let isOnline = true;
         database.ref('.info/connected').on('value', (snapshot) => {
             isOnline = snapshot.val() === true;
-            connectionStatus.style.display = isOnline ? 'none' : 'block';
+            connectionStatus.style.display = isOnline ? 'block' : 'block';
             statusIndicator.textContent = isOnline ? 'online' : 'offline';
         });
 
