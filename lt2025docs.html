@@ -746,105 +746,62 @@
         messageInput.focus();
 
         function addResultsMessage() {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'message received';
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message received';
 
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    messageContent.innerHTML = `
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.innerHTML = `
         Check out the <strong>LT Camp 2025 Results</strong> below:<br>
         <a class="document-link" onclick="openResultsFrame()">
             <i class="zmdi zmdi-open-in-new"></i> View Results
         </a>
-        <div class="alternative-link">
-            If the results don't load, <a href="http://rahul.serv00.net/LT2025Results" target="_blank">open them in a new tab</a>
-        </div>
     `;
 
-    const messageMeta = document.createElement('div');
-    messageMeta.className = 'message-meta';
-    const timeSpan = document.createElement('span');
-    timeSpan.className = 'message-time';
-    timeSpan.textContent = getCurrentTime();
+            const messageMeta = document.createElement('div');
+            messageMeta.className = 'message-meta';
 
-    messageMeta.appendChild(timeSpan);
-    messageDiv.appendChild(messageContent);
-    messageDiv.appendChild(messageMeta);
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = getCurrentTime();
 
-    chatMessages.appendChild(messageDiv);
-    scrollToBottom();
-}
+            messageMeta.appendChild(timeSpan);
+            messageDiv.appendChild(messageContent);
+            messageDiv.appendChild(messageMeta);
 
-function openResultsFrame() {
-    const container = document.getElementById('results-frame-container');
-    const iframe = document.getElementById('results-frame');
-    const spinner = document.getElementById('results-spinner');
-    const errorMsg = document.getElementById('results-error');
-
-    // Reset states
-    errorMsg.style.display = 'none';
-    container.classList.add('active');
-    spinner.style.display = 'block';
-    iframe.style.display = 'none';
-    
-    // Set iframe source
-    const url = "http://rahul.serv00.net/LT2025Results";
-    
-    // Add a timestamp to prevent caching issues
-    const timestamp = new Date().getTime();
-    const finalUrl = `${url}?t=${timestamp}`;
-    
-    // Handle both http and https versions
-    if (window.location.protocol === 'https:') {
-        try {
-            // Try secure version first if available
-            iframe.src = url.replace('http:', 'https:');
-        } catch (e) {
-            iframe.src = finalUrl;
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
         }
-    } else {
-        iframe.src = finalUrl;
-    }
 
-    // Set timeout for loading
-    const loadTimeout = setTimeout(() => {
-        iframe.onload = null; // Clear the onload handler
-        spinner.style.display = 'none';
-        errorMsg.style.display = 'block';
-        errorMsg.textContent = 'Results took too long to load. Try opening in a new tab.';
-    }, 10000); // 10 seconds timeout
+        function openResultsFrame() {
+            const container = document.getElementById('results-frame-container');
+            const iframe = document.getElementById('results-frame');
+            const spinner = document.getElementById('results-spinner');
 
-    iframe.onload = function() {
-        clearTimeout(loadTimeout);
-        hideResultsSpinner();
-    };
+            container.classList.add('active');
+            spinner.style.display = 'block';
+            iframe.style.display = 'none';
+            iframe.src = "http://rahul.serv00.net/LT2025Results";
+        }
 
-    iframe.onerror = function() {
-        clearTimeout(loadTimeout);
-        spinner.style.display = 'none';
-        errorMsg.style.display = 'block';
-        errorMsg.textContent = 'Failed to load results. Please try opening in a new tab.';
-    };
-}
+        function closeResultsFrame() {
+            const container = document.getElementById('results-frame-container');
+            const iframe = document.getElementById('results-frame');
 
-function closeResultsFrame() {
-    const container = document.getElementById('results-frame-container');
-    const iframe = document.getElementById('results-frame');
-    
-    container.classList.remove('active');
-    
-    setTimeout(() => {
-        iframe.src = "about:blank";
-    }, 400);
-}
+            container.classList.remove('active');
 
-function hideResultsSpinner() {
-    const spinner = document.getElementById('results-spinner');
-    const iframe = document.getElementById('results-frame');
-    
-    spinner.style.display = 'none';
-    iframe.style.display = 'block';
-}
+            setTimeout(() => {
+                iframe.src = "about:blank";
+            }, 400);
+        }
+
+        function hideResultsSpinner() {
+            const spinner = document.getElementById('results-spinner');
+            const iframe = document.getElementById('results-frame');
+
+            spinner.style.display = 'none';
+            iframe.style.display = 'block';
+        }
     </script>
 </body>
 
