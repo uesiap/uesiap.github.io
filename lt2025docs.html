@@ -1,0 +1,848 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LT 2025 Docs - Coming Soon</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background-color: #2c3e50;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar img {
+      height: 40px;
+      margin-right: 15px;
+    }
+
+    .navbar-title {
+      color: #fff;
+      font-size: 1.5em;
+      font-weight: bold;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 600px;
+      margin: 80px auto;
+      background-color: #fff;
+      padding: 40px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin-bottom: 20px;
+    }
+
+    .coming-time {
+      font-weight: bold;
+      color: #16a085;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <img src="https://uesi.in/wp-content/uploads/2021/03/favicon-ipad-large.png" alt="Logo">
+    <div class="navbar-title">LT 2025 Docs</div>
+  </div>
+
+  <div class="container">
+    <h1>PPTs Will be Available Soon</h1>
+    <p>We're working on it to bring the <strong>Documentations</strong> with an intelligent <strong>AI Chatbot</strong>.</p>
+    <p class="coming-time">Available starting this evening!</p>
+    <p>Thank you for your patience.</p>
+  </div>
+
+<footer
+        style="positon: fixed; bottom: 0; margin-bottom: 0px; width: 100%; background-color: #fff; color: #333; text-align: center; padding: 10px 0; margin-top: 30px">
+        <p style="margin: 0; font-family: 'Google Sans', sans-serif; font-size: 16px;">© Designed with ❤️ by <strong><a
+                    href="https://rahul.serv00.net/profile">Rahul</a></strong>&ensp;</p>
+    </footer>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>LT Camp WhatsApp Chat</title>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Roboto", sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f5f5f5;
+            overflow: hidden;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            /*max-height: -webkit-fill-available;*/
+        }
+
+        .user-bar {
+            height: 60px;
+            background: #075e54;
+            color: #fff;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .avatar img {
+            width: 100%;
+            border-radius: 50%;
+        }
+
+        .user-info {
+            flex-grow: 1;
+        }
+
+        .name {
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .status {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .conversation {
+            flex-grow: 1;
+            overflow-y: auto;
+          -webkit-overflow-scrolling: touch;
+            background-color: #e5ddd5;
+            padding: 60px 10px 5px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 85%;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 7.5px;
+            position: relative;
+            word-wrap: break-word;
+            min-width: 85px;
+        }
+
+        .message.sent {
+            background: #dcf8c6;
+            margin-left: auto;
+            border-top-right-radius: 0;
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+        }
+
+        .message.received {
+            background: #fff;
+            margin-right: auto;
+            border-top-left-radius: 0;
+            box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+        }
+
+        .message-content {
+            display: inline-block;
+            padding-right: 30px;
+            font-size: 20px;
+        }
+
+        .message.sent .message-content {
+            padding-right: 60px;
+        }
+
+        .message-meta {
+            position: absolute;
+            bottom: 4px;
+            right: 8px;
+            display: flex;
+            align-items: center;
+        }
+
+        .message-time {
+            font-size: 11px;
+            color: rgba(0, 0, 0, 0.45);
+            margin-right: 3px;
+        }
+
+        .message-status {
+            display: inline-flex;
+        }
+
+        .message-status i {
+            color: #4fc3f7;
+            font-size: 16px;
+            margin-left: 2px;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 8px 10px;
+            background: #ddd;
+            align-items: center;
+            flex-shrink: 0;
+            
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 10px 15px;
+            margin: 0 5px;
+            outline: none;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            resize: none;
+        }
+
+        .send-button {
+            background: #075e54;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+
+        .document-link {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 5px;
+            padding: 8px 12px;
+            background: #f5f5f5;
+            border-radius: 5px;
+            color: #075e54;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .document-link i {
+            margin-right: 5px;
+        }
+
+        .download-icon {
+            margin-left: 10px;
+            color: #075e54;
+            cursor: pointer;
+            font-size: 35px;
+        }
+
+        .typing-indicator {
+            display: inline-flex;
+            padding: 8px 12px;
+            background: #fff;
+            border-radius: 7.5px;
+            border-top-left-radius: 0;
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #888;
+            margin: 0 2px;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        @keyframes typingAnimation {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .connection-status {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            height: 37px;
+            margin-top: -10px;
+            background-color: #075e54;
+            color: white;
+            text-align: center;
+            padding: 5px;
+            font-size: 16px;
+            display: none;
+            z-index: 50;
+        }
+
+        @media (max-width: 600px) {
+            .user-bar {
+                height: 55px;
+                padding: 0 10px;
+            }
+
+            .avatar {
+                width: 35px;
+                height: 35px;
+            }
+
+            .name {
+                font-size: 20px;
+            }
+
+            .status {
+                font-size: 15px;
+            }
+
+            .conversation {
+                padding: 70px 8px 8px;
+            }
+
+            .message {
+                max-width: 85%;
+                padding: 6px 10px;
+            }
+
+            .message-input {
+                font-size: 20px;
+                padding: 8px 12px;
+            }
+
+            .send-button {
+                width: 45px;
+                height: 45px;
+            }
+
+            .send-button i {
+                font-size: 28px;
+            }
+        }
+
+        
+
+        /* Fullscreen iframe overlay */
+        #results-frame-container {
+            position: fixed;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 999;
+            transition: top 0.4s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #results-frame-container.active {
+            top: 0;
+        }
+
+        /* Back button */
+        #results-frame-header {
+            background: #075e54;
+            color: white;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        #results-frame-header i {
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 24px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            margin: auto;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #075e54;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        iframe#results-frame {
+            flex: 1;
+            width: 100%;
+            border: none;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="chat-container">
+        <div class="user-bar">
+            <div class="avatar">
+                <img src="https://uesiap.github.io/vidhyardhi-geethavali/Icon192.jpg" alt="Ico">
+            </div>
+            <div class="user-info">
+                <div class="name">LT Camp 2025 Docs</div>
+                <div class="status" id="status-indicator">online</div>
+            </div>
+        </div>
+
+        <div class="conversation" id="chat-messages" style="margin-bottom: 50px;">
+            <br><br><br><div class="message received">
+                <div class="message-content">Welcome to LT Camp Docs! <br><br>Ask for documents with the talk Name or
+                    type a category name
+                    <br><strong>1. Doctrines,<br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions. </strong>
+                    <br>to download all documents in that category!<br>Also ask me <strong>Results</strong> to know your
+                    <strong>Team Score</strong>
+                </div>
+                <div class="message-meta">
+                    <span class="message-time" id="current-time"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input type="text" class="message-input" id="message-input" placeholder="Type a message" autocomplete="off"
+                autofocus>
+            <button class="send-button" id="send-button">
+                <i class="zmdi zmdi-mail-send"></i>
+            </button>
+        </div>
+    </div>
+    <div id="results-frame-container">
+        <div id="results-frame-header">
+            <strong><i class="zmdi zmdi-arrow-left" onclick="closeResultsFrame()"></i>&ensp;Results</strong>
+        </div>
+        <div id="results-spinner" style="display: none;">Loading...</div>
+        <iframe id="results-frame" style="display: none;"></iframe>
+    </div>
+
+    <div class="connection-status" id="connectionStatus">
+        Advanced AI Chatbot, Designed with ❤️ by Rahul.
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAaQdWKBdtqqe3pu9XDdPoFuvcEm2YG_wA",
+            authDomain: "melam-rahul.firebaseapp.com",
+            projectId: "melam-rahul",
+            storageBucket: "melam-rahul.appspot.com",
+            messagingSenderId: "742315739002",
+            appId: "1:742315739002:web:329ea957fa38f66ab078c3",
+            measurementId: "G-SCNKZYJ3TT"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function updatePageVisit(pagePath) {
+            const now = new Date();
+            const formattedDate = `${String(now.getDate()).padStart(2, "0")}/${String(now.getMonth() + 1).padStart(2, "0")}/${now.getFullYear()}`;
+            const totalVisitsRef = database.ref(`AMSVisitorsLog/${pagePath}/${formattedDate}/TotalVisits`);
+
+            totalVisitsRef.transaction((currentValue) => (currentValue || 0) + 1);
+        }
+
+        // Call the function for your specific page
+        updatePageVisit("moreOptions");
+
+
+        // DOM elements
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const statusIndicator = document.getElementById('status-indicator');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const currentTimeElement = document.getElementById('current-time');
+
+        // Set initial time
+        currentTimeElement.textContent = getCurrentTime();
+
+        // Track connection state
+        let isOnline = true;
+        database.ref('.info/connected').on('value', (snapshot) => {
+            isOnline = snapshot.val() === true;
+            connectionStatus.style.display = isOnline ? 'block' : 'block';
+            statusIndicator.textContent = isOnline ? 'online' : 'offline';
+        });
+
+        // Add a new message to the chat
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'sent' : 'received'}`;
+
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.textContent = text;
+
+            const messageMeta = document.createElement('div');
+            messageMeta.className = 'message-meta';
+
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = getCurrentTime();
+
+            messageMeta.appendChild(timeSpan);
+
+            if (isUser) {
+                const statusSpan = document.createElement('span');
+                statusSpan.className = 'message-status';
+                statusSpan.innerHTML = '<i class="zmdi zmdi-check-all"></i>';
+                messageMeta.appendChild(statusSpan);
+            }
+
+            messageDiv.appendChild(messageContent);
+            messageDiv.appendChild(messageMeta);
+
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // Add a document link message with download icon
+        function addDocumentMessage(title, url, category) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message received';
+
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.innerHTML = `${category ? `Document from ${category}:` : "Here's the document you requested:"}<br>
+            <a class="document-link">
+                 <i class="zmdi zmdi-file"></i> ${title}
+            </a>
+            <a href="${url}" download class="download-icon">
+                <i class="zmdi zmdi-download"></i>
+            </a>`;
+
+
+
+            const messageMeta = document.createElement('div');
+            messageMeta.className = 'message-meta';
+
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = getCurrentTime();
+
+            messageMeta.appendChild(timeSpan);
+            messageDiv.appendChild(messageContent);
+            messageDiv.appendChild(messageMeta);
+
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        // Show all documents in a category
+        function showCategoryDocuments(category, path) {
+            database.ref(path).once('value')
+                .then((snapshot) => {
+                    const documents = snapshot.val();
+                    if (documents) {
+                        addMessage(`Available documents in ${category}:`, false);
+                        Object.keys(documents).forEach((key) => {
+                            const title = key.replace(/-/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+                            const url = documents[key];
+                            addDocumentMessage(title, url, category);
+                        });
+                    } else {
+                        addMessage(`No documents found in ${category}.`, false);
+                    }
+                })
+                .catch((error) => {
+                    console.error(`Error fetching ${category} documents:`, error);
+                    addMessage(`Sorry, I couldn't access the ${category} documents right now. Please try again later.`, false);
+                });
+        }
+
+
+        // Show typing indicator
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+            <span class="typing-dot" style="animation-delay: 0s"></span>
+            <span class="typing-dot" style="animation-delay: 0.2s"></span>
+            <span class="typing-dot" style="animation-delay: 0.4s"></span>
+        `;
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        // Remove typing indicator
+        function removeTypingIndicator() {
+            const typingDiv = document.getElementById('typing-indicator');
+            if (typingDiv) typingDiv.remove();
+        }
+
+        // Handle user message
+        function handleUserMessage() {
+            const message = messageInput.value.trim();
+            if (message === '') return;
+
+            addMessage(message, true);
+            messageInput.value = '';
+
+            showTypingIndicator();
+
+            setTimeout(() => {
+                removeTypingIndicator();
+
+                // Check for category requests
+                const lowerMessage = message.toLowerCase().trim();
+                if (lowerMessage === 'doctrines') {
+                    showCategoryDocuments('Doctrines', 'lt2025camp/doctrines');
+                    return;
+                } else if (lowerMessage === 'pbs/gbs' || lowerMessage === 'pbs' || lowerMessage === 'gbs') {
+                    showCategoryDocuments('PBS/GBS', 'lt2025camp/pbs-gbs');
+                    return;
+                } else if (lowerMessage === 'practical talk' || lowerMessage === 'practical talks') {
+                    showCategoryDocuments('Practical Talk', 'lt2025camp/practicle-talk');
+                    return;
+                } else if (lowerMessage === 'devotions') {
+                    showCategoryDocuments('Devotions', 'lt2025camp/devotions');
+                    return;
+                } else if (lowerMessage === 'results') {
+                    addResultsMessage();
+                    return;
+                }
+
+
+                // Check for specific document in all categories
+                const docId = message.toUpperCase().replace(/\s+/g, '-');
+                const categories = [
+                    { name: 'Doctrines', path: `lt2025camp/doctrines/${docId}` },
+                    { name: 'PBS/GBS', path: `lt2025camp/pbs-gbs/${docId}` },
+                    { name: 'Practical Talk', path: `lt2025camp/practicle-talk/${docId}` },
+                    { name: 'Devotions', path: `lt2025camp/devotions/${docId}` }
+                ];
+
+
+                let found = false;
+                let promises = categories.map(category =>
+                    database.ref(category.path).once('value').then(snapshot => {
+                        const docUrl = snapshot.val();
+                        if (docUrl) {
+                            found = true;
+                            addDocumentMessage(message, docUrl, category.name);
+                        }
+                        return docUrl;
+                    })
+                );
+
+                Promise.all(promises)
+                    .then(() => {
+                        if (!found) {
+                            addMessage('I couldn\'t find a document for that. Try a category name 1. Doctrines,  2. PBS/GBS,  3. Practical Talk, 4. Devotions or ask me your Results', false);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error getting document:", error);
+                        addMessage('Sorry, I couldn\'t access the documents right now. Please try again later.', false);
+                    });
+            }, 1500);
+        }
+
+        // Helper functions
+        function getCurrentTime() {
+            const d = new Date();
+            let h = d.getHours();
+            let t = d.getMinutes();
+            h = h < 10 ? "0" + h : h;
+            t = t < 10 ? "0" + t : t;
+            return h + ":" + t;
+        }
+
+       function scrollToBottom() {
+    const chatMessages = document.querySelector('.conversation');
+    requestAnimationFrame(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+}
+
+
+        // Event listeners
+        sendButton.addEventListener('click', handleUserMessage);
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleUserMessage();
+            }
+        });
+
+        // Handle focus on input to ensure conversation is visible
+        messageInput.addEventListener('focus', () => {
+            setTimeout(scrollToBottom, 300);
+        });
+
+        // Auto-focus input on load
+        messageInput.focus();
+
+        function addResultsMessage() {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message received';
+
+            const messageContent = document.createElement('div');
+            messageContent.className = 'message-content';
+            messageContent.innerHTML = `
+        Check out the <strong>LT Camp 2025 Results</strong> below:<br>
+        <a class="document-link"  href="https://rahul.serv00.net/LT2025Results" target="_blank">
+            <i class="zmdi zmdi-open-in-new"></i> View Results
+        </a>
+
+    `;
+
+            const messageMeta = document.createElement('div');
+            messageMeta.className = 'message-meta';
+
+            const timeSpan = document.createElement('span');
+            timeSpan.className = 'message-time';
+            timeSpan.textContent = getCurrentTime();
+
+            messageMeta.appendChild(timeSpan);
+            messageDiv.appendChild(messageContent);
+            messageDiv.appendChild(messageMeta);
+
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function openResultsFrame() {
+            const container = document.getElementById('results-frame-container');
+            const iframe = document.getElementById('results-frame');
+            const spinner = document.getElementById('results-spinner'); // Fixed ID
+
+            // Check for missing elements
+            if (!container || !iframe || !spinner) {
+                console.error('Required elements not found:', {
+                    container: !!container,
+                    iframe: !!iframe,
+                    spinner: !!spinner
+                });
+                return;
+            }
+
+            console.log('Setting iframe src to:', "http://rahul.serv00.net/LT2025Results");
+
+            container.classList.add('active');
+            spinner.style.display = 'block';
+            iframe.style.display = 'none';
+            iframe.src = "http://rahul.serv00.net/LT2025Results";
+
+            iframe.onload = () => {
+                console.log('Iframe loaded successfully');
+                hideResultsSpinner();
+            };
+
+            iframe.onerror = (e) => {
+                console.error('Iframe failed to load:', e);
+            };
+        }
+
+        function closeResultsFrame() {
+            const container = document.getElementById('results-frame-container');
+            const iframe = document.getElementById('results-frame');
+
+            if (!container || !iframe) {
+                console.error('Required elements not found:', {
+                    container: !!container,
+                    iframe: !!iframe
+                });
+                return;
+            }
+
+            container.classList.remove('active');
+
+            setTimeout(() => {
+                iframe.src = "about:blank";
+            }, 400);
+        }
+
+        function hideResultsSpinner() {
+            const spinner = document.getElementById('results-spinner');
+            const iframe = document.getElementById('results-frame');
+
+            if (!spinner || !iframe) {
+                console.error('Required elements not found:', {
+                    spinner: !!spinner,
+                    iframe: !!iframe
+                });
+                return;
+            }
+
+            spinner.style.display = 'none';
+            iframe.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
