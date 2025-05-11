@@ -703,7 +703,11 @@
                 Promise.all(promises)
                     .then(() => {
                         if (!found) {
-                            addMessage('I couldn\'t find a document for that. Try a category name <br> 1. Doctrines, <br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions <br> or ask me your <strong>Results</strong>', false);
+                            addMessage({
+        text: "I couldn't find a document for that. Try a category name:",
+        html: "I couldn't find a document for that. Try a category name <br> 1. Doctrines, <br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions <br> or ask me your <strong>Results</strong>",
+        isBot: false
+      });
                         }
                     })
                     .catch((error) => {
