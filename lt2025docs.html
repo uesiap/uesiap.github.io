@@ -159,7 +159,7 @@
            flex-grow: 1;
            overflow-y: auto;
            background: #e5ddd5 url("https://web.whatsapp.com/img/bg-chat-tile-light_a4be512e7195b6b733d9110b408f075d.png") repeat;
-           padding: 70px 10px 70px; /* top and bottom spacing for fixed header and input */
+           padding: 60px 10px calc(60px + env(safe-area-inset-bottom));
            display: flex;
            flex-direction: column;
         }
@@ -724,7 +724,8 @@
         }
 
         function scrollToBottom() {
-            chatMessages.scrollTop = chatMessages.scrollHeight;
+    const chatMessages = document.querySelector('.conversation');
+    chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         // Event listeners
