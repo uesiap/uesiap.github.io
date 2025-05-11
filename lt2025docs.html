@@ -462,7 +462,7 @@
                 <div class="message-content">Welcome to LT Camp Docs! <br><br>Ask for documents with the talk Name or
                     type a category name
                     <br><strong>1. Doctrines,<br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions. </strong>
-                    <br>to download all documents in that category!
+                    <br>to download all documents in that category!<br>Also ask me <strong>Results</strong> to know your <strong>Team Score</strong>
                 </div>
                 <div class="message-meta">
                     <span class="message-time" id="current-time"></span>
@@ -703,7 +703,7 @@
                 Promise.all(promises)
                     .then(() => {
                         if (!found) {
-                            addMessage('I couldn\'t find a document for that. Try a category name (Doctrines, PBS/GBS, Practical Talk, Devotions) or a specific document name like "HOLY SCRIPTURES".', false);
+                            addMessage('I couldn\'t find a document for that. Try a category name <br> 1. Doctrines, <br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions <br> or ask me your <strong>Results</strong>', false);
                         }
                     })
                     .catch((error) => {
