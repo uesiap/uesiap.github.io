@@ -774,14 +774,30 @@
         }
 
         function openResultsFrame() {
-            const container = document.getElementById('results-frame-container');
-            const iframe = document.getElementById('results-frame');
-            const spinner = document.getElementById('results-spinner');
+    const container = document.getElementById('results-frame-container');
+    const iframe = document.getElementById('results-frame');
+    const spinner = document.getElementById('results-frame-spinner');
 
-            container.classList.add('active');
-            spinner.style.display = 'block';
-            iframe.style.display = 'none';
-            iframe.src = "http://rahul.serv00.net/LT2025Results";
+    if (!iframe) {
+        console.error('Iframe element not found');
+        return;
+    }
+
+    console.log('Setting iframe src to:', "http://rahul.serv00.net/LT2025Results");
+
+    container.classList.add('active');
+    spinner.style.display = 'block';
+    iframe.style.display = 'none';
+    iframe.src = "http://rahul.serv00.net/LT2025Results";
+
+    iframe.onload = () => {
+        console.log('Iframe loaded successfully');
+        hideResultsSpinner();
+    };
+
+    iframe.onerror = (e) => {
+        console.error('Iframe failed to load:', e);
+    };
         }
 
         function closeResultsFrame() {
