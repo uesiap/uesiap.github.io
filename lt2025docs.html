@@ -379,7 +379,7 @@
 
         
 
-        /* Fullscreen iframe overlay */
+        /* Fullscreen iframe overlay 
         #results-frame-container {
             position: fixed;
             top: 100%;
@@ -397,7 +397,6 @@
             top: 0;
         }
 
-        /* Back button */
         #results-frame-header {
             background: #075e54;
             color: white;
@@ -413,7 +412,6 @@
             font-size: 24px;
         }
 
-        /* Loading spinner */
         .spinner {
             margin: auto;
             border: 6px solid #f3f3f3;
@@ -440,6 +438,7 @@
             border: none;
             display: none;
         }
+      */
     </style>
 </head>
 
@@ -477,13 +476,13 @@
             </button>
         </div>
     </div>
-    <div id="results-frame-container">
+   <!-- <div id="results-frame-container">
         <div id="results-frame-header">
             <strong><i class="zmdi zmdi-arrow-left" onclick="closeResultsFrame()"></i>&ensp;Results</strong>
         </div>
         <div id="results-spinner" style="display: none;">Loading...</div>
         <iframe id="results-frame" style="display: none;"></iframe>
-    </div>
+    </div>  -->
 
     <div class="connection-status" id="connectionStatus">
         Advanced AI Chatbot, Designed with ❤️ by Rahul.
@@ -776,7 +775,7 @@
             scrollToBottom();
         }
 
-        function openResultsFrame() {
+        /* function openResultsFrame() {
             const container = document.getElementById('results-frame-container');
             const iframe = document.getElementById('results-frame');
             const spinner = document.getElementById('results-spinner'); // Fixed ID
@@ -841,7 +840,7 @@
 
             spinner.style.display = 'none';
             iframe.style.display = 'block';
-        }
+        } */
     </script>
 </body>
 
