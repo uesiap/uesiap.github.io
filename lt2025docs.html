@@ -91,11 +91,59 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css">
     <style>
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #075e54;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease-out;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-text {
+            color: white;
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        /* Hide body content initially */
+        body:not(#loader) {
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+
+        body.loaded:not(#loader) {
+            opacity: 1;
+        }
+
+        /* Rest of your existing CSS (without the backtick issues) */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
+
 
         body {
             font-family: "Roboto", sans-serif;
@@ -158,7 +206,7 @@
         .conversation {
             flex-grow: 1;
             overflow-y: auto;
-          -webkit-overflow-scrolling: touch;
+            -webkit-overflow-scrolling: touch;
             background-color: #e5ddd5;
             padding: 60px 10px 5px;
             display: flex;
@@ -229,7 +277,7 @@
             background: #ddd;
             align-items: center;
             flex-shrink: 0;
-            
+
             bottom: 0;
             left: 0;
             right: 0;
@@ -377,7 +425,7 @@
             }
         }
 
-        
+
 
         /* Fullscreen iframe overlay 
         #results-frame-container {
@@ -443,49 +491,59 @@
 </head>
 
 <body>
-    <div class="chat-container">
-        <div class="user-bar">
-            <div class="avatar">
-                <img src="https://uesiap.github.io/vidhyardhi-geethavali/Icon192.jpg" alt="Ico">
-            </div>
-            <div class="user-info">
-                <div class="name">LT Camp 2025 Docs</div>
-                <div class="status" id="status-indicator">online</div>
-            </div>
-        </div>
-
-        <div class="conversation" id="chat-messages" style="margin-bottom: 50px;">
-            <br><br><br><div class="message received">
-                <div class="message-content">Welcome to LT Camp Docs! <br><br>Ask for documents with the talk Name or
-                    type a category name
-                    <br><strong>1. Doctrines,<br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions. </strong>
-                    <br>to download all documents in that category!<br>Also ask me <strong>Results</strong> to know your
-                    <strong>Team Score</strong>
-                </div>
-                <div class="message-meta">
-                    <span class="message-time" id="current-time"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="input-area">
-            <input type="text" class="message-input" id="message-input" placeholder="Type a message" autocomplete="off"
-                autofocus>
-            <button class="send-button" id="send-button">
-                <i class="zmdi zmdi-mail-send"></i>
-            </button>
-        </div>
+    <div id="loader">
+        <div class="spinner"></div>
+        <div class="loader-text">Loading LT Camp Docs...</div>
     </div>
-   <!-- <div id="results-frame-container">
+    <div id="content" style="display: none;">
+        <div class="chat-container">
+            <div class="user-bar">
+                <div class="avatar">
+                    <img src="https://uesiap.github.io/vidhyardhi-geethavali/Icon192.jpg" alt="Ico">
+                </div>
+                <div class="user-info">
+                    <div class="name">LT Camp 2025 Docs</div>
+                    <div class="status" id="status-indicator">online</div>
+                </div>
+            </div>
+
+            <div class="conversation" id="chat-messages" style="margin-bottom: 50px;">
+                <br><br><br>
+                <div class="message received">
+                    <div class="message-content">Welcome to LT Camp Docs! <br><br>Ask for documents with the talk Name
+                        or
+                        type a category name
+                        <br><strong>1. Doctrines,<br> 2. PBS/GBS, <br> 3. Practical Talk, <br> 4. Devotions. </strong>
+                        <br>to download all documents in that category!<br>Also ask me <strong>Results</strong> to know
+                        your
+                        <strong>Team Score</strong>
+                    </div>
+                    <div class="message-meta">
+                        <span class="message-time" id="current-time"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-area">
+                <input type="text" class="message-input" id="message-input" placeholder="Type a message"
+                    autocomplete="off" autofocus>
+                <button class="send-button" id="send-button">
+                    <i class="zmdi zmdi-mail-send"></i>
+                </button>
+            </div>
+        </div>
+        <!-- <div id="results-frame-container">
         <div id="results-frame-header">
             <strong><i class="zmdi zmdi-arrow-left" onclick="closeResultsFrame()"></i>&ensp;Results</strong>
         </div>
         <div id="results-spinner" style="display: none;">Loading...</div>
         <iframe id="results-frame" style="display: none;"></iframe>
-    </div>  -->
+        </div>  -->
 
-    <div class="connection-status" id="connectionStatus">
-        Advanced AI Chatbot, Designed with ❤️ by Rahul.
+        <div class="connection-status" id="connectionStatus">
+            Advanced AI Chatbot, Designed with ❤️ by Rahul.
+        </div>
+
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -515,6 +573,27 @@
 
         // Call the function for your specific page
         updatePageVisit("moreOptions");
+
+        // Show loader first
+        document.addEventListener('DOMContentLoaded', function () {
+            // After 2 seconds, hide loader and show content
+            setTimeout(function () {
+                var loader = document.getElementById('loader');
+                var content = document.getElementById('content');
+
+                // Fade out loader
+                loader.style.opacity = '0';
+
+                // Show content
+                content.style.display = 'block';
+                document.body.classList.add('loaded');
+
+                // Remove loader from DOM after fade out completes
+                setTimeout(function () {
+                    loader.remove();
+                }, 500); // Match this with your CSS transition time
+            }, 2000); // 2 seconds delay
+        });
 
 
         // DOM elements
@@ -721,12 +800,12 @@
             return h + ":" + t;
         }
 
-       function scrollToBottom() {
-    const chatMessages = document.querySelector('.conversation');
-    requestAnimationFrame(() => {
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    });
-}
+        function scrollToBottom() {
+            const chatMessages = document.querySelector('.conversation');
+            requestAnimationFrame(() => {
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        }
 
 
         // Event listeners
@@ -779,7 +858,7 @@
             const container = document.getElementById('results-frame-container');
             const iframe = document.getElementById('results-frame');
             const spinner = document.getElementById('results-spinner'); // Fixed ID
-
+ 
             // Check for missing elements
             if (!container || !iframe || !spinner) {
                 console.error('Required elements not found:', {
@@ -789,28 +868,28 @@
                 });
                 return;
             }
-
+ 
             console.log('Setting iframe src to:', "http://rahul.serv00.net/LT2025Results");
-
+ 
             container.classList.add('active');
             spinner.style.display = 'block';
             iframe.style.display = 'none';
             iframe.src = "http://rahul.serv00.net/LT2025Results";
-
+ 
             iframe.onload = () => {
                 console.log('Iframe loaded successfully');
                 hideResultsSpinner();
             };
-
+ 
             iframe.onerror = (e) => {
                 console.error('Iframe failed to load:', e);
             };
         }
-
+ 
         function closeResultsFrame() {
             const container = document.getElementById('results-frame-container');
             const iframe = document.getElementById('results-frame');
-
+ 
             if (!container || !iframe) {
                 console.error('Required elements not found:', {
                     container: !!container,
@@ -818,18 +897,18 @@
                 });
                 return;
             }
-
+ 
             container.classList.remove('active');
-
+ 
             setTimeout(() => {
                 iframe.src = "about:blank";
             }, 400);
         }
-
+ 
         function hideResultsSpinner() {
             const spinner = document.getElementById('results-spinner');
             const iframe = document.getElementById('results-frame');
-
+ 
             if (!spinner || !iframe) {
                 console.error('Required elements not found:', {
                     spinner: !!spinner,
@@ -837,7 +916,7 @@
                 });
                 return;
             }
-
+ 
             spinner.style.display = 'none';
             iframe.style.display = 'block';
         } */
