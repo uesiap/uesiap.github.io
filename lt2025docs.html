@@ -91,6 +91,7 @@
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.1.2/css/material-design-iconic-font.min.css">
     <style>
+        /* Loader Styles */
         #loader {
             position: fixed;
             top: 0;
@@ -127,13 +128,13 @@
             font-size: 18px;
         }
 
-        /* Hide body content initially */
-        body:not(#loader) {
+        /* Main content initially hidden */
+        #content {
             opacity: 0;
             transition: opacity 0.5s ease-in;
         }
 
-        body.loaded:not(#loader) {
+        body.loaded #content {
             opacity: 1;
         }
 
@@ -495,7 +496,6 @@
         <div class="spinner"></div>
         <div class="loader-text">Loading LT Camp Docs...</div>
     </div>
-    <div id="content" style="display: none;">
         <div class="chat-container">
             <div class="user-bar">
                 <div class="avatar">
@@ -508,7 +508,7 @@
             </div>
 
             <div class="conversation" id="chat-messages" style="margin-bottom: 50px;">
-                <br><br><br>
+                <br><br>
                 <div class="message received">
                     <div class="message-content">Welcome to LT Camp Docs! <br><br>Ask for documents with the talk Name
                         or
@@ -531,7 +531,6 @@
                     <i class="zmdi zmdi-mail-send"></i>
                 </button>
             </div>
-        </div>
         <!-- <div id="results-frame-container">
         <div id="results-frame-header">
             <strong><i class="zmdi zmdi-arrow-left" onclick="closeResultsFrame()"></i>&ensp;Results</strong>
@@ -575,24 +574,27 @@
         updatePageVisit("moreOptions");
 
         // Show loader first
+        // Single DOMContentLoaded handler
         document.addEventListener('DOMContentLoaded', function () {
-            // After 2 seconds, hide loader and show content
+            updatePageVisit("moreOptions");
+
+            // Show loader initially
+            const loader = document.getElementById('loader');
+            const content = document.getElementById('content');
+
+            // After 2 seconds, transition to main content
             setTimeout(function () {
-                var loader = document.getElementById('loader');
-                var content = document.getElementById('content');
-
-                // Fade out loader
                 loader.style.opacity = '0';
-
-                // Show content
                 content.style.display = 'block';
                 document.body.classList.add('loaded');
 
-                // Remove loader from DOM after fade out completes
+                // Remove loader after fade completes
                 setTimeout(function () {
                     loader.remove();
-                }, 500); // Match this with your CSS transition time
-            }, 2000); // 2 seconds delay
+                    // Initialize chat functionality after content is visible
+                    initChatFunctionality();
+                }, 500);
+            }, 2000);
         });
 
 
