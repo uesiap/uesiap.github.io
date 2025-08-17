@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans&display=swap" rel="stylesheet">
+<style>
+  /* Style for container */
+  .container {
+    text-align: center;
+    margin-top: 100px;
+    font-family: 'Google Sans', sans-serif; /* Applying Google Sans font */
+  }
+  
+  /* Style for loader */
+  .loader {
+    border: 6px solid #f3f3f3; /* Light grey */
+    border-top: 6px solid #3498db; /* Blue */
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+    margin-top: 20px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Container for the message and loader -->
+<div class="container">
+  <h3><strong>LIFE 2.0</strong> is Loading..<h3>
+  <h5>Form is in construction 🚧 Please Wait..</h5>
+  <div class="loader"></div>
+</div>
+<script>
+  // JavaScript for redirection after 2 seconds
+  setTimeout(function() {
+    window.location.replace('https://docs.google.com/forms/d/e/1FAIpQLSfka_A-W9K_ibp5mrL5fZ52J76GTCLUdSAgQnaUtcbVWRl0lQ/viewform'); // Change the URL to the desired destination
+  }, 3000); // 2000 milliseconds = 2 seconds
+</script>
+</body>
+</html>
