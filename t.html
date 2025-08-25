@@ -6,7 +6,7 @@
     <script>
         window.onload = function () {
             const params = new URLSearchParams(window.location.search);
-            const songNum = params.get("song");
+            const songNum = params.get("s");
             if (songNum) {
                 const targetUrl = `https://uesiap.github.io/vidhyardhi-geethavali/tsongs/song${songNum}`;
                 window.location.href = targetUrl;
