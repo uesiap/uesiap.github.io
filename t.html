@@ -1,23 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <script>
-      window.onload = function() {
-        const params = new URLSearchParams(window.location.search);
-        const songNum = params.get("song");
-        if (songNum) {
-          const targetUrl = `https://uesiap.github.io/vidhyardhi-geethavali/tsongs/song${songNum}`;
-          window.location.href = targetUrl;
-        } else {
-          document.body.innerHTML = "<p>No song number provided.</p>";
-        }
-      };
+        window.onload = function () {
+            const params = new URLSearchParams(window.location.search);
+            const songNum = params.get("song");
+            if (songNum) {
+                const targetUrl = `https://uesiap.github.io/vidhyardhi-geethavali/tsongs/song${songNum}`;
+                window.location.href = targetUrl;
+            } else {
+                document.body.innerHTML = "<p>No song number provided.</p>";
+            }
+        };
+    </script>
+    <script>
+        (function () {
+            const keysToRetain = ["bbsRole", "bbsName"];
+            const existingKeys = new Set(keysToRetain.filter(key => localStorage.getItem(key) !== null));
+            Object.keys(localStorage).forEach((key) => {
+                if (!existingKeys.has(key)) {
+                    localStorage.removeItem(key);
+                }
+            });
+            console.log("LocalStorage cleared except for:", [...existingKeys]);
+            sessionStorage.clear();
+            console.log("SessionStorage cleared.");
+            const clearIndexedDB = () => {
+                if (!window.indexedDB) {
+                    console.warn("IndexedDB is not supported by this browser.");
+                    return;
+                }
+                indexedDB.databases().then((databases) => {
+                    databases.forEach((db) => {
+                        indexedDB.deleteDatabase(db.name);
+                        console.log(`Deleted IndexedDB: ${db.name}`);
+                    });
+                }).catch((error) => {
+                    console.error("Error clearing IndexedDB:", error);
+                });
+            };
+            const clearCache = () => {
+                if ("caches" in window) {
+                    caches.keys().then((cacheNames) => {
+                        cacheNames.forEach((cacheName) => {
+                            caches.delete(cacheName);
+                            console.log(`Deleted Cache: ${cacheName}`);
+                        });
+                    }).catch((error) => {
+                        console.error("Error clearing cache:", error);
+                    });
+                } else {
+                    console.warn("Cache API is not supported by this browser.");
+                }
+            };
+            clearIndexedDB();
+            clearCache();
+            console.log(`All data cleared except for ${[...existingKeys].join(", ")} in localStorage.`);
+        })();
     </script>
     <title>Vidhyardhi Geethavali Songs | UESI AP</title>
     <meta name="theme-color" content="#0B1023">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta property="og:site_name" content="Melam Rahul">       
+    <meta property="og:site_name" content="Melam Rahul">
     <meta property="og:title" content="Vidhyardhi Geethavali Songs | UESI AP">
     <meta property="og:description" content="">
     <meta property="og:url" content="https://Melam.Rahul">
@@ -27,5 +73,6 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <body><p>Opening song page...</p></body>
+<body></body>
+
 </html>
