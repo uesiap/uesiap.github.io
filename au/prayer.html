@@ -2,15 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AU - ZONE Online Prayer</title>
-    <meta http-equiv="refresh" content="0; URL=https://meet.google.com/isa-dhrr-mwa">        
+    
+    <!-- Primary redirect -->
+    <meta http-equiv="refresh" content="0; URL=https://meet.google.com/isa-dhrr-mwa">
+    
+    <!-- Fallback JavaScript redirect -->
+    <script>
+        window.onload = function() {
+            setTimeout(function() {
+                window.location.href = "https://meet.google.com/isa-dhrr-mwa";
+            }, 100);
+        }
+    </script>
+    
+    <!-- Open Graph tags for social media sharing -->
     <meta property="og:title" content="AU - ZONE Online Prayer">
     <meta property="og:description" content="Join for AU - ZONE Online Prayer using this Link.">
     <meta property="og:url" content="https://Melam.Rahul">
     <meta property="og:image" content="https://i.ibb.co/39KKpXrQ/au-zone-prayer-img.jpg">
-    <meta property="og:image:width" content="32">
-    <meta property="og:image:height" content="32">
+    <meta property="og:image:width" content="300">
+    <meta property="og:image:height" content="300">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
-    <body></body>
+    
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .container {
+            max-width: 500px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #1a73e8;
+            color: white;
+            padding: 14px 28px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #1557b0;
+        }
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #1a73e8;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AU - ZONE Online Prayer</h1>
+        <p>You are being redirected to the prayer meeting. If you are not redirected automatically, please click the button below.</p>
+        
+        <div class="loader"></div>
+        
+        <p>
+            <a href="https://meet.google.com/isa-dhrr-mwa" class="button">Join Prayer Meeting</a>
+        </p>
+        
+        <p style="font-size: 14px; color: #999; margin-top: 30px;">
+            Redirecting to Google Meet...
+        </p>
+    </div>
+</body>
 </html>
