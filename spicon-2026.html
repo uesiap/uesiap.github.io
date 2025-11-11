@@ -983,9 +983,9 @@
           <h3 style="text-decoration: underline">Speakers</h3>&nbsp;<span>🎤</span>
         </span>
         <p style="margin:0;color:#374151;line-height:1.7">
-          <strong>Expositions:</strong> Mr. G. Sudheer Kumar<br>
-          <strong>Devotions:</strong> Mr. K. David Rajkumar<br>
-          <strong>Keynote:</strong> Mr. Uma Maheswara Rao
+          <strong>Keynote: <span style="color: #D05C14;">Mr. Ch. Uma Maheswara Rao</span></strong><br>
+          <strong>Devotions: <span style="color: #004AAD;">Mr. K. David Rajkumar</span></strong><br>
+          <strong>Expositions: <span style="color: #A932BC;">Mr. G. Sudheer Kumar</span></strong>
         </p>
       </div>
 
@@ -1227,6 +1227,14 @@
 
             <label>Amount Paid in Advance<span class="required">*</span></label>
             <input type="number" id="amountPaid" placeholder="Enter amount you paid" required />
+
+            <hr>
+
+            <label>Access Code<span class="required">*</span></label>
+            <small style="display:block; color:red; font-size:0.95rem; margin-bottom:6px;">
+              This code is required for authorized submission.
+            </small>
+            <input type="text" id="accessCode" placeholder="Enter your access code" required />
           </div>
           <div class="nav-row">
             <button type="button" class="icon-btn" onclick="pressThenPrev(this,1)">
@@ -1766,6 +1774,22 @@
         field.focus();
         return;
       }
+
+      // ✅ Validate Access Code before allowing submission
+      const accessCodeInput = document.getElementById('accessCode');
+      const enteredCode = accessCodeInput.value.trim();
+
+      // Set your actual valid code(s) here — can be one or more
+      const validAccessCodes = ['SPI26', 'spi26'];
+
+      if (!validAccessCodes.includes(enteredCode)) {
+        showDialog('🔒 Invalid Access Code', 'Please ask your Senior Advisor/EGF Secretary/EGF Persident/ RC/ DC/ Staff for this code.');
+        accessCodeInput.classList.add('error-field');
+        accessCodeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        accessCodeInput.focus();
+        return;
+      }
+
 
       // ✅ Everything valid — show confirmation dialog
       pressButtonVisual(submitBtn);
