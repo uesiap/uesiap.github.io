@@ -1771,9 +1771,13 @@
       let totalFee = baseFee + childrenFee;
 
       if (attendAs === 'Volunteer') {
-        totalFee = 0;
-        document.getElementById('transactionId').value = '000000';
-        document.getElementById('amountPaid').value = '0';
+        const transactionField = document.getElementById('transactionId');
+        const amountField = document.getElementById('amountPaid');
+        transactionField.value = '000000';  // keep as string
+        transactionField.setAttribute('type', 'text');  // force string input
+        amountField.value = '0';
+      } else {
+        document.getElementById('transactionId').setAttribute('type', 'text');
       }
 
       document.getElementById('feeAmount').textContent = '₹' + totalFee.toLocaleString('en-IN');
