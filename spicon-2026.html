@@ -1148,7 +1148,14 @@
               <option value="Srikakulam">Srikakulam</option>
               <option value="Vizianagaram">Vizianagaram</option>
               <option value="Visakhapatnam">Visakhapatnam</option>
+              <option value="Other District">Other District</option>
             </select>
+
+            <!-- Hidden input for custom district -->
+            <div id="otherDistrictContainer" style="display:none; margin-top:10px;">
+              <label>Enter the Other District:<span class="required">*</span></label>
+              <input type="text" id="otherDistrictInput" placeholder="Enter your district name here" />
+            </div>
 
             <label>Place<span class="required">*</span></label>
             <select id="place" required disabled onchange="checkOtherPlace()">
@@ -1157,8 +1164,8 @@
 
             <!-- Hidden input for custom place -->
             <div id="otherPlaceContainer" style="display:none; margin-top:10px;">
-              <label>Enter the Other Place:</label>
-              <input type="text" id="otherPlaceInput" placeholder="Enter your place here" />
+              <label>Enter the Other Place:<span class="required">*</span></label>
+              <input type="text" id="otherPlaceInput" placeholder="Enter your place name here" />
             </div>
           </div>
 
@@ -1171,6 +1178,7 @@
             </button>
           </div>
         </form>
+
 
         <!-- Step 3 -->
         <form id="step3">
@@ -1653,16 +1661,40 @@
     }
 
     function updatePlaces() {
-      const district = document.getElementById('district').value;
+      const districtSelect = document.getElementById('district');
+      const district = districtSelect.value;
       const placeSelect = document.getElementById('place');
       const otherPlaceContainer = document.getElementById('otherPlaceContainer');
+      const otherDistrictContainer = document.getElementById('otherDistrictContainer');
+      const otherDistrictInput = document.getElementById('otherDistrictInput');
+      const otherPlaceInput = document.getElementById('otherPlaceInput');
 
-      // Reset place dropdown and hide "Other" input
+      // Reset all dynamic elements
       placeSelect.innerHTML = '<option value="" disabled selected>Select Place</option>';
       otherPlaceContainer.style.display = 'none';
-      document.getElementById('otherPlaceInput').value = '';
-      document.getElementById('otherPlaceInput').removeAttribute('required');
+      otherPlaceInput.value = '';
+      otherPlaceInput.removeAttribute('required');
+      otherDistrictContainer.style.display = 'none';
+      otherDistrictInput.value = '';
+      otherDistrictInput.removeAttribute('required');
 
+      // If user selects "Other District"
+      if (district === 'Other District') {
+        // Show the "Enter Other District" input
+        otherDistrictContainer.style.display = 'block';
+        otherDistrictInput.setAttribute('required', 'required');
+
+        // Auto-select "Other place" behavior
+        placeSelect.disabled = false; // enable dropdown
+        placeSelect.innerHTML = '<option value="Other place" selected>Other place</option>';
+
+        // Show "Other Place" input automatically
+        otherPlaceContainer.style.display = 'block';
+        otherPlaceInput.setAttribute('required', 'required');
+        return;
+      }
+
+      // Populate normal place options for known districts
       if (district && places[district]) {
         placeSelect.disabled = false;
         places[district].forEach(place => {
@@ -1690,6 +1722,30 @@
         otherPlaceInput.value = '';
       }
     }
+
+    // ✅ Use this when submitting or moving to next step
+    function getLocationDetails() {
+      const districtSelect = document.getElementById('district');
+      const placeSelect = document.getElementById('place');
+      const otherDistrictInput = document.getElementById('otherDistrictInput');
+      const otherPlaceInput = document.getElementById('otherPlaceInput');
+
+      let finalDistrict = districtSelect.value;
+      let finalPlace = placeSelect.value;
+
+      // If "Other District" selected, take custom district name
+      if (finalDistrict === 'Other District') {
+        finalDistrict = otherDistrictInput.value.trim();
+      }
+
+      // If "Other place" selected, take custom place name
+      if (finalPlace === 'Other place') {
+        finalPlace = otherPlaceInput.value.trim();
+      }
+
+      return { district: finalDistrict, place: finalPlace };
+    }
+
 
     function updateFeeDisplay() {
       const attendAs = document.getElementById('attendAs').value;
@@ -1792,6 +1848,7 @@
 
 
       // ✅ Everything valid — show confirmation dialog
+      const { district, place } = getLocationDetails();
       pressButtonVisual(submitBtn);
 
       const confirmationDialog = new bootstrap.Modal(document.getElementById('confirmDialog'));
@@ -1801,12 +1858,6 @@
       confirmButton.onclick = () => {
         confirmationDialog.hide();
         document.getElementById('loaderContainer').style.display = 'block';
-
-        // Get the actual place value (custom if "Other" was selected)
-        let placeValue = document.getElementById('place').value;
-        if (placeValue === 'Other') {
-          placeValue = document.getElementById('otherPlaceInput').value.trim();
-        }
 
         const formData = new FormData();
         formData.append("Full Name", document.getElementById("fullName").value);
@@ -1819,8 +1870,8 @@
         formData.append("Recommended By (Name)", document.getElementById("recommendName").value);
         formData.append("Recommended By (Role)", document.getElementById("recommendRole").value);
         formData.append("Recommended Contact", document.getElementById("recommendContact").value);
-        formData.append("District", document.getElementById("district").value);
-        formData.append("Place", placeValue); // Use custom place if "Other" selected
+        formData.append("District", district);
+        formData.append("Place", place); // Use custom place if "Other" selected
         formData.append("Transaction ID", document.getElementById("transactionId").value);
         formData.append("Total Fee", document.getElementById("feeAmount").textContent.replace("₹", "").replace(",", "").trim());
         formData.append("Amount Paid", document.getElementById("amountPaid").value);
