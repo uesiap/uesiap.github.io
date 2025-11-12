@@ -1009,11 +1009,7 @@
             <td>₹500</td>
           </tr>
           <tr>
-            <td>🤝 Volunteer</td>
-            <td>FREE</td>
-          </tr>
-          <tr>
-            <td>👶 Children (below 15 Yrs)</td>
+            <td>👶 Children (10 - 15 Yrs)</td>
             <td>₹300 (per child)</td>
           </tr>
           <tr>
@@ -1027,6 +1023,18 @@
           <tr>
             <td>👨‍👩‍👧‍👦 Both Employed Family</td>
             <td>₹4000</td>
+          </tr>
+          <tr>
+            <td>👔 Staff</td>
+            <td>₹2500</td>
+          </tr>
+          <tr>
+            <td>🎵 Choir Member</td>
+            <td>₹2000</td>
+          </tr>
+          <tr>
+            <td>🤝 Volunteer</td>
+            <td>FREE</td>
           </tr>
         </table>
       </div>
@@ -1146,8 +1154,11 @@
             <select id="district" required onchange="updatePlaces()">
               <option value="" disabled selected>Select District</option>
               <option value="Srikakulam">Srikakulam</option>
+              <option value="Manyam">Manyam</option>
               <option value="Vizianagaram">Vizianagaram</option>
+              <option value="ASR District">ASR District</option>
               <option value="Visakhapatnam">Visakhapatnam</option>
+              <option value="Anakapalle">Anakapalle</option>
               <option value="Other District">Other District</option>
             </select>
 
@@ -1426,10 +1437,14 @@
     const progressWrap = document.getElementById('progressWrap');
 
     const places = {
-      Srikakulam: ['Srikakulam', 'Kotturu', 'Palasa', 'Sompeta', 'Mandasa', 'Rajam', 'Palakonda', 'Etcherla', 'Pathapatnam', 'Other place'],
+      Srikakulam: ['Srikakulam', 'Etcherla', 'Tekkali', 'Palasa', 'Sompeta', 'Pathapatnam', 'Ranastalam', 'Rajam', 'Kotturu', 'Palakonda', 'Mandasa', 'Other place'],
       Vizianagaram: ['Vizianagaram Zone', 'Kanapaka Zone', 'Garividi', 'Gajapathinagaram', 'Salur', 'Bobbili', 'Parvathipuram', 'Bhogapuram', 'Kurupam', 'Badangi', 'Pusapatirega', 'Other place'],
-      Visakhapatnam: ['City Central Zone', 'Gajuwaka', 'Steel Plant', 'NAD Zone', 'Duvvada Zone', 'GITAM Zone', 'AU Zone', 'Arilova', 'HB Colony', 'Madhurawada', 'Bheemili', 'Anakapalle', 'Yelamanchili', 'Araku Valley', 'Chodavaram', 'Paderu', 'Narsipatnam', 'Narsipatnam Road', 'Chintapalle Zone', 'Other place']
+      Manyam: ['Parvathipuram', 'Palakonda', 'Salur', 'Kurupam', 'GL Puram', 'Seethampeta', 'Other place'],
+      Visakhapatnam: ['City Central Zone', 'Gajuwaka', 'Steel Plant', 'NAD Zone', 'Duvvada Zone', 'GITAM Zone', 'AU Zone', 'Arilova', 'HB Colony', 'Madhurawada', 'Bheemili', 'Anakapalle', 'Yelamanchili', 'Araku Valley', 'Chodavaram', 'Narsipatnam', 'Narsipatnam Road', 'Chintapalle Zone', 'Other place'],
+      ASR: ['Araku', 'Paderu', 'Chintapalli', 'Munchingupattu', 'Other place'],
+      Anakapalle: ['Anakapalle', 'Yelamanchili', 'Chodavaram', 'Narsipatnam', 'Narsipatnam Road', 'Other place']
     };
+
 
     const fees = {
       'Student': 500,
