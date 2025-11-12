@@ -1418,9 +1418,9 @@
     const progressWrap = document.getElementById('progressWrap');
 
     const places = {
-      Srikakulam: ['Srikakulam', 'Kotturu', 'Palasa', 'Sompeta', 'Mandasa', 'Rajam', 'Palakonda', 'Etcherla', 'Pathapatnam', 'Other'],
-      Vizianagaram: ['Vizianagaram Zone', 'Kanapaka Zone', 'Garividi', 'Gajapathinagaram', 'Salur', 'Bobbili', 'Parvathipuram', 'Bhogapuram', 'Kurupam', 'Badangi', 'Pusapatirega', 'Other'],
-      Visakhapatnam: ['City Central Zone', 'Gajuwaka', 'Steel Plant', 'NAD Zone', 'Duvvada Zone', 'GITAM Zone', 'AU Zone', 'Arilova', 'HB Colony', 'Madhurawada', 'Bheemili', 'Anakapalle', 'Yelamanchili', 'Araku Valley', 'Chodavaram', 'Paderu', 'Narsipatnam', 'Narsipatnam Road', 'Chintapalle Zone', 'Other']
+      Srikakulam: ['Srikakulam', 'Kotturu', 'Palasa', 'Sompeta', 'Mandasa', 'Rajam', 'Palakonda', 'Etcherla', 'Pathapatnam', 'Other place'],
+      Vizianagaram: ['Vizianagaram Zone', 'Kanapaka Zone', 'Garividi', 'Gajapathinagaram', 'Salur', 'Bobbili', 'Parvathipuram', 'Bhogapuram', 'Kurupam', 'Badangi', 'Pusapatirega', 'Other place'],
+      Visakhapatnam: ['City Central Zone', 'Gajuwaka', 'Steel Plant', 'NAD Zone', 'Duvvada Zone', 'GITAM Zone', 'AU Zone', 'Arilova', 'HB Colony', 'Madhurawada', 'Bheemili', 'Anakapalle', 'Yelamanchili', 'Araku Valley', 'Chodavaram', 'Paderu', 'Narsipatnam', 'Narsipatnam Road', 'Chintapalle Zone', 'Other place']
     };
 
     const fees = {
@@ -1681,7 +1681,7 @@
       const otherPlaceContainer = document.getElementById('otherPlaceContainer');
       const otherPlaceInput = document.getElementById('otherPlaceInput');
 
-      if (placeSelect.value === 'Other') {
+      if (placeSelect.value === 'Other place') {
         otherPlaceContainer.style.display = 'block';
         otherPlaceInput.setAttribute('required', 'required');
       } else {
