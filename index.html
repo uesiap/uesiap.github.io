@@ -790,6 +790,18 @@
       font-size: 0.95rem;
     }
 
+    .scuuess-wa-btn {
+      cursor: pointer;
+      transition: all var(--anim);
+      box-shadow: none;
+      -webkit-tap-highlight-color: rgba(0, 153, 255, 0.2);
+    }
+
+    .success-wa-btn:hover {
+      background: #faf5ff;
+      color: var(--brand-dark);
+    }
+
     /* Animations */
     @keyframes fadeIn {
       from {
@@ -1115,7 +1127,7 @@
 
             <div id="familyFields" class="conditional-fields">
               <label>Spouse Name<span class="required">*</span></label>
-              <input type="text" id="spouseName" pattern="[A-Za-z\s]{2,}" placeholder="Enter spouse name" />
+              <input type="text" id="spouseName" pattern="[A-Za-z.\s]{2,}" placeholder="Enter spouse name" />
 
               <label>Number of Children (Below 15 Years Only)<span class="required">*</span></label>
               <input type="number" id="children" min="0" placeholder="0" value="0" />
@@ -1275,6 +1287,14 @@
           <h1>Successful Submission! 🎉 </h1>
           <p style="font-weight: bold">🙏 Thank you for Registering.</p><br>
           <p>Your response has been submitted successfully. 🤝</p>
+          <hr>
+          <p style="font-size: bold; margin-bottom: 10px;">Please Join, Spicon Whatsapp Group</p>
+          <a class="success-wa-btn" href="" target="_blank"
+            style="text-decoration: none; color: var(--brand); font-weight: bold; border: 1.5px solid var(--brand-dark); border-radius: 5px; padding: 5px;">
+            <img
+              src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/whatsapp-color-icon.png"
+              alt="Whatsapp" width="20px" style="margin-top: -7px;"> Join Spicon Group
+          </a>
         </div>
       </div>
     </div>
