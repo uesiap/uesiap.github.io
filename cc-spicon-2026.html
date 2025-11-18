@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- Corrections
+Two Pegions / our logo
+Anouther column for selecting number for below 12yrs
+-->
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -944,12 +949,29 @@
         transform: translateX(0);
       }
     }
+
+    .head_img {
+      border-radius: 50%;
+    }
+
+    header span {
+      display: flex;
+      align-items: center;
+      /* keeps image + text nicely aligned */
+      gap: 0.5rem;
+      /* optional: space between image and text */
+    }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>SPICON 2026 🕊</h1>
+    <span>
+      <img class="head_img"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcSxSNUXpJ8n2YkTuBEeO84gb1dH6NRhvQNg&s" width="40"
+        height="40" alt="Logo">
+      <h1>SPICON 2026</h1>
+    </span>
   </header>
 
   <div id="customDialog" class="dialog-overlay">
@@ -1139,6 +1161,15 @@
 
               <!-- <label>Name & Age of Children (12 - 15 Years)<span class="required">*</span></label>
               <input type="text" id="children" placeholder="0" value="0" /> -->
+              <label>Select no. of children attending (Beolow 12 Years)<span class="required">*</span></label>
+              <select id="kiddosCount" required>
+                <option value="0" selected>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+
               <label>Select no. of children attending (12–15 Years)</label>
               <select id="childrenCount">
                 <option value="0">0</option>
@@ -1265,12 +1296,15 @@
               </button>
             </div>
 
+            <label>Date & Time of Payment<span class="required">*</span></label>
+            <input type="datetime-local" id="dateOfPayment" required />
+
             <label>Transaction ID<span class="required">*</span></label>
             <small style="display:block; color:red; font-size:0.95rem; margin-bottom:6px;">
               Enter last 6 digits of transaction ID
             </small>
             <small style="display:block; color:red; font-size:0.95rem; margin-bottom:6px;">
-              Enter last 6 digits of UTR Number (if done through Phonepe)
+              Enter last 6 digits of UTR Number (if done throught Phonepe)
             </small>
 
             <input type="text" id="transactionId" name="transactionId"
@@ -1433,6 +1467,9 @@
       });
     });
 
+
+
+
     // Validate Transaction ID (must be alphanumeric, at least 6 chars)
     const transactionField = document.getElementById('transactionId');
     transactionField.addEventListener('blur', () => {
@@ -1516,8 +1553,8 @@
         wrapper.className = "child-field";
 
         wrapper.innerHTML = `
-            <label>Child ${i} (Name & Age)</label>
-            <input type="text" id="child${i}" placeholder="e.g. Joseph - 14" pattern="^[A-Za-z\\s.]+\\s?-\\s?([1][2-5])$" required />`;
+            <label>Child ${i} (Name, Age & Gender) (12 - 15 Yrs only)</label>
+            <input type="text" id="child${i}" placeholder="e.g. Joseph - 14 - Male" required />`;
         container.appendChild(wrapper);
       }
 
@@ -1618,10 +1655,9 @@
 
       showDialogg(
         '💰 Make Payment',
-        `Please pay ₹${amount} to:<br><strong>9866819908</strong><br>(SYAM BABU CHINNAM)<br><br>Click OK to continue`
+        `Please pay ₹${amount}/ full amount of ₹${feeAmount}<br>to:<br><strong>9866819908</strong><br>(SYAM BABU CHINNAM)<br><br>Click OK to continue`
       );
     }
-
 
     function pressButtonVisual(el) {
       el.classList.add('pressed');
@@ -1988,9 +2024,12 @@
         formData.append("Other Specify", document.getElementById("otherText")?.value || "");
         formData.append("Spouse Name", document.getElementById("spouseName")?.value || "");
 
+        const kiddosCount = parseInt(document.getElementById("kiddosCount")?.value || "0");
+        formData.append("Child (below 12 Yrs)", kiddosCount);
+
         // NEW: number of children
         const childCount = parseInt(document.getElementById("childrenCount")?.value || "0");
-        formData.append("Number of Children", childCount);
+        formData.append("Child (12-15 Yrs)", childCount);
 
         // NEW: Append each child entry (Name + Age in one field)
         for (let i = 1; i <= childCount; i++) {
@@ -2003,6 +2042,7 @@
         formData.append("Recommended Contact", document.getElementById("recommendContact").value);
         formData.append("District", district);
         formData.append("Place", place);
+        formData.append("Payment Date", document.getElementById("dateOfPayment").value);
         formData.append("Transaction ID", document.getElementById("transactionId").value);
         formData.append(
           "Total Fee",
