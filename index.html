@@ -944,6 +944,100 @@
         transform: translateX(0);
       }
     }
+
+    /* --- NEW RADIO BUTTON STYLES --- */
+    .radio-group label,
+    .radio-group input[type="radio"] {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .radio-group input[type="radio"] {
+      /* Hide the default radio button */
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      /* Space between options */
+    }
+
+    .radio-label {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      padding-left: 28px;
+      /* Space for the custom radio button */
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .radio-custom {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 18px;
+      width: 18px;
+      border-radius: 50%;
+      border: 2px solid var(--muted);
+      /* Default unselected border */
+      background: #fff;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 0 0 rgba(103, 58, 183, 0);
+      /* Initial shadow for ripple effect */
+    }
+
+    /* Inner dot (the "knob") */
+    .radio-custom::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      height: 8px;
+      width: 8px;
+      border-radius: 50%;
+      background: var(--brand);
+      /* Brand color for the inner knob */
+      transition: transform 0.2s ease;
+    }
+
+    /* When the radio button is checked */
+    .radio-group input[type="radio"]:checked+.radio-label .radio-custom {
+      border-color: var(--brand-dark);
+      /* Darker color for the border when selected */
+      /* Optional: subtle background color on check */
+      background: var(--bg);
+    }
+
+    .radio-group input[type="radio"]:checked+.radio-label .radio-custom::after {
+      transform: translate(-50%, -50%) scale(1);
+      /* Show the inner dot */
+      background: var(--brand);
+      /* Ensure inner dot uses brand color */
+    }
+
+    /* Focus/Active/Hover state for accessibility and visual feedback (the shading/ripple) */
+    .radio-group input[type="radio"]:focus+.radio-label .radio-custom,
+    .radio-group input[type="radio"]:hover+.radio-label .radio-custom {
+      box-shadow: 0 0 0 6px var(--bg);
+      /* Use --bg for outer shading/ripple effect */
+    }
+
+    .radio-group .note {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 4px;
+      margin-left: 5px;
+      /* Align note text with label */
+    }
   </style>
 </head>
 
@@ -1129,12 +1223,29 @@
               <label>Spouse Name<span class="required">*</span></label>
               <input type="text" id="spouseName" pattern="[A-Za-z.\s]{2,}" placeholder="Enter spouse name" />
 
-              <label>Number of Children (Below 15 Years Only)<span class="required">*</span></label>
-              <input type="number" id="children" min="0" placeholder="0" value="0" />
+              <label>Number of Children (Below 10 Years)<span class="required">*</span></label>
+              <select id="Kiddoschild">
+                <option value="0" selected>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+
+              <label>Number of Children (Above 10 Years)<span class="required">*</span></label>
+              <select id="children">
+                <option value="0" selected>0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+
             </div>
 
             <label>Recommended By (Name)<span class="required">*</span></label>
-            <input type="text" id="recommendName" pattern="[A-Za-z.\s]{2,}" placeholder="Name of recommender" required />
+            <input type="text" id="recommendName" pattern="[A-Za-z.\s]{2,}" placeholder="Name of recommender"
+              required />
 
             <label>Recommended By (Role)<span class="required">*</span></label>
             <select id="recommendRole" required>
@@ -1191,6 +1302,35 @@
               <input type="text" id="otherPlaceInput" placeholder="Enter your place name here" />
             </div>
           </div>
+
+          <hr>
+
+          <div class="form-group radio-group">
+            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #0f172a; font-size: 0.95rem;">
+              Do you need accommodation at Peddipalem (2 km away from the conference venue)?<span
+                class="required">*</span>
+              <span class="note">Note: Handle the transport yourself.</span>
+            </label>
+
+            <span style="display: flex;">
+              <div class="radio-option">
+                <input type="radio" id="acc_no" name="accommodation" value="No">
+                <label for="acc_no" class="radio-label">
+                  <span class="radio-custom"></span>
+                  No
+                </label>
+              </div> &emsp; &nbsp;
+
+              <div class="radio-option">
+                <input type="radio" id="acc_yes" name="accommodation" value="Yes">
+                <label for="acc_yes" class="radio-label">
+                  <span class="radio-custom"></span>
+                  Yes
+                </label>
+              </div>
+            </span>
+          </div>
+
 
           <div class="nav-row">
             <button type="button" class="icon-btn" onclick="pressThenPrev(this,0)">
@@ -1462,7 +1602,7 @@
       Manyam: ['Parvathipuram', 'Palakonda', 'Salur', 'Kurupam', 'GL Puram', 'Seethampeta', 'Other place'],
       Visakhapatnam: ['City Central Zone', 'Gajuwaka', 'Steel Plant', 'NAD Zone', 'Duvvada Zone', 'GITAM Zone', 'AU Zone', 'Arilova', 'HB Colony', 'Madhurawada', 'Bheemili', 'Other place'],
       ASR: ['Araku', 'Paderu', 'Chintapalli', 'Munchingupattu', 'Other place'],
-      Anakapalle: ['Anakapalle', 'Chodavaram','Narsipatnam', 'Nakkapalli', 'Yellamanchili', 'Sabbavaram', 'Other place']
+      Anakapalle: ['Anakapalle', 'Chodavaram', 'Narsipatnam', 'Nakkapalli', 'Yellamanchili', 'Sabbavaram', 'Other place']
     };
 
 
@@ -1621,6 +1761,15 @@
             document.getElementById('otherPlaceInput').focus();
             return false;
           }
+        }
+
+        const accommodationChecked = document.querySelector('input[name="accommodation"]:checked');
+
+        if (!accommodationChecked) {
+          showDialog('⚠ Choose Yes/No', 'Please select if you need accommodation at Peddipalem.');
+          // Optionally highlight the group container
+          document.querySelector('.radio-group').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return false;
         }
       }
 
@@ -1905,12 +2054,14 @@
         formData.append("Attend As", document.getElementById("attendAs").value);
         formData.append("Other Specify", document.getElementById("otherText")?.value || "");
         formData.append("Spouse Name", document.getElementById("spouseName")?.value || "");
-        formData.append("Number of Children", document.getElementById("children")?.value || "0");
+        formData.append("No. of Kiddos", document.getElementById("Kiddoschild")?.value || "0");
+        formData.append("No. of Children", document.getElementById("children")?.value || "0");
         formData.append("Recommended By (Name)", document.getElementById("recommendName").value);
         formData.append("Recommended By (Role)", document.getElementById("recommendRole").value);
         formData.append("Recommended Contact", document.getElementById("recommendContact").value);
         formData.append("District", district);
         formData.append("Place", place); // Use custom place if "Other" selected
+        formData.append("Peddipalem Venue", document.querySelector('input[name="accommodation"]:checked').value);
         formData.append("Transaction ID", document.getElementById("transactionId").value);
         formData.append("Total Fee", document.getElementById("feeAmount").textContent.replace("₹", "").replace(",", "").trim());
         formData.append("Amount Paid", document.getElementById("amountPaid").value);
