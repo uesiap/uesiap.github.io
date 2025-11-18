@@ -1000,8 +1000,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%) scale(0);
-      height: 8px;
-      width: 8px;
+      height: 10px;
+      width: 10px;
       border-radius: 50%;
       background: var(--brand);
       /* Brand color for the inner knob */
@@ -1068,6 +1068,14 @@
       <img id="qrPreviewImage" src="" alt="QR Code Preview"
         style="width:100%;height:auto;border:2px solid var(--brand);border-radius:8px;">
       <button class="dialog-button" style="margin-top:12px;" onclick="closeQRPreview()">Close</button>
+    </div>
+  </div>
+
+  <div id="waQRModal" class="dialog-overlay" style="display:none;">
+    <div class="dialog-box" style="max-width:400px;padding:10px;background:#fff;border-radius:8px;">
+      <img id="waQRCodeImage" src="" alt="WA QR Code Preview"
+        style="width:100%;height:auto;border:2px solid var(--brand);border-radius:8px;">
+      <button class="dialog-button" style="margin-top:12px;" onclick="closeWAQR()">Close</button>
     </div>
   </div>
 
@@ -1383,7 +1391,9 @@
 
               <button type="button" class="pay-btn"
                 onclick="showQRPreview('https://uesiap.github.io/spicon-2026-upi-payment-big.jpg')">
-                <img src="https://uesiap.github.io/spicon-2026-upi-payment-small.jpg" alt="QR Code" width="130">
+                <img
+                  src="https://uxwing.com/wp-content/themes/uxwing/download/computers-mobile-hardware/qr-code-icon.png"
+                  alt="QR Code" width="130">
               </button>
             </div>
 
@@ -1578,14 +1588,22 @@
 
     function showDialogg(title, message) {
       document.getElementById('dialogTitlee').textContent = title;
-      document.getElementById('dialogMessagee').innerHTML = message; // supports <br>
+      document.getElementById('dialogMessagee').innerHTML = message;
       document.getElementById('customDialogg').style.display = 'flex';
 
       const okButton = document.getElementById('dialogOkButton');
       okButton.onclick = () => {
         closeDialogg();
+
+        if (pendingQR) {
+          // open QR preview modal instead of redirect
+          showQRPreview(pendingQR);
+          return;
+        }
+
+        // normal redirect for UPI apps
         if (pendingUrl) {
-          window.location.href = pendingUrl; // redirect after OK
+          window.location.href = pendingUrl;
         }
       };
     }
@@ -1601,8 +1619,19 @@
       modal.style.display = 'flex';
     }
 
+    function showWAQRPreview(src) {
+      const modal = document.getElementById('waQRModal');
+      const img = document.getElementById('waQRCodeImage');
+      img.src = src;
+      modal.style.display = 'flex';
+    }
+
     function closeQRPreview() {
       document.getElementById('qrPreviewModal').style.display = 'none';
+    }
+
+    function closeWAQR() {
+      document.getElementById('waQRModal').style.display = 'none';
     }
 
     const steps = Array.from(document.querySelectorAll('.step'));
@@ -1691,10 +1720,19 @@
         pendingUrl = 'https://m.p-y.tm/home';
       }
 
-      // Show dialog first
-      showDialogg('💰 Make Payment', `Please pay ₹${amount} to:\n9347450441 (MELAM RAHUL)\n\n Click OK to open selected UPI App`);
-    }
+      // NEW: QR CASE → no redirect, only show QR preview after dialog
+      if (app === 'qr') {
+        pendingUrl = null; // block redirect
+        pendingQR = 'https://uesiap.github.io/assets/cc-spicon-2026-upi-payment-big.jpg';
+      } else {
+        pendingQR = null;
+      }
 
+      showDialogg(
+        '💰 Make Payment',
+        `Please pay ₹${amount}/ full amount of ₹${feeAmount}<br>to:<br><strong>9347450441</strong><br>(MELAM RAHUL)<br><br>Click OK to continue`
+      );
+    }
     function pressButtonVisual(el) {
       el.classList.add('pressed');
       setTimeout(() => el.classList.remove('pressed'), 250);
