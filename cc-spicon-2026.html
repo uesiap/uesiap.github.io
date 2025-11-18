@@ -2053,7 +2053,7 @@
           .then(result => {
             document.getElementById('loaderContainer').style.display = 'none';
 
-            if (result.result === "success") {
+            if (result.result === "submission_cached" || result.result === "email_batch_sent" || result.result === "success") {
               document.getElementById('steps-container').style.display = 'none';
               document.querySelector('.form-container').style.marginTop = '4rem 0 0 0';
               document.getElementById('successMessage').style.display = 'block';
