@@ -365,7 +365,7 @@
     }
 
     .btnn:hover {
-      background: #faf5ff;
+      background: var(--bg);
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
     }
@@ -436,7 +436,7 @@
 
     .pay-btn {
       flex: 0 0 auto;
-      border: 2px solid #e5e7eb;
+      border: 1px solid var(--brand);
       background: #fff;
       cursor: pointer;
       transition: all 0.2s;
@@ -453,7 +453,7 @@
     }
 
     .pay-btn:hover {
-      border-color: var(--brand);
+      border: 2px solid var(--brand-dark);
       background: #faf5ff;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(124, 58, 237, 0.15);
@@ -1038,6 +1038,20 @@
       margin-left: 5px;
       /* Align note text with label */
     }
+
+    .hidden {
+      display: none;
+    }
+
+    .optional-text {
+      color: #6c757d;
+      /* muted grey */
+      font-style: italic;
+    }
+
+    #StaffVolunteer {
+      display: block;
+    }
   </style>
 </head>
 
@@ -1119,7 +1133,7 @@
             <td>₹300</td>
           </tr>
           <tr>
-            <td>👨‍🎓 Unemployed Graduate</td>
+            <td>👨‍🎓 Single Unemployed Graduate</td>
             <td>₹500</td>
           </tr>
           <tr>
@@ -1140,7 +1154,7 @@
           </tr>
           <tr>
             <td>👔 Staff</td>
-            <td>₹1500</td>
+            <td>FREE</td>
           </tr>
           <!-- <tr>
             <td>🎵 Choir Member</td>
@@ -1157,8 +1171,8 @@
         <h3 style="text-decoration: underline">Payment Information</h3>
         <p style="margin:0;color:#374151;line-height:1.7">
           <span style="color: red;">Transfer 50% of your registration fee to:</span><br>
-          <strong>📱 Phone Number:</strong> 9347450441<br>
-          <strong>👤 Name:</strong> MELAM RAHUL<br>
+          <strong>📱 Phone Number:</strong> 9398263570<br>
+          <strong>👤 Name:</strong> GALAM SURESH<br>
           <strong>💳 Accepted:</strong> Google Pay / PhonePe / Paytm
         </p>
       </div>
@@ -1212,7 +1226,7 @@
             <select id="attendAs" required onchange="updateAttendeeType()">
               <option value="" disabled selected>Select Category</option>
               <option value="Student">👨‍🎓 Student</option>
-              <option value="Unemployed">🎓 Unemployed Graduate</option>
+              <option value="Single Unemployed">🎓 Single Unemployed Graduate</option>
               <option value="Single Employed">👤 Single Employed Graduate</option>
               <option value="Single Employed Family">👨‍👩‍👧 Single Employed Family</option>
               <option value="Both Employed Family">👨‍👩‍👧‍👦 Both Employed Family</option>
@@ -1313,32 +1327,25 @@
 
           <hr>
 
-          <div class="form-group radio-group">
-            <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #0f172a; font-size: 0.95rem;">
-              Do you need accommodation at Peddipalem (2 km away from the conference venue)?<span
-                class="required">*</span>
-              <span class="note">Note: Handle the transport yourself.</span>
-            </label>
 
-            <span style="display: flex;">
-              <div class="radio-option">
-                <input type="radio" id="acc_no" name="accommodation" value="No">
-                <label for="acc_no" class="radio-label">
-                  <span class="radio-custom"></span>
-                  No
-                </label>
-              </div> &emsp; &nbsp;
+          <!-- Accomidation Section-->
+          <h2>Accomidation 🏕️</h2>
 
-              <div class="radio-option">
-                <input type="radio" id="acc_yes" name="accommodation" value="Yes">
-                <label for="acc_yes" class="radio-label">
-                  <span class="radio-custom"></span>
-                  Yes
-                </label>
-              </div>
-            </span>
+          <label for="AccAck">Do you need accommodation? <span class="required">*</span></label>
+          <select id="AccAck" required>
+            <option value="" disabled selected>Select</option>
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+          </select>
+
+          <div id="travelQuestion" class="hidden">
+            <label for="travelMode">How will you be attending the venue? <span class="required">*</span></label>
+            <select id="travelMode" required>
+              <option value="" disabled selected>Select</option>
+              <option value="Own Vehicle">Own Vehicle 🛵🚗</option>
+              <option value="Public Transport">Public Transport 🚌🚆🛺</option>
+            </select>
           </div>
-
 
           <div class="nav-row">
             <button type="button" class="icon-btn" onclick="pressThenPrev(this,0)">
@@ -1361,58 +1368,66 @@
               <div class="amount" id="feeAmount">₹0</div>
             </div>
 
-            <div class="info-box">
-              <strong>📱 Payment Information</strong>
-              <p>Transfer 50% of the above amount to:<br>
-                <strong>Phone:</strong> 9347450441
-                <button type="button" class="copy-btn" onclick="copyPhoneNumber()">
-                  <i class="fa-solid fa-copy"></i> Copy
-                </button><br>
-                <strong>Name:</strong> MELAM RAHUL
-              </p>
-            </div>
+            <span id="StaffVolunteer">
+              <div class="info-box">
+                <strong>📱 Payment Information</strong>
+                <p>Transfer 50% of the above amount to:<br>
+                  <strong>Phone:</strong> 9398263570
+                  <button type="button" class="copy-btn" onclick="copyPhoneNumber()">
+                    <i class="fa-solid fa-copy"></i> Copy
+                  </button><br>
+                  <strong>Name:</strong> GALAM SURESH
+                </p>
+              </div>
 
-            <div class="pay-methods">
-              <button type="button" class="pay-btn" onclick="openPaymentApp('phonepe')">
-                <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/phonepe-icon.png"
-                  alt="PhonePe" width="100">
-              </button>
+              <div class="pay-methods">
+                <button type="button" class="pay-btn" onclick="openPaymentApp('phonepe')">
+                  <img
+                    src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/phonepe-icon.png"
+                    alt="PhonePe" width="100">
+                </button>
 
-              <button type="button" class="pay-btn" onclick="openPaymentApp('googlepay')">
-                <img
-                  src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-pay-icon.png"
-                  alt="Google Pay" width="100">
-              </button>
+                <button type="button" class="pay-btn" onclick="openPaymentApp('googlepay')">
+                  <img
+                    src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-pay-icon.png"
+                    alt="Google Pay" width="100">
+                </button>
 
-              <button type="button" class="pay-btn" onclick="openPaymentApp('paytm')">
-                <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/paytm-icon.png"
-                  alt="Paytm" width="100">
-              </button>
+                <button type="button" class="pay-btn"
+                  onclick="showQRPreview('https://uesiap.github.io/assets/nc-bank-transfer.jpg')">
+                  <img src="https://uesiap.github.io/assets/nc-register-bank-transfer.jpg" alt="QR Code" width="130">
+                </button>
 
-              <button type="button" class="pay-btn"
-                onclick="showQRPreview('https://uesiap.github.io/spicon-2026-upi-payment-big.jpg')">
-                <img
-                  src="https://uxwing.com/wp-content/themes/uxwing/download/computers-mobile-hardware/qr-code-icon.png"
-                  alt="QR Code" width="130">
-              </button>
-            </div>
+                <button type="button" class="pay-btn"
+                  onclick="showQRPreview('https://uesiap.github.io/assets/nc-upi-transfer.jpg')">
+                  <img
+                    src="https://uxwing.com/wp-content/themes/uxwing/download/computers-mobile-hardware/qr-code-icon.png"
+                    alt="QR Code" width="130">
+                </button>
+              </div>
 
-            <label>Transaction ID<span class="required">*</span></label>
-            <small style="display:block; color:red; font-size:0.95rem; margin-bottom:6px;">
-              Enter last 6 digits of transaction ID/UTR Number(Phonepe)
-            </small>
+              <label>Date & Time of Payment&nbsp;<span id="paymentReqMark" class="required">*</span></label>
+              <input type="datetime-local" id="dateOfPayment" required />
 
-            <input type="text" id="transactionId" name="transactionId"
-              placeholder="Enter last 6 digits of Transaction ID" required pattern="[A-Za-z0-9]{6,}"
-              title="Please enter at least 6 digits." />
+              <label>Transaction ID<span class="required">*</span></label>
+              <small style="display:block; color:rgb(90, 18, 199); font-size:0.95rem; margin-bottom:6px;">
+                1. Enter last 6 UTR Numbers (if done through Phonepe)
+              </small>
+              <small style="display:block; color:rgb(168, 25, 25); font-size:0.95rem; margin-bottom:6px;">
+                2. Enter last 6 digits of transaction ID (if done through other Apps)
+              </small>
 
-            <label>Amount Paid in Advance<span class="required">*</span></label>
-            <input type="number" id="amountPaid" placeholder="Enter amount you paid" required />
+              <input type="text" id="transactionId" name="transactionId" placeholder="Enter last 6 digits" required
+                pattern="[A-Za-z0-9]{6,}" title="Please enter at least 6 digits." />
+
+              <label>Amount Paid in Advance<span class="required">*</span></label>
+              <input type="number" id="amountPaid" placeholder="Enter amount you paid" required />
+            </span>
 
             <hr>
 
             <label>Access Code<span class="required">*</span></label>
-            <small style="display:block; color:red; font-size:0.95rem; margin-bottom:6px;">
+            <small style="display:block; color:rgb(150, 30, 30); font-size:0.95rem; margin-bottom:6px;">
               This code is required for authorized submission.
             </small>
             <input type="text" id="accessCode" placeholder="Enter your access code" required />
@@ -1634,9 +1649,38 @@
       document.getElementById('waQRModal').style.display = 'none';
     }
 
+    function makeSectionOptional(section) {
+      section.querySelectorAll('[required]').forEach(field => {
+        field.dataset.wasRequired = "true";  // remember who used to be required
+        field.removeAttribute('required');
+      });
+    }
+    function restoreRequired(section) {
+      section.querySelectorAll('[data-was-required="true"]').forEach(field => {
+        field.setAttribute('required', 'required');
+        delete field.dataset.wasRequired;
+      });
+    }
+
+
+    const accSelect = document.getElementById('AccAck');
+    const travelDiv = document.getElementById('travelQuestion');
+
+    accSelect.addEventListener('change', function () {
+      if (this.value === 'Yes') {
+        travelDiv.classList.remove('hidden');
+      } else {
+        travelDiv.classList.add('hidden');
+      }
+    });
+
+    const reqMark = document.getElementById('paymentReqMark');
+    const staffVolunt = document.getElementById('StaffVolunteer')
+
     const steps = Array.from(document.querySelectorAll('.step'));
     const forms = ['step1', 'step2', 'step3'].map(id => document.getElementById(id));
     const progressWrap = document.getElementById('progressWrap');
+    const paymentField = document.querySelector('#dateOfPayment');
 
     const places = {
       Srikakulam: ['Srikakulam', 'Etcherla', 'Tekkali', 'Palasa', 'Sompeta', 'Pathapatnam', 'Ranastalam', 'Rajam', 'Kotturu', 'Mandasa', 'Other place'],
@@ -1654,7 +1698,7 @@
       'Single Employed': 1500,
       'Single Employed Family': 2000,
       'Both Employed Family': 3000,
-      'Staff': 1500,
+      'Staff': 0,
       // 'Choir': 0, // to be updated
       'Volunteer': 0, // FREE
       'Other': 500
@@ -1700,10 +1744,10 @@
     }
 
     function copyPhoneNumber() {
-      navigator.clipboard.writeText('9347450441').then(() => {
-        showDialog('📋 Copied', 'Phone number: 9347450441');
+      navigator.clipboard.writeText('9398263570').then(() => {
+        showDialog('📋 Copied', 'Phone number: 9398263570');
       }).catch(() => {
-        showDialog('📞 Contact', 'Phone number: 9347450441');
+        showDialog('📞 Contact', 'Phone number: 9398263570');
       });
     }
 
@@ -1730,7 +1774,7 @@
 
       showDialogg(
         '💰 Make Payment',
-        `Please pay ₹${amount}/ full amount of ₹${feeAmount}<br>to:<br><strong>9347450441</strong><br>(MELAM RAHUL)<br><br>Click OK to continue`
+        `Please pay ₹${amount} to:<br><strong>9398263570</strong><br>(GALAM SURESH)<br><br>Click OK to continue`
       );
     }
     function pressButtonVisual(el) {
@@ -1805,7 +1849,7 @@
         const place = document.getElementById('place').value;
 
         // Check if "Other" is selected and custom place is provided
-        if (place === 'Other') {
+        if (place === 'Other place') {
           const otherPlace = document.getElementById('otherPlaceInput')?.value.trim();
           if (!otherPlace) {
             showDialog('⚠ Required Field', 'Please enter your place name.');
@@ -1814,12 +1858,20 @@
           }
         }
 
-        const accommodationChecked = document.querySelector('input[name="accommodation"]:checked');
+        const accommodation = document.querySelector('#AccAck').value;
+        const travelMode = document.querySelector('#travelMode').value;
 
-        if (!accommodationChecked) {
-          showDialog('⚠ Choose Yes/No', 'Please select if you need accommodation at Peddipalem?');
-          // Optionally highlight the group container
-          document.querySelector('.radio-group').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Validate accommodation
+        if (!accommodation) {
+          showDialog('⚠ Choose Yes/No', 'Please select if you need accommodation.');
+          document.querySelector('#AccAck').scrollIntoView({ behavior: 'smooth', block: 'center' });
+          return false;
+        }
+
+        // If Yes, validate travel mode
+        if (accommodation === 'Yes' && !travelMode) {
+          showDialog('⚠ Select travel mode', 'Please choose how you will be attending the venue.');
+          document.querySelector('#travelMode').scrollIntoView({ behavior: 'smooth', block: 'center' });
           return false;
         }
       }
@@ -1889,10 +1941,21 @@
       }
 
       // Auto-set transaction ID for Volunteers
-      if (attendAs === 'Volunteer') {
+      if (attendAs === 'Volunteer' || attendAs === 'Staff') {
+        staffVolunt.style.display = 'none';
+        makeSectionOptional(staffVolunt);
+        paymentField.removeAttribute('required');
+        reqMark.textContent = '(optional)';
+        reqMark.classList.remove('required');
+        reqMark.classList.add('optional-text');
         document.getElementById('transactionId').value = '000000';
         document.getElementById('amountPaid').value = '0';
       }
+      else {
+        staffVolunt.style.display = 'block';
+        restoreRequired(staffVolunt);
+      }
+
     }
 
     function updatePlaces() {
@@ -1981,7 +2044,6 @@
       return { district: finalDistrict, place: finalPlace };
     }
 
-
     function updateFeeDisplay() {
       const attendAs = document.getElementById('attendAs').value;
       const children = parseInt(document.getElementById('children')?.value || 0);
@@ -1990,18 +2052,23 @@
       let childrenFee = children * 300;
       let totalFee = baseFee + childrenFee;
 
-      if (attendAs === 'Volunteer') {
+      // Volunteers and Staff are FREE
+      if (attendAs === 'Volunteer' || attendAs === 'Staff') {
+        if (attendAs === 'Staff') {
+          totalFee = 0;
+        }
         const transactionField = document.getElementById('transactionId');
         const amountField = document.getElementById('amountPaid');
-        transactionField.value = '000000';  // keep as string
-        transactionField.setAttribute('type', 'text');  // force string input
+        transactionField.value = '000000';
+        transactionField.setAttribute('type', 'text');
         amountField.value = '0';
-      } else {
+      }
+      else {
         document.getElementById('transactionId').setAttribute('type', 'text');
       }
-
       document.getElementById('feeAmount').textContent = '₹' + totalFee.toLocaleString('en-IN');
     }
+
 
     document.getElementById('step3').addEventListener('submit', e => {
       e.preventDefault();
@@ -2052,22 +2119,42 @@
       const attendAs = document.getElementById('attendAs').value;
       const transactionId = document.getElementById('transactionId').value;
 
-      if (attendAs === 'Volunteer' && transactionId !== '000000') {
-        showDialog('⚠ Volunteers', 'Volunteers should use Transaction ID: 000000');
+      if ((attendAs === 'Volunteer' || attendAs === 'Staff') && transactionId !== '000000') {
+        paymentField.removeAttribute('required');
+        reqMark.textContent = '(optional)';
+        reqMark.classList.remove('required');
+        reqMark.classList.add('optional-text');
+        showDialog('⚠ Volunteers/Staff', 'Volunteers/Staff should use Transaction ID: 000000');
         const field = document.getElementById('transactionId');
         field.classList.add('error-field');
         field.scrollIntoView({ behavior: 'smooth', block: 'center' });
         field.focus();
         return;
       }
+      else {
+        // Make input required again
+        paymentField.setAttribute('required', 'required');
+        // Restore *
+        reqMark.textContent = '*';
+        reqMark.classList.remove('optional-text');
+        reqMark.classList.add('required');
+      }
 
-      if (attendAs !== 'Volunteer' && transactionId === '000000') {
-        showDialog('⚠ Invalid Transaction ID', 'Transaction ID 000000 is reserved for Volunteers only.');
+      if ((attendAs !== 'Volunteer' && attendAs !== 'Staff') && transactionId === '000000') {
+        showDialog('⚠ Invalid Transaction ID', 'Transaction ID 000000 is reserved for Volunteers/Staff only.');
         const field = document.getElementById('transactionId');
         field.classList.add('error-field');
         field.scrollIntoView({ behavior: 'smooth', block: 'center' });
         field.focus();
         return;
+      }
+      else {
+        // Make input required again
+        paymentField.setAttribute('required', 'required');
+        // Restore *
+        reqMark.textContent = '*';
+        reqMark.classList.remove('optional-text');
+        reqMark.classList.add('required');
       }
 
       // ✅ Validate Access Code before allowing submission
@@ -2112,7 +2199,10 @@
         formData.append("Recommended Contact", document.getElementById("recommendContact").value);
         formData.append("District", district);
         formData.append("Place", place); // Use custom place if "Other" selected
-        formData.append("Peddipalem Venue", document.querySelector('input[name="accommodation"]:checked').value);
+        formData.append("Accomodation", document.getElementById("AccAck").value);
+        formData.append("Travel Mode", document.getElementById("travelMode").value);
+        // formData.append("Peddipalem Venue", document.querySelector('input[name="accommodation"]:checked').value);
+        formData.append("Payment Timestamp", document.getElementById("dateOfPayment")?.value || "0");
         formData.append("Transaction ID", document.getElementById("transactionId").value);
         formData.append("Total Fee", document.getElementById("feeAmount").textContent.replace("₹", "").replace(",", "").trim());
         formData.append("Amount Paid", document.getElementById("amountPaid").value);
