@@ -1726,7 +1726,7 @@
 
     const fees = {
       'Student': 300,
-      'Unemployed': 500,
+      'Single Unemployed': 500,
       'Single Employed': 1500,
       'Single Employed Family': 2000,
       'Both Employed Family': 3000,
@@ -1976,12 +1976,6 @@
       if (attendAs === 'Volunteer' || attendAs === 'Staff') {
         staffVolunt.style.display = 'none';
         makeSectionOptional(staffVolunt);
-        paymentField.removeAttribute('required');
-        reqMark.textContent = '(optional)';
-        reqMark.classList.remove('required');
-        reqMark.classList.add('optional-text');
-        document.getElementById('transactionId').value = '000000';
-        document.getElementById('amountPaid').value = '0';
       }
       else {
         staffVolunt.style.display = 'block';
@@ -2091,9 +2085,9 @@
         }
         const transactionField = document.getElementById('transactionId');
         const amountField = document.getElementById('amountPaid');
-        transactionField.value = '000000';
-        transactionField.setAttribute('type', 'text');
-        amountField.value = '0';
+        // transactionField.value = '000000';
+        // transactionField.setAttribute('type', 'text');
+        //amountField.value = '0';
       }
       else {
         document.getElementById('transactionId').setAttribute('type', 'text');
@@ -2151,43 +2145,24 @@
       const attendAs = document.getElementById('attendAs').value;
       const transactionId = document.getElementById('transactionId').value;
 
-      if ((attendAs === 'Volunteer' || attendAs === 'Staff') && transactionId !== '000000') {
-        paymentField.removeAttribute('required');
-        reqMark.textContent = '(optional)';
-        reqMark.classList.remove('required');
-        reqMark.classList.add('optional-text');
-        showDialog('⚠ Volunteers/Staff', 'Volunteers/Staff should use Transaction ID: 000000');
-        const field = document.getElementById('transactionId');
-        field.classList.add('error-field');
-        field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        field.focus();
-        return;
-      }
-      else {
-        // Make input required again
-        paymentField.setAttribute('required', 'required');
-        // Restore *
-        reqMark.textContent = '*';
-        reqMark.classList.remove('optional-text');
-        reqMark.classList.add('required');
-      }
+      // if (attendAs === 'Volunteer' || attendAs === 'Staff') {
+      //   paymentField.removeAttribute('required');
+      //   showDialog('⚠ Volunteers/Staff', 'Volunteers/Staff should use Transaction ID: 000000');
+      //   const field = document.getElementById('transactionId');
+      //   field.classList.add('error-field');
+      //   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      //   field.focus();
+      //   return;
+      // }
 
-      if ((attendAs !== 'Volunteer' && attendAs !== 'Staff') && transactionId === '000000') {
-        showDialog('⚠ Invalid Transaction ID', 'Transaction ID 000000 is reserved for Volunteers/Staff only.');
-        const field = document.getElementById('transactionId');
-        field.classList.add('error-field');
-        field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        field.focus();
-        return;
-      }
-      else {
-        // Make input required again
-        paymentField.setAttribute('required', 'required');
-        // Restore *
-        reqMark.textContent = '*';
-        reqMark.classList.remove('optional-text');
-        reqMark.classList.add('required');
-      }
+      // if ((attendAs !== 'Volunteer' && attendAs !== 'Staff') && transactionId === '000000') {
+      //   showDialog('⚠ Invalid Transaction ID', 'Transaction ID 000000 is reserved for Volunteers/Staff only.');
+      //   const field = document.getElementById('transactionId');
+      //   field.classList.add('error-field');
+      //   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      //   field.focus();
+      //   return;
+      // }
 
       // ✅ Validate Access Code before allowing submission
       const accessCodeInput = document.getElementById('accessCode');
@@ -2235,9 +2210,9 @@
         formData.append("Travel Mode", document.getElementById("travelMode").value);
         // formData.append("Peddipalem Venue", document.querySelector('input[name="accommodation"]:checked').value);
         formData.append("Payment Timestamp", document.getElementById("dateOfPayment")?.value || "0");
-        formData.append("Transaction ID", document.getElementById("transactionId").value);
+        formData.append("Transaction ID", document.getElementById("transactionId")?.value || "0");
         formData.append("Total Fee", document.getElementById("feeAmount").textContent.replace("₹", "").replace(",", "").trim());
-        formData.append("Amount Paid", document.getElementById("amountPaid").value);
+        formData.append("Amount Paid", document.getElementById("amountPaid")?.value || "0");
 
         fetch("https://script.google.com/macros/s/AKfycby2dUvOJujAHXXSisTUmVbGROWr7ookQrzwg1XOt4pTUUsmz4Sauku0MFJGWsAsKucI/exec", {
           method: "POST",
