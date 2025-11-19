@@ -1679,14 +1679,32 @@
 
     const accSelect = document.getElementById('AccAck');
     const travelDiv = document.getElementById('travelQuestion');
+    const travelMode = document.getElementById('travelMode');
 
     accSelect.addEventListener('change', function () {
       if (this.value === 'Yes') {
-        travelDiv.classList.remove('hidden');
+        travelDiv.classList.remove('hidden');    // Show section
+        travelMode.setAttribute('required', 'required');  // Make required
       } else {
-        travelDiv.classList.add('hidden');
+        travelDiv.classList.add('hidden');       // Hide section
+        travelMode.removeAttribute('required');  // Remove required
+        travelMode.value = "";                   // Reset selection
       }
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const waQRBtn = document.getElementById("waQRShow");
+
+      // Basic desktop detection
+      const isDesktop = !navigator.userAgent.match(/Android|iPhone|iPad|iPod|Mobile|Tablet/i);
+
+      if (isDesktop) {
+        waQRBtn.style.display = "inline-flex";   // show on laptop/desktop
+      } else {
+        waQRBtn.style.display = "none";          // hide on mobile/tablet
+      }
+    });
+
 
     const reqMark = document.getElementById('paymentReqMark');
     const staffVolunt = document.getElementById('StaffVolunteer')
@@ -2250,4 +2268,5 @@
     forms.forEach(f => f.classList.remove('active'));
   </script>
 </body>
+
 </html>
