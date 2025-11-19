@@ -1329,7 +1329,7 @@
 
 
           <!-- Accomidation Section-->
-          <h2>Accomidation 🏕️</h2>
+          <h2>Accommodation 🏕️</h2>
 
           <label for="AccAck">Do you need accommodation? <span class="required">*</span></label>
           <select id="AccAck" required>
@@ -1342,8 +1342,8 @@
             <label for="travelMode">How will you be attending the venue? <span class="required">*</span></label>
             <select id="travelMode" required>
               <option value="" disabled selected>Select</option>
-              <option value="Own Vehicle">Own Vehicle 🛵🚗</option>
-              <option value="Public Transport">Public Transport 🚌🚆🛺</option>
+              <option value="Own Vehicle">Own Vehicle 🛵 🚗</option>
+              <option value="Public Transport">Public Transport 🛺 🚌 🚃</option>
             </select>
           </div>
 
@@ -1411,7 +1411,7 @@
 
               <label>Transaction ID<span class="required">*</span></label>
               <small style="display:block; color:rgb(90, 18, 199); font-size:0.95rem; margin-bottom:6px;">
-                1. Enter last 6 UTR Numbers (if done through Phonepe)
+                1. Enter last 6 digits of UTR Number (if done through Phonepe)
               </small>
               <small style="display:block; color:rgb(168, 25, 25); font-size:0.95rem; margin-bottom:6px;">
                 2. Enter last 6 digits of transaction ID (if done through other Apps)
@@ -1466,7 +1466,7 @@
               Join Spicon Group
             </a>
 
-            <button type="button" class="pay-btn"
+            <button id="waQRShow" type="button" class="pay-btn"
               onclick="showWAQRPreview('https://uesiap.github.io/assets/nc-spicon-2026-wa-qr.jpg')">
               <img src="https://uxwing.com/wp-content/themes/uxwing/download/computers-mobile-hardware/qr-code-icon.png"
                 alt="QR Code" width="130">
@@ -1586,6 +1586,20 @@
         transactionField.focus();
       }
     });
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const waQRBtn = document.getElementById("waQRShow");
+
+      // Basic desktop detection
+      const isDesktop = !navigator.userAgent.match(/Android|iPhone|iPad|iPod|Mobile|Tablet/i);
+
+      if (isDesktop) {
+        waQRBtn.style.display = "inline-flex";   // show on laptop/desktop
+      } else {
+        waQRBtn.style.display = "none";          // hide on mobile/tablet
+      }
+    });
+
 
     // Dialog 1 — For Invalid Transaction
     function showDialog(title, message) {
@@ -1774,7 +1788,7 @@
 
       showDialogg(
         '💰 Make Payment',
-        `Please pay ₹${amount} to:<br><strong>9398263570</strong><br>(GALAM SURESH)<br><br>Click OK to continue`
+        `Please pay <strong>₹${amount}</strong> to:<br><strong>9398263570</strong><br>(GALAM SURESH)<br><br>Click OK to continue`
       );
     }
     function pressButtonVisual(el) {
@@ -2236,5 +2250,4 @@
     forms.forEach(f => f.classList.remove('active'));
   </script>
 </body>
-
 </html>
