@@ -1052,12 +1052,29 @@
     #StaffVolunteer {
       display: block;
     }
+
+    .head_img {
+      border-radius: 50%;
+    }
+
+    header span {
+      display: flex;
+      align-items: center;
+      /* keeps image + text nicely aligned */
+      gap: 0.5rem;
+      /* optional: space between image and text */
+    }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>SPICON 2026 🕊</h1>
+    <span>
+      <img class="head_img"
+        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcSxSNUXpJ8n2YkTuBEeO84gb1dH6NRhvQNg&s" width="40"
+        height="40" alt="Logo">
+      <h1>SPICON 2026</h1>
+    </span>
   </header>
 
   <div id="customDialog" class="dialog-overlay">
