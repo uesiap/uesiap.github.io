@@ -1732,7 +1732,7 @@
     const paymentField = document.querySelector('#dateOfPayment');
 
     const places = {
-      Srikakulam: ['Srikakulam', 'Etcherla', 'Tekkali', 'Palasa', 'Sompeta', 'Pathapatnam', 'Ranastalam', 'Rajam', 'Kotturu', 'Mandasa', 'Other place'],
+      Srikakulam: ['Srikakulam', 'Etcherla', 'Tekkali', 'Palasa', 'Sompeta', 'Pathapatnam', 'Ranastalam', 'Rajam', 'Kotturu', 'Naira', 'Mandasa', 'Other place'],
       Vizianagaram: ['Vizianagaram fort zone', 'Kanapaka', 'Gajapathinagaram', 'Garividi', 'Poosapatirega', 'Bhogapuram', 'Bobbili', 'Rajam', 'Nellimarla', 'Kothavalasa', 'S Kota', 'Other place'],
       Manyam: ['Parvathipuram', 'Palakonda', 'Salur', 'Kurupam', 'GL Puram', 'Seethampeta', 'Other place'],
       Visakhapatnam: ['City Central Zone', 'Gajuwaka', 'Steel Plant', 'IE ZONE', 'NAD Zone', 'Duvvada Zone', 'GITAM Zone', 'AU Zone', 'Arilova', 'HB Colony', 'Madhurawada', 'Bheemili', 'Other place'],
@@ -2226,7 +2226,7 @@
         formData.append("Accomodation", document.getElementById("AccAck").value);
         formData.append("Travel Mode", document.getElementById("travelMode").value);
         // formData.append("Peddipalem Venue", document.querySelector('input[name="accommodation"]:checked').value);
-        formData.append("Payment Timestamp", document.getElementById("dateOfPayment")?.value || "0");
+        formData.append("Payment Date", document.getElementById("dateOfPayment")?.value || "0");
         formData.append("Transaction ID", document.getElementById("transactionId")?.value || "0");
         formData.append("Total Fee", document.getElementById("feeAmount").textContent.replace("₹", "").replace(",", "").trim());
         formData.append("Amount Paid", document.getElementById("amountPaid")?.value || "0");
