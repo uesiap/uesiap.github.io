@@ -299,6 +299,15 @@
       font-size: 1.05rem;
     }
 
+    .eligibility {
+      color: #9b5124;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
     .info-box p {
       margin: 0;
       color: #78350f;
@@ -1113,6 +1122,7 @@
   <main class="main">
     <section class="intro active" id="intro" style="margin-top: 1rem;">
       <h2>📋 Welcome to Registration Form</h2>
+      <h2>North and Central Coastal Regions</h2>
 
       <div class="instruction-section" style="background-color: #fff; border: 1.5px solid var(--brand)">
         <span style="display: flex;"><span>🏕️</span>&nbsp;<h3 style="text-decoration: underline">Program Details</h3>
@@ -1135,8 +1145,26 @@
       </div>
 
       <div class="info-box">
-        <strong>✅ ELIGIBILITY: D.T. CAMP</strong>
-        <p><strong>📅 Last Day for Registration:</strong> Still not specify</p>
+        <strong>✅ ELIGIBILITY:</strong>
+        <ul>
+          <li>
+            <span style="display: flex;">
+              <strong>Students:</strong> &nbsp;<span class="eligibility">DT/LT</span>
+            </span>
+          </li>
+          <li>
+            <span style="display: flex;">
+              <strong>Graduates:</strong>&nbsp;<span class="eligibility">Must Be Recommended by anyone of the person
+                shown in the Recommended Role.</span>
+            </span>
+          </li>
+          <hr>
+          <li>
+            <span class="eligibility">
+              <strong>📅 Last Day for Registration:</strong> <span class="eligibility">17th DEC 2025</span>
+            </span>
+          </li>
+        </ul>
       </div>
 
       <div class="fee-table" style="background-color: #fff; border: 1.5px solid var(--brand)">
@@ -1888,50 +1916,74 @@
     function updateBedOption() {
       const accommodation = accSelectField.value;
       const attendAs = attendAsField.value;
+      const travelModeValue = travelMode.value;
 
-      // reset options
+      // Always reset options cleanly
       bedSelect.innerHTML = "";
       const noNeedOpt = new Option("No need", "none");
       noNeedOpt.dataset.price = 0;
       bedSelect.append(noNeedOpt);
-      bedSelect.value = "none"; // default
+      bedSelect.value = "none";
 
-      // show block only when needed
+      // CASE 1: Accommodation = No → hide bed section
+      if (accommodation !== "Yes") {
+        bedBlock.classList.add("hidden");
+        updateFeeDisplay();
+        return;
+      }
+
+      // CASE 2: Accommodation = Yes, but travel not chosen → hide bed section
+      if (!travelModeValue) {
+        bedBlock.classList.add("hidden");
+        updateFeeDisplay();
+        return;
+      }
+
+      // CASE 3: Travel Mode = Own Vehicle → hide bed section
+      if (travelModeValue === "Own Vehicle") {
+        bedBlock.classList.add("hidden");
+        updateFeeDisplay();
+        return;
+      }
+
+      // CASE 4: Travel Mode = Public Transport → now apply bed rules
       if (
-        accommodation === "Yes" &&
-        (attendAs === "Single Employed Family" ||
-          attendAs === "Both Employed Family" ||
-          attendAs === "Single Employed")
+        attendAs === "Single Employed Family" ||
+        attendAs === "Both Employed Family"
       ) {
         bedBlock.classList.remove("hidden");
 
-        if (attendAs === "Single Employed Family" || attendAs === "Both Employed Family") {
-          const opt = new Option("2 Beds (₹500)", "Family-2");
-          opt.dataset.price = 500;
-          bedSelect.append(opt);
+        const opt = new Option("2 Beds (₹500)", "Family-2");
+        opt.dataset.price = 500;
+        bedSelect.append(opt);
+        bedSelect.value = "Family-2";
+      }
 
-          // auto-select the family bed
-          bedSelect.value = "Family-2";
-        }
+      if (attendAs === "Single Employed") {
+        bedBlock.classList.remove("hidden");
 
-        if (attendAs === "Single Employed") {
-          const opt = new Option("1 Bed (₹300)", "Graduate-1");
-          opt.dataset.price = 300;
-          bedSelect.append(opt);
+        const opt = new Option("1 Bed (₹300)", "Graduate-1");
+        opt.dataset.price = 300;
+        bedSelect.append(opt);
+        bedSelect.value = "Graduate-1";
+      }
 
-          // auto-select the 1-bed option
-          bedSelect.value = "Graduate-1";
-        }
-
-        updateFeeDisplay();
-      } else {
+      // If category doesn't require beds → hide
+      if (
+        attendAs !== "Single Employed" &&
+        attendAs !== "Single Employed Family" &&
+        attendAs !== "Both Employed Family"
+      ) {
         bedBlock.classList.add("hidden");
       }
-    }
 
+      updateFeeDisplay();
+    }
 
     accSelectField.addEventListener("change", updateBedOption);
     attendAsField.addEventListener("change", updateBedOption);
+    travelMode.addEventListener("change", updateBedOption);
+
 
 
     function validateCurrentStep(stepIndex) {
@@ -2153,7 +2205,32 @@
 
       return { district: finalDistrict, place: finalPlace };
     }
-    
+
+    // function updateFeeDisplay() {
+    //   const attendAs = document.getElementById('attendAs').value;
+    //   const children = parseInt(document.getElementById('children')?.value || 0);
+
+    //   let baseFee = fees[attendAs] || 0;
+    //   let childrenFee = children * 300;
+    //   let totalFee = baseFee + childrenFee;
+
+    //   // Volunteers and Staff are FREE
+    //   if (attendAs === 'Volunteer' || attendAs === 'Staff') {
+    //     if (attendAs === 'Staff') {
+    //       totalFee = 0;
+    //     }
+    //     const transactionField = document.getElementById('transactionId');
+    //     const amountField = document.getElementById('amountPaid');
+    //     // transactionField.value = '000000';
+    //     // transactionField.setAttribute('type', 'text');
+    //     //amountField.value = '0';
+    //   }
+    //   else {
+    //     document.getElementById('transactionId').setAttribute('type', 'text');
+    //   }
+    //   document.getElementById('feeAmount').textContent = '₹' + totalFee.toLocaleString('en-IN');
+    // }
+
     function updateFeeDisplay() {
       const attendAs = document.getElementById('attendAs').value;
       const children = parseInt(document.getElementById('children')?.value || 0);
@@ -2236,6 +2313,25 @@
       // ✅ Final validation for volunteers and transaction ID
       const attendAs = document.getElementById('attendAs').value;
       const transactionId = document.getElementById('transactionId').value;
+
+      // if (attendAs === 'Volunteer' || attendAs === 'Staff') {
+      //   paymentField.removeAttribute('required');
+      //   showDialog('⚠ Volunteers/Staff', 'Volunteers/Staff should use Transaction ID: 000000');
+      //   const field = document.getElementById('transactionId');
+      //   field.classList.add('error-field');
+      //   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      //   field.focus();
+      //   return;
+      // }
+
+      // if ((attendAs !== 'Volunteer' && attendAs !== 'Staff') && transactionId === '000000') {
+      //   showDialog('⚠ Invalid Transaction ID', 'Transaction ID 000000 is reserved for Volunteers/Staff only.');
+      //   const field = document.getElementById('transactionId');
+      //   field.classList.add('error-field');
+      //   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      //   field.focus();
+      //   return;
+      // }
 
       // ✅ Validate Access Code before allowing submission
       const accessCodeInput = document.getElementById('accessCode');
