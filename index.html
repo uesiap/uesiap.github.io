@@ -1889,12 +1889,14 @@
       const accommodation = accSelectField.value;
       const attendAs = attendAsField.value;
 
-      // Always reset bed field
+      // reset options
       bedSelect.innerHTML = "";
-      bedSelect.append(new Option("No need", "", true, false));
-      bedSelect.selectedIndex = 0;
+      const noNeedOpt = new Option("No need", "none");
+      noNeedOpt.dataset.price = 0;
+      bedSelect.append(noNeedOpt);
+      bedSelect.value = "none"; // default
 
-      // Show only when they select YES + valid categories
+      // show block only when needed
       if (
         accommodation === "Yes" &&
         (attendAs === "Single Employed Family" ||
@@ -1904,26 +1906,29 @@
         bedBlock.classList.remove("hidden");
 
         if (attendAs === "Single Employed Family" || attendAs === "Both Employed Family") {
-          // Only family option
           const opt = new Option("2 Beds (₹500)", "Family-2");
           opt.dataset.price = 500;
           bedSelect.append(opt);
+
+          // auto-select the family bed
           bedSelect.value = "Family-2";
         }
 
         if (attendAs === "Single Employed") {
-          // Only graduate option
           const opt = new Option("1 Bed (₹300)", "Graduate-1");
           opt.dataset.price = 300;
           bedSelect.append(opt);
+
+          // auto-select the 1-bed option
           bedSelect.value = "Graduate-1";
         }
 
-        updateFeeDisplay(); // refresh fee
+        updateFeeDisplay();
       } else {
         bedBlock.classList.add("hidden");
       }
     }
+
 
     accSelectField.addEventListener("change", updateBedOption);
     attendAsField.addEventListener("change", updateBedOption);
@@ -2148,32 +2153,7 @@
 
       return { district: finalDistrict, place: finalPlace };
     }
-
-    // function updateFeeDisplay() {
-    //   const attendAs = document.getElementById('attendAs').value;
-    //   const children = parseInt(document.getElementById('children')?.value || 0);
-
-    //   let baseFee = fees[attendAs] || 0;
-    //   let childrenFee = children * 300;
-    //   let totalFee = baseFee + childrenFee;
-
-    //   // Volunteers and Staff are FREE
-    //   if (attendAs === 'Volunteer' || attendAs === 'Staff') {
-    //     if (attendAs === 'Staff') {
-    //       totalFee = 0;
-    //     }
-    //     const transactionField = document.getElementById('transactionId');
-    //     const amountField = document.getElementById('amountPaid');
-    //     // transactionField.value = '000000';
-    //     // transactionField.setAttribute('type', 'text');
-    //     //amountField.value = '0';
-    //   }
-    //   else {
-    //     document.getElementById('transactionId').setAttribute('type', 'text');
-    //   }
-    //   document.getElementById('feeAmount').textContent = '₹' + totalFee.toLocaleString('en-IN');
-    // }
-
+    
     function updateFeeDisplay() {
       const attendAs = document.getElementById('attendAs').value;
       const children = parseInt(document.getElementById('children')?.value || 0);
@@ -2256,25 +2236,6 @@
       // ✅ Final validation for volunteers and transaction ID
       const attendAs = document.getElementById('attendAs').value;
       const transactionId = document.getElementById('transactionId').value;
-
-      // if (attendAs === 'Volunteer' || attendAs === 'Staff') {
-      //   paymentField.removeAttribute('required');
-      //   showDialog('⚠ Volunteers/Staff', 'Volunteers/Staff should use Transaction ID: 000000');
-      //   const field = document.getElementById('transactionId');
-      //   field.classList.add('error-field');
-      //   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      //   field.focus();
-      //   return;
-      // }
-
-      // if ((attendAs !== 'Volunteer' && attendAs !== 'Staff') && transactionId === '000000') {
-      //   showDialog('⚠ Invalid Transaction ID', 'Transaction ID 000000 is reserved for Volunteers/Staff only.');
-      //   const field = document.getElementById('transactionId');
-      //   field.classList.add('error-field');
-      //   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      //   field.focus();
-      //   return;
-      // }
 
       // ✅ Validate Access Code before allowing submission
       const accessCodeInput = document.getElementById('accessCode');
