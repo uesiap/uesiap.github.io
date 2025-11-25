@@ -1364,6 +1364,20 @@
             </select>
           </div>
 
+          <div id="BedSheetQuestion" class="hidden">
+            <label for="BetSheet">Comfortable Beds will be provided! <span class="required">*</span></label>
+            <select id="BetSheet" required>
+              <option value="" disabled selected>Select</option>
+              <option value="Family Beds (2 Beds)">Family Beds (2 Beds)</option>
+              <option value="Graduate Bed (1 Bed)">Graduate Bed (1 Bed)</option>
+            </select>
+            <button class="btnn" type="button" style="padding:6px 6px;"
+              onclick="showQRPreview('https://uesiap.github.io/assets/bed-image.jpg')">
+              Show Bed Image
+            </button>
+          </div>
+
+
           <div class="nav-row">
             <button type="button" class="icon-btn" onclick="pressThenPrev(this,0)">
               <i class="fa-solid fa-arrow-left"></i>
@@ -1730,6 +1744,10 @@
     const forms = ['step1', 'step2', 'step3'].map(id => document.getElementById(id));
     const progressWrap = document.getElementById('progressWrap');
     const paymentField = document.querySelector('#dateOfPayment');
+    const accSelectField = document.getElementById("AccAck");
+    const attendAsField = document.getElementById("attendAs");
+    const bedBlock = document.getElementById("BedSheetQuestion");
+    const bedSelect = document.getElementById("BetSheet");
 
     const places = {
       Srikakulam: ['Srikakulam', 'Etcherla', 'Tekkali', 'Palasa', 'Sompeta', 'Pathapatnam', 'Ranastalam', 'Rajam', 'Kotturu', 'Naira', 'Mandasa', 'Other place'],
@@ -1866,6 +1884,50 @@
         }, 100);
       }, 200);
     }
+
+    function updateBedOption() {
+      const accommodation = accSelectField.value;
+      const attendAs = attendAsField.value;
+
+      // Always reset bed field
+      bedSelect.innerHTML = "";
+      bedSelect.append(new Option("No need", "", true, false));
+      bedSelect.selectedIndex = 0;
+
+      // Show only when they select YES + valid categories
+      if (
+        accommodation === "Yes" &&
+        (attendAs === "Single Employed Family" ||
+          attendAs === "Both Employed Family" ||
+          attendAs === "Single Employed")
+      ) {
+        bedBlock.classList.remove("hidden");
+
+        if (attendAs === "Single Employed Family" || attendAs === "Both Employed Family") {
+          // Only family option
+          const opt = new Option("2 Beds (₹500)", "Family-2");
+          opt.dataset.price = 500;
+          bedSelect.append(opt);
+          bedSelect.value = "Family-2";
+        }
+
+        if (attendAs === "Single Employed") {
+          // Only graduate option
+          const opt = new Option("1 Bed (₹300)", "Graduate-1");
+          opt.dataset.price = 300;
+          bedSelect.append(opt);
+          bedSelect.value = "Graduate-1";
+        }
+
+        updateFeeDisplay(); // refresh fee
+      } else {
+        bedBlock.classList.add("hidden");
+      }
+    }
+
+    accSelectField.addEventListener("change", updateBedOption);
+    attendAsField.addEventListener("change", updateBedOption);
+
 
     function validateCurrentStep(stepIndex) {
       // Step 0 (Personal Details)
@@ -2087,29 +2149,62 @@
       return { district: finalDistrict, place: finalPlace };
     }
 
+    // function updateFeeDisplay() {
+    //   const attendAs = document.getElementById('attendAs').value;
+    //   const children = parseInt(document.getElementById('children')?.value || 0);
+
+    //   let baseFee = fees[attendAs] || 0;
+    //   let childrenFee = children * 300;
+    //   let totalFee = baseFee + childrenFee;
+
+    //   // Volunteers and Staff are FREE
+    //   if (attendAs === 'Volunteer' || attendAs === 'Staff') {
+    //     if (attendAs === 'Staff') {
+    //       totalFee = 0;
+    //     }
+    //     const transactionField = document.getElementById('transactionId');
+    //     const amountField = document.getElementById('amountPaid');
+    //     // transactionField.value = '000000';
+    //     // transactionField.setAttribute('type', 'text');
+    //     //amountField.value = '0';
+    //   }
+    //   else {
+    //     document.getElementById('transactionId').setAttribute('type', 'text');
+    //   }
+    //   document.getElementById('feeAmount').textContent = '₹' + totalFee.toLocaleString('en-IN');
+    // }
+
     function updateFeeDisplay() {
       const attendAs = document.getElementById('attendAs').value;
       const children = parseInt(document.getElementById('children')?.value || 0);
+      const bedSelect = document.getElementById('BetSheet');
 
+      // Base fee + children fee
       let baseFee = fees[attendAs] || 0;
       let childrenFee = children * 300;
       let totalFee = baseFee + childrenFee;
 
-      // Volunteers and Staff are FREE
-      if (attendAs === 'Volunteer' || attendAs === 'Staff') {
-        if (attendAs === 'Staff') {
-          totalFee = 0;
-        }
-        const transactionField = document.getElementById('transactionId');
-        const amountField = document.getElementById('amountPaid');
-        // transactionField.value = '000000';
-        // transactionField.setAttribute('type', 'text');
-        //amountField.value = '0';
+      // Add BED charge (if visible & selected)
+      let bedFee = 0;
+      if (!bedSelect.classList.contains('hidden') && bedSelect.value) {
+        const selectedOption = bedSelect.options[bedSelect.selectedIndex];
+        bedFee = parseInt(selectedOption.dataset.price || 0);
       }
-      else {
+
+      totalFee += bedFee;
+
+      // Volunteers & Staff stay FREE
+      if (attendAs === 'Volunteer' || attendAs === 'Staff') {
+        totalFee = 0;
+        const transactionField = document.getElementById('transactionId');
+        transactionField.setAttribute('type', 'text');
+      } else {
         document.getElementById('transactionId').setAttribute('type', 'text');
       }
-      document.getElementById('feeAmount').textContent = '₹' + totalFee.toLocaleString('en-IN');
+
+      // Display final fee
+      document.getElementById('feeAmount').textContent =
+        '₹' + totalFee.toLocaleString('en-IN');
     }
 
 
@@ -2225,6 +2320,7 @@
         formData.append("Place", place); // Use custom place if "Other" selected
         formData.append("Accomodation", document.getElementById("AccAck").value);
         formData.append("Travel Mode", document.getElementById("travelMode").value);
+        formData.append("Bed Type", document.getElementById("BetSheet")?.selectedOptions[0]?.text || "");
         // formData.append("Peddipalem Venue", document.querySelector('input[name="accommodation"]:checked').value);
         formData.append("Payment Date", document.getElementById("dateOfPayment")?.value || "0");
         formData.append("Transaction ID", document.getElementById("transactionId")?.value || "0");
