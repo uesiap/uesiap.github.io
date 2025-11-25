@@ -2320,7 +2320,7 @@
         formData.append("Place", place); // Use custom place if "Other" selected
         formData.append("Accomodation", document.getElementById("AccAck").value);
         formData.append("Travel Mode", document.getElementById("travelMode").value);
-        formData.append("Bed Type", document.getElementById("BetSheet")?.selectedOptions[0]?.text || "");
+        formData.append("Beds Need", document.getElementById("BetSheet")?.selectedOptions[0]?.text || "");
         // formData.append("Peddipalem Venue", document.querySelector('input[name="accommodation"]:checked').value);
         formData.append("Payment Date", document.getElementById("dateOfPayment")?.value || "0");
         formData.append("Transaction ID", document.getElementById("transactionId")?.value || "0");
