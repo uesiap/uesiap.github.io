@@ -2206,31 +2206,6 @@
       return { district: finalDistrict, place: finalPlace };
     }
 
-    // function updateFeeDisplay() {
-    //   const attendAs = document.getElementById('attendAs').value;
-    //   const children = parseInt(document.getElementById('children')?.value || 0);
-
-    //   let baseFee = fees[attendAs] || 0;
-    //   let childrenFee = children * 300;
-    //   let totalFee = baseFee + childrenFee;
-
-    //   // Volunteers and Staff are FREE
-    //   if (attendAs === 'Volunteer' || attendAs === 'Staff') {
-    //     if (attendAs === 'Staff') {
-    //       totalFee = 0;
-    //     }
-    //     const transactionField = document.getElementById('transactionId');
-    //     const amountField = document.getElementById('amountPaid');
-    //     // transactionField.value = '000000';
-    //     // transactionField.setAttribute('type', 'text');
-    //     //amountField.value = '0';
-    //   }
-    //   else {
-    //     document.getElementById('transactionId').setAttribute('type', 'text');
-    //   }
-    //   document.getElementById('feeAmount').textContent = '₹' + totalFee.toLocaleString('en-IN');
-    // }
-
     function updateFeeDisplay() {
       const attendAs = document.getElementById('attendAs').value;
       const children = parseInt(document.getElementById('children')?.value || 0);
@@ -2313,32 +2288,13 @@
       // ✅ Final validation for volunteers and transaction ID
       const attendAs = document.getElementById('attendAs').value;
       const transactionId = document.getElementById('transactionId').value;
-
-      // if (attendAs === 'Volunteer' || attendAs === 'Staff') {
-      //   paymentField.removeAttribute('required');
-      //   showDialog('⚠ Volunteers/Staff', 'Volunteers/Staff should use Transaction ID: 000000');
-      //   const field = document.getElementById('transactionId');
-      //   field.classList.add('error-field');
-      //   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      //   field.focus();
-      //   return;
-      // }
-
-      // if ((attendAs !== 'Volunteer' && attendAs !== 'Staff') && transactionId === '000000') {
-      //   showDialog('⚠ Invalid Transaction ID', 'Transaction ID 000000 is reserved for Volunteers/Staff only.');
-      //   const field = document.getElementById('transactionId');
-      //   field.classList.add('error-field');
-      //   field.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      //   field.focus();
-      //   return;
-      // }
-
+      
       // ✅ Validate Access Code before allowing submission
       const accessCodeInput = document.getElementById('accessCode');
       const enteredCode = accessCodeInput.value.trim();
 
       // Set your actual valid code(s) here — can be one or more
-      const validAccessCodes = ['SPI26', 'spi26', 'Spi26'];
+      const validAccessCodes = ['SPI26'];
 
       if (!validAccessCodes.includes(enteredCode)) {
         showDialog('🔒 Invalid Access Code', 'Please ask your Senior Advisor/EGF Secretary/EGF Persident/ RC/ DC/ Staff for this code.');
