@@ -1512,10 +1512,23 @@
                     <h1>Successful Submission! 🎉 </h1>
                     <p style="font-weight: bold">🙏 Thank you for Registering.</p><br>
                     <p>Your response has been submitted successfully. 🤝</p><br>
-                    <!-- 🔥 Added Placeholder -->
-                    <p id="regCodeDisplay"
-                        style="font-size:1.5rem;color:#00695c;font-weight:bold;text-align:center;margin:10px 0;">
-                    </p>
+
+                    <div style="text-align:center;margin:10px 0;">
+                        <div style="font-size:1.3rem;font-weight:600;color:var(--muted);margin-bottom:6px;">
+                            Your Reference Code:
+                        </div>
+
+                        <div style="display:flex;justify-content:center;align-items:center;gap:14px;">
+                            <span id="regCodeDisplay" style="font-size:1.6rem;font-weight:900;color:#007b32;">
+                            </span>
+
+                            <button type="button" class="copy-btn" onclick="copyRefCode()"
+                                style="padding: 8px 12px;font-size:1rem;">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <hr>
                     <p style="font-size: bold; margin-bottom: 10px; text-align:center;">
                         Please Join, Spicon Whatsapp Group
@@ -1655,6 +1668,19 @@
 
             totalVisitsRef.transaction((currentValue) => (currentValue || 0) + 1);
         }
+
+        function copyRefCode() {
+            const codeText = document.getElementById('regCodeDisplay').innerText.trim();
+            if (!codeText) return showDialog('Copy Failed', 'Reference Code is missing!');
+
+            const formatted = `Spicon 2026 Ref Code: ${codeText}`;
+
+            navigator.clipboard.writeText(formatted)
+                .then(() => showDialog('📋 Ref Code Copied', formatted))
+                .catch(() => showDialog('⚠ Error', 'Unable to copy. Please copy manually.'));
+        }
+
+
 
         // Initialize Firebase
         const app = firebase.initializeApp(firebaseConfig);
@@ -2387,12 +2413,12 @@
                                 document.getElementById('successMessage').style.display = 'block';
                                 document.querySelector('.success-message-container').style.display = 'block';
                                 document.querySelector('.form-container').style.marginTop = '2rem';
-                                document.getElementById("regCodeDisplay").innerHTML =
-                                    `Your Reference Code:<br><span style='font-size: 2rem;font-weight:900;color:#007b32;'>${regCode}</span>`;
+                                document.getElementById("regCodeDisplay").textContent = regCode;
                             } else {
                                 showDialog("⚠ Error", "Something went wrong!");
                             }
                         })
+
                         .catch(err => {
                             console.error("Form Error:", err);
                             document.getElementById('loaderContainer').style.display = 'none';
