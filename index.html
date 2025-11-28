@@ -197,7 +197,7 @@
         /* FORM CONTAINER */
         .form-container {
             background: #fff;
-            margin-top: 5rem;
+            margin-top: 6rem;
             width: 100%;
             max-width: 680px;
             min-height: auto;
@@ -211,18 +211,14 @@
             transition: opacity var(--anim) ease, transform var(--anim) ease;
         }
 
+
+
         .form-container.show {
             display: flex;
         }
 
-        .form-containerr {
-            background: #fff;
-            width: 100%;
-            max-width: 680px;
-            min-height: auto;
-            padding: 10px 10px;
-            border: 1px solid var(--brand);
-            display: none;
+        .succ-con {
+            margin-top: 2rem;
         }
 
         form,
@@ -914,7 +910,7 @@
             }
 
             .success-container {
-                padding: 20px 15px;
+                padding: 16px 15px;
             }
 
             .success-container h1 {
@@ -1249,7 +1245,7 @@
             </div>
         </div>
 
-        <div class="form-container" style="margin-top: 6rem; margin-bottom: auto;">
+        <div class="form-container" style="margin-bottom: auto;">
             <span id="steps-container">
                 <!-- Step 1 -->
                 <form id="step1">
@@ -1640,7 +1636,7 @@
 
         function getRegionCode(district) {
             const NCR = ["Srikakulam", "Manyam", "Vizianagaram"];
-            const CCR = ["ASR District", "Visakhapatnam", "Anakapalle"];
+            const CCR = ["ASR", "Visakhapatnam", "Anakapalle"];
 
             if (NCR.includes(district)) return "NCR";
             if (CCR.includes(district)) return "CCR";
@@ -2396,7 +2392,7 @@
                                 document.getElementById('progressWrap').style.display = 'none';
                                 document.getElementById('successMessage').style.display = 'block';
                                 document.querySelector('.success-message-container').style.display = 'block';
-
+                                document.querySelector('.form-container').style.marginTop = '2rem';
                                 document.getElementById("regCodeDisplay").innerHTML =
                                     `Your Reference Code:<br><span style='font-size: 2rem;font-weight:900;color:#007b32;'>${regCode}</span>`;
                             } else {
