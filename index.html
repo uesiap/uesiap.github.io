@@ -1673,10 +1673,11 @@
             const codeText = document.getElementById('regCodeDisplay').innerText.trim();
             if (!codeText) return showDialog('Copy Failed', 'Reference Code is missing!');
 
+            const formattedCode = `${codeText}`;
             const formatted = `Spicon 2026 Ref Code: ${codeText}`;
 
             navigator.clipboard.writeText(formatted)
-                .then(() => showDialog('📋 Ref Code Copied', formatted))
+                .then(() => showDialog('📋 Code Copied', formattedCode))
                 .catch(() => showDialog('⚠ Error', 'Unable to copy. Please copy manually.'));
         }
 
