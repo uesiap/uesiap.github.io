@@ -1600,24 +1600,24 @@
             projectId: "melam-rahul",
         };
 
-        document.addEventListener("DOMContentLoaded", () => {
-            updatePageVisit("mainFolders");
-        });
+        function getNextCounter(counterKey, callback) {
+            const counterRef = database.ref(`Counters/${counterKey}`);
 
-        function getNextCounter(region, cat, callback) {
-            const counterRef = database.ref(`Counters/${region}-${cat}`);
+            counterRef.transaction(current => (current || 0) + 1,
+                (error, committed, snapshot) => {
+                    if (error) {
+                        console.error("Counter update failed:", error);
+                        alert("Could not generate Reference Code. Please try again.");
+                        return;
+                    }
 
-            counterRef.transaction(current => {
-                return (current || 0) + 1;
-            }, (error, committed, snapshot) => {
-                if (error) {
-                    console.error("Counter failed:", error);
-                    alert("Could not generate Reg Code. Please try again.");
-                } else if (committed) {
-                    callback(snapshot.val());
+                    if (committed) {
+                        callback(snapshot.val());
+                    }
                 }
-            });
+            );
         }
+
 
 
         function getCategoryCode(attendAs) {
@@ -1634,15 +1634,18 @@
             return codes[attendAs] || "GEN";
         }
 
-        function getRegionCode(district) {
-            const NCR = ["Srikakulam", "Manyam", "Vizianagaram"];
-            const CCR = ["ASR", "Visakhapatnam", "Anakapalle"];
+        function getDistrictCode(district) {
+            const districtCodes = {
+                "Srikakulam": "SKLM",
+                "Manyam": "MYM",
+                "Vizianagaram": "VZM",
+                "ASR": "ASR",
+                "Visakhapatnam": "VSKP",
+                "Anakapalle": "ANKP"
+            };
 
-            if (NCR.includes(district)) return "NCR";
-            if (CCR.includes(district)) return "CCR";
-            return "OTR"; // Other district
+            return districtCodes[district] || "OTR";
         }
-
 
         // Update page visit count
         function updatePageVisit(pagePath) {
@@ -1692,6 +1695,7 @@
         });
 
         document.addEventListener("DOMContentLoaded", () => {
+            updatePageVisit("mainFolders");
             const waQRBtn = document.getElementById("waQRShow");
 
             // Basic desktop detection
@@ -1717,6 +1721,7 @@
         }
 
         // Dialog 2 — For Payment Confirmation
+        let pendingQR = null;
         let pendingUrl = ''; // store redirect URL
 
         function showDialogg(title, message) {
@@ -1793,19 +1798,6 @@
                 travelDiv.classList.add('hidden');       // Hide section
                 travelMode.removeAttribute('required');  // Remove required
                 travelMode.value = "";                   // Reset selection
-            }
-        });
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const waQRBtn = document.getElementById("waQRShow");
-
-            // Basic desktop detection
-            const isDesktop = !navigator.userAgent.match(/Android|iPhone|iPad|iPod|Mobile|Tablet/i);
-
-            if (isDesktop) {
-                waQRBtn.style.display = "inline-flex";   // show on laptop/desktop
-            } else {
-                waQRBtn.style.display = "none";          // hide on mobile/tablet
             }
         });
 
@@ -2332,7 +2324,7 @@
             const validAccessCodes = ['SPICON2026'];
 
             if (!validAccessCodes.includes(enteredCode)) {
-                showDialog('🔒 Invalid Access Code', 'Please ask your Senior Advisor/EGF Secretary/EGF Persident/ RC/ DC/ Staff for this code.');
+                showDialog('🔒 Invalid Access Code', 'Please ask your Senior Advisor/EGF Secretary/EGF President/ RC/ DC/ Staff for this code.');
                 accessCodeInput.classList.add('error-field');
                 accessCodeInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 accessCodeInput.focus();
@@ -2348,11 +2340,13 @@
                 document.getElementById('loaderContainer').style.display = 'block';
 
                 const districtSelect = document.getElementById("district").value;
-                const regionCode = getRegionCode(districtSelect);
+                const distCode = getDistrictCode(districtSelect);
                 const categoryCode = getCategoryCode(attendAs);
+                const counterKey = `${distCode}-${categoryCode}`;
 
-                getNextCounter(regionCode, categoryCode, (counterValue) => {
-                    const regCode = `${regionCode}-${categoryCode}-${String(counterValue).padStart(3, '0')}`;
+                getNextCounter(counterKey, (counterValue) => {
+                    const regCode = `${distCode}-${categoryCode}-${String(counterValue).padStart(3, '0')}`;
+
 
                     const { district, place } = getLocationDetails();
 
