@@ -1482,6 +1482,11 @@
 
                             <label>Amount Paid in Advance<span class="required">*</span></label>
                             <input type="number" id="amountPaid" placeholder="Enter amount you paid" required />
+
+                            <label id="needToPayLabel" style="display:none; margin-top:6px;">Need to Pay at venue:</label>
+                            <input type="number" id="needToPay" placeholder="Auto-calculates" readonly
+                                style="display:none; background:#f3f4f6; font-weight:700;" />
+
                         </span>
 
                         <hr>
@@ -2303,6 +2308,24 @@
                 '₹' + totalFee.toLocaleString('en-IN');
         }
 
+        document.getElementById("amountPaid").addEventListener("input", calculateNeedToPay);
+
+        function calculateNeedToPay() {
+            const totalFeeText = document.getElementById("feeAmount").textContent;
+            const totalAmount = parseInt(totalFeeText.replace("₹", "").replace(",", "").trim()) || 0;
+            const paidAmount = parseInt(document.getElementById("amountPaid").value) || 0;
+
+            const needToPay = Math.max(totalAmount - paidAmount, 0);
+
+            const label = document.getElementById("needToPayLabel");
+            const field = document.getElementById("needToPay");
+
+            label.style.display = "block";
+            field.style.display = "block";
+            field.value = needToPay;
+        }
+
+
 
         // Submit Handler with Reg Code System Integrated
         document.getElementById('step3').addEventListener('submit', e => {
@@ -2399,6 +2422,7 @@
                     formData.append("Transaction ID", document.getElementById("transactionId")?.value || "0");
                     formData.append("Total Fee", document.getElementById("feeAmount").textContent.replace("₹", "").replace(",", "").trim());
                     formData.append("Amount Paid", document.getElementById("amountPaid")?.value || "0");
+                    formData.append("Need To Pay", document.getElementById("needToPay").value || "0");
 
                     fetch("https://script.google.com/macros/s/AKfycby2dUvOJujAHXXSisTUmVbGROWr7ookQrzwg1XOt4pTUUsmz4Sauku0MFJGWsAsKucI/exec", {
                         method: "POST",
