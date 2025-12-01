@@ -2314,18 +2314,25 @@
             const totalFeeText = document.getElementById("feeAmount").textContent;
             const totalAmount = parseInt(totalFeeText.replace("₹", "").replace(",", "").trim()) || 0;
             const paidAmount = parseInt(document.getElementById("amountPaid").value) || 0;
-
-            const needToPay = Math.max(totalAmount - paidAmount, 0);
-
+        
+            const balance = totalAmount - paidAmount; // negative means extra gift
+        
             const label = document.getElementById("needToPayLabel");
             const field = document.getElementById("needToPay");
-
+        
             label.style.display = "block";
             field.style.display = "block";
-            field.value = needToPay;
+        
+            field.value = balance;
+        
+            if (balance < 0) {
+                label.textContent = "Extra Gift (−)";
+                field.style.color = "green";
+            } else {
+                label.textContent = "Need to Pay";
+                field.style.color = "#111";
+            }
         }
-
-
 
         // Submit Handler with Reg Code System Integrated
         document.getElementById('step3').addEventListener('submit', e => {
