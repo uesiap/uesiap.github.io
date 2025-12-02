@@ -2429,7 +2429,7 @@
                     formData.append("Transaction ID", document.getElementById("transactionId")?.value || "0");
                     formData.append("Total Fee", document.getElementById("feeAmount").textContent.replace("₹", "").replace(",", "").trim());
                     formData.append("Amount Paid", document.getElementById("amountPaid")?.value || "0");
-                    formData.append("Need To Pay", document.getElementById("needToPay").value || "0");
+                    formData.append("Need to Pay", document.getElementById("needToPay").value || "0");
 
                     fetch("https://script.google.com/macros/s/AKfycby2dUvOJujAHXXSisTUmVbGROWr7ookQrzwg1XOt4pTUUsmz4Sauku0MFJGWsAsKucI/exec", {
                         method: "POST",
