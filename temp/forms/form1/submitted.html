@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>EC & DT Camp Follow-Up | Vizag District</title>
@@ -22,7 +23,7 @@
         }
 
         .header-title {
-            font-size: 18px;
+            font-size: 1em;
             font-weight: 700;
             text-align: center;
             color: #1d2939;
@@ -42,42 +43,47 @@
         .zone {
             background: #ffffff;
             border-radius: 10px;
-            padding: 18px;
+            padding: 22px;
+            /* slightly more breathing room */
             border: 1px solid #e0e4eb;
             transition: box-shadow .18s ease;
         }
 
+        /* Hover shadow */
         .zone:hover {
-            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
         }
 
         .zone-title {
-            font-size: 16px;
+            font-size: 18px;
+            /* increased */
             font-weight: 700;
             color: #1d2939;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
             border-left: 4px solid #4a68e2;
             padding-left: 10px;
         }
 
         h3 {
-            font-size: 14px;
+            font-size: 1rem;
+            /* slightly increased */
             font-weight: 600;
-            margin: 12px 0 6px;
+            margin: 14px 0 6px;
             color: #344054;
         }
 
         ul {
-            padding: 8px 12px;
-            margin: 0 0 10px;
+            padding: 10px 14px;
+            margin: 0 0 12px;
             border-radius: 6px;
             border: 1px solid #e5e7eb;
             background: #fafbff;
         }
 
         li {
-            font-size: 13.5px;
-            padding: 4px 0;
+            font-size: 1rem;
+            /* increased for readability */
+            padding: 5px 0;
             color: #444;
             border-bottom: 1px dashed #e5e7eb;
         }
@@ -115,7 +121,7 @@
 
             if (!snapshot.exists()) {
                 dataDiv.innerHTML =
-                "<p style='text-align:center;color:#475467;'>No data found yet.</p>";
+                    "<p style='text-align:center;color:#475467;'>No data found yet.</p>";
                 return;
             }
 
@@ -145,10 +151,11 @@
                         <h3>DT Camp – New</h3>
                         <ul>${(zone.dtCamp.newStudents || []).map(s => `<li>${s}</li>`).join("")}</ul>
                     </div>`;
-                    
+
                     dataDiv.innerHTML += html;
                 });
         });
     </script>
 </body>
+
 </html>
