@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vizag District Camps Follow-Up for DT Camp 2</title>
+
+    <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background: #eef1f5;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 620px;
+            background: #ffffff;
+            border: 1px solid #d7dce3;
+            border-radius: 0;
+            padding: 28px;
+        }
+
+        h2 {
+            font-size: 24px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 14px;
+            color: #1f2937;
+        }
+
+        h3 {
+            font-size: 17px;
+            font-weight: 600;
+            background: #487cc5;
+            color: white;
+            padding: 6px 10px;
+            margin-top: 24px;
+            margin-bottom: 12px;
+            border-radius: 0;
+        }
+
+        input,
+        button {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 0;
+            outline: none;
+            border: 1px solid #cfd4dc;
+            background: #f9fafb;
+            margin-top: 10px;
+        }
+
+        input:focus {
+            border-color: #3b82f6;
+            background: #ffffff;
+        }
+
+        button {
+            font-weight: 600;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            margin-top: 26px;
+            transition: .15s;
+        }
+
+        button:hover {
+            background: #1e40af;
+        }
+
+        .student-box {
+            padding: 6px;
+            margin: 4px 0;
+            background: #fafbfc;
+            border: 1px solid #d3d8e0;
+        }
+
+        label {
+            display: flex;
+            gap: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #2d3748;
+        }
+
+        /* Modal dialog */
+        .modal-bg {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.35);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            width: 320px;
+            border: 1px solid #d7dce3;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1f2937;
+        }
+
+        .modal button {
+            border-radius: 0;
+            background: #2563eb;
+            padding: 10px 20px;
+            margin-top: 16px;
+        }
+
+        /* DT-Camp checkbox list container */
+        #dtCampFromEList {
+            background: #f3f6fa;
+            border: 1px solid #c5ccd7;
+            padding: 14px;
+            margin-top: 12px;
+        }
+
+        /* Each selectable student row */
+        .student-box {
+            display: flex;
+            align-items: center;
+            background: #ffffff;
+            border: 1px solid #cfd4dc;
+            margin: 6px 0;
+            padding: 10px;
+            transition: background 0.15s, border-color 0.15s;
+            cursor: pointer;
+        }
+
+        /* Hover feedback */
+        .student-box:hover {
+            background: #e9eff8;
+            border-color: #3b82f6;
+        }
+
+        /* Checkbox itself */
+        .dtCheck {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* Label text next to checkbox */
+        .student-box label {
+            width: 100%;
+            font-size: 15px;
+            color: #1f2937;
+            cursor: pointer;
+        }
+
+        /* Section title inside container */
+        #dtCampFromEList p {
+            margin: 0 0 10px 0;
+            font-size: 14.5px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h2></h2>
+        <h2 style="text-align: left;">District: Vizag </h2>
+        <h3 style="background-color: #7568ef;">Purpose: Camps Follow-Up for DT Camp 2</h3>
+
+        <input type="text" id="zoneName" placeholder="Enter your zone Name">
+
+        <h3>E-Camp 1</h3>
+        <input type="number" id="ecamp1Count" placeholder="Number of students attended?"
+            oninput="generateFields('ecamp1', this.value)">
+        <div id="ecamp1"></div>
+
+        <h3>E-Camp 2</h3>
+        <input type="number" id="ecamp2Count" placeholder="Number of students attended?"
+            oninput="generateFields('ecamp2', this.value)">
+        <div id="ecamp2"></div>
+
+        <h3>E-Camp 3</h3>
+        <input type="number" id="ecamp3Count" placeholder="Number of students attended?"
+            oninput="generateFields('ecamp3', this.value)">
+        <div id="ecamp3"></div>
+
+        <h3>DT-Camp</h3>
+        <p>How many attened to DT Camp from E-Camps?</p>
+        <input type="number" id="dtFromECount" placeholder="Enter the number" oninput="updateDTCheckboxes(this.value)">
+        <div id="dtCampFromEList"></div>
+
+        <p style="font-size:14px;margin-top:16px;font-weight:600;">New students directly attended to DT-Camp:</p>
+        <input type="number" id="dtNewCount" placeholder="Number of new students?"
+            oninput="generateFields('dtNew', this.value)">
+        <div id="dtNew"></div>
+
+        <button onclick="submitData()">Submit</button>
+    </div>
+
+
+    <!-- Custom Modal -->
+    <div class="modal-bg" id="modalBg">
+        <div class="modal">
+            <div class="modal-title">✔ Saved Successfully</div>
+            <p>Your data has been submitted.</p>
+            <button onclick="closeModal()">Okay</button>
+        </div>
+    </div>
+
+
+    <script>
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGS4dCnRS7ywHWRBjnaOpDmL28323flw8",
+            authDomain: "melamrahul.firebaseapp.com",
+            databaseURL: "https://melamrahul-default-rtdb.firebaseio.com",
+            projectId: "melamrahul",
+            storageBucket: "melamrahul.appspot.com",
+            messagingSenderId: "721100209859",
+            appId: "1:721100209859:web:52b007dd6becf1d54c6c76",
+            measurementId: "G-8ZH6Z66ESH"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        function generateFields(id, count) {
+            let container = document.getElementById(id);
+            container.innerHTML = "";
+            for (let i = 0; i < count; i++) {
+                let input = document.createElement("input");
+                input.placeholder = `Student ${i + 1} Name`;
+                input.id = `${id}Student${i}`;
+                container.appendChild(input);
+            }
+        }
+
+        function updateDTCheckboxes(count) {
+            let listDiv = document.getElementById("dtCampFromEList");
+            listDiv.innerHTML = "";
+
+            let allStudents = [
+                ...document.querySelectorAll("[id^='ecamp1Student']"),
+                ...document.querySelectorAll("[id^='ecamp2Student']"),
+                ...document.querySelectorAll("[id^='ecamp3Student']")
+            ].map(i => i.value.trim()).filter(v => v);
+
+            if (!allStudents.length) {
+                listDiv.innerHTML = "<p style='color:#555;'>Enter E-Camp students first</p>";
+                return;
+            }
+
+            if (count > allStudents.length) count = allStudents.length;
+
+            // Display student list with checkboxes
+            listDiv.innerHTML += `<p style="font-size:14px; margin-bottom:8px; font-weight:600;">Select ${count} students from below:</p>`;
+
+            for (let i = 0; i < allStudents.length; i++) {
+                let box = document.createElement("div");
+                box.className = "student-box";
+                box.innerHTML = `
+            <label>
+                <input type="checkbox" class="dtCheck" value="${allStudents[i]}" 
+                onclick="limitSelection(${count})">
+                ${allStudents[i]}
+            </label>`;
+                listDiv.appendChild(box);
+            }
+        }
+
+        // Prevent selecting more checkboxes than allowed
+        function limitSelection(limit) {
+            let checked = document.querySelectorAll(".dtCheck:checked");
+            if (checked.length > limit) {
+                alert(`You can select only ${limit} students`);
+                checked[checked.length - 1].checked = false;
+            }
+        }
+
+
+        function getStudents(prefix) {
+            return Array.from(document.querySelectorAll(`[id^='${prefix}Student']`))
+                .map(i => i.value.trim())
+                .filter(v => v !== "");
+        }
+
+        function submitData() {
+            let zone = document.getElementById("zoneName").value.trim();
+            if (!zone) return openModal("Missing zone name");
+
+            let data = {
+                zoneName: zone,
+                camps: {
+                    ecamp1: getStudents("ecamp1"),
+                    ecamp2: getStudents("ecamp2"),
+                    ecamp3: getStudents("ecamp3")
+                },
+                dtCamp: {
+                    fromEcamp: Array.from(document.querySelectorAll(".dtCheck:checked")).map(x => x.value),
+                    newStudents: getStudents("dtNew")
+                }
+            };
+
+            db.ref("CampData/" + zone).set(data)
+                .then(() => openModal("✔ Saved Successfully"))
+                .catch(err => openModal("Error: " + err));
+        }
+
+        function openModal(message) {
+            document.querySelector(".modal-title").innerHTML = message;
+            document.getElementById("modalBg").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("modalBg").style.display = "none";
+        }
+    </script>
+
+</body>
+
+</html>
