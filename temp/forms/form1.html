@@ -326,7 +326,7 @@
             };
 
             db.ref("CampData/" + zone).set(data)
-                .then(() => openModal("✔ Saved Successfully"))
+                .then(() => openModal("✅ Saved Successfully"))
                 .catch(err => openModal("Error: " + err));
         }
 
@@ -336,7 +336,7 @@
         }
 
         function closeModal() {
-            document.getElementById("modalBg").style.display = "none";
+            location.reload();
         }
     </script>
 
