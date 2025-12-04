@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EC & DT Camp Follow-Up | Vizag District</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: "Inter", sans-serif;
+            background: #f6f8fc;
+            padding: 28px 14px;
+            margin: 0;
+            min-height: 100vh;
+            color: #1d2939;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            color: #1d2939;
+            margin-bottom: 28px;
+        }
+
+        /* Grid for zones */
+        #data {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 18px;
+            max-width: 1250px;
+            margin: auto;
+        }
+
+        /* Minimal clean card */
+        .zone {
+            background: #ffffff;
+            border-radius: 10px;
+            padding: 18px;
+            border: 1px solid #e0e4eb;
+            transition: box-shadow .18s ease;
+        }
+
+        .zone:hover {
+            box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+        }
+
+        .zone-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1d2939;
+            margin-bottom: 14px;
+            border-left: 4px solid #4a68e2;
+            padding-left: 10px;
+        }
+
+        h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 12px 0 6px;
+            color: #344054;
+        }
+
+        ul {
+            padding: 8px 12px;
+            margin: 0 0 10px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            background: #fafbff;
+        }
+
+        li {
+            font-size: 13.5px;
+            padding: 4px 0;
+            color: #444;
+            border-bottom: 1px dashed #e5e7eb;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-title">EC & DT Camps Follow-Up Data</div>
+
+    <div id="data"></div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGS4dCnRS7ywHWRBjnaOpDmL28323flw8",
+            authDomain: "melamrahul.firebaseapp.com",
+            databaseURL: "https://melamrahul-default-rtdb.firebaseio.com",
+            projectId: "melamrahul",
+            storageBucket: "melamrahul.appspot.com",
+            messagingSenderId: "721100209859",
+            appId: "1:721100209859:web:52b007dd6becf1d54c6c76",
+            measurementId: "G-8ZH6Z66ESH"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        db.ref("CampData").on("value", snapshot => {
+            const dataDiv = document.getElementById("data");
+            dataDiv.innerHTML = "";
+
+            if (!snapshot.exists()) {
+                dataDiv.innerHTML =
+                "<p style='text-align:center;color:#475467;'>No data found yet.</p>";
+                return;
+            }
+
+            const data = snapshot.val();
+
+            Object.keys(data)
+                .sort()
+                .forEach(zoneName => {
+                    const zone = data[zoneName];
+
+                    let html = `
+                    <div class="zone">
+                        <div class="zone-title">${zone.zoneName}</div>
+
+                        <h3>E-Camp 1</h3>
+                        <ul>${(zone.camps.ecamp1 || []).map(s => `<li>${s}</li>`).join("")}</ul>
+
+                        <h3>E-Camp 2</h3>
+                        <ul>${(zone.camps.ecamp2 || []).map(s => `<li>${s}</li>`).join("")}</ul>
+
+                        <h3>E-Camp 3</h3>
+                        <ul>${(zone.camps.ecamp3 || []).map(s => `<li>${s}</li>`).join("")}</ul>
+
+                        <h3>DT Camp – From E-Camps</h3>
+                        <ul>${(zone.dtCamp.fromEcamp || []).map(s => `<li>${s}</li>`).join("")}</ul>
+
+                        <h3>DT Camp – New</h3>
+                        <ul>${(zone.dtCamp.newStudents || []).map(s => `<li>${s}</li>`).join("")}</ul>
+                    </div>`;
+                    
+                    dataDiv.innerHTML += html;
+                });
+        });
+    </script>
+</body>
+</html>
