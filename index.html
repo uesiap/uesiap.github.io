@@ -1483,7 +1483,8 @@
                             <label>Amount Paid in Advance<span class="required">*</span></label>
                             <input type="number" id="amountPaid" placeholder="Enter amount you paid" required />
 
-                            <label id="needToPayLabel" style="display:none; margin-top:6px;">Need to Pay at venue:</label>
+                            <label id="needToPayLabel" style="display:none; margin-top:6px;">Need to Pay at
+                                venue:</label>
                             <input type="number" id="needToPay" placeholder="Auto-calculates" readonly
                                 style="display:none; background:#f3f4f6; font-weight:700;" />
 
@@ -1547,6 +1548,14 @@
                                 alt="Whatsapp" width="20" style="margin-right:6px;">
                             Join Spicon Group
                         </a>
+
+                        <div id="waShareContainer" style="display:none; margin-top:12px;">
+                            <button id="shareWAButton" class="pay-btn" style="padding:8px 10px;">
+                                <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/whatsapp-color-icon.png"
+                                    width="22" style="margin-right:8px;">
+                                Share WhatsApp Group Link
+                            </button>
+                        </div>
 
                         <button id="waQRShow" type="button" class="pay-btn"
                             onclick="showWAQRPreview('https://uesiap.github.io/assets/nc-spicon-2026-wa-qr.jpg')">
@@ -2314,17 +2323,17 @@
             const totalFeeText = document.getElementById("feeAmount").textContent;
             const totalAmount = parseInt(totalFeeText.replace("₹", "").replace(",", "").trim()) || 0;
             const paidAmount = parseInt(document.getElementById("amountPaid").value) || 0;
-        
+
             const balance = totalAmount - paidAmount; // negative means extra gift
-        
+
             const label = document.getElementById("needToPayLabel");
             const field = document.getElementById("needToPay");
-        
+
             label.style.display = "block";
             field.style.display = "block";
-        
+
             field.value = balance;
-        
+
             if (balance < 0) {
                 label.textContent = "Giving Extra Gift for SPICON 2026 Need:";
                 field.style.color = "green";
@@ -2333,6 +2342,14 @@
                 field.style.color = "#111";
             }
         }
+
+        document.getElementById("shareWAButton")?.addEventListener("click", () => {
+            const groupInviteLink = "https://chat.whatsapp.com/B99aCrcfUIuIuXpOZU07yo";
+            const encoded = encodeURIComponent(groupInviteLink);
+            const waLink = `https://api.whatsapp.com/send?text=${encoded}`;
+            window.open(waLink, "_blank");
+        });
+
 
         // Submit Handler with Reg Code System Integrated
         document.getElementById('step3').addEventListener('submit', e => {
@@ -2446,6 +2463,13 @@
                                 document.querySelector('.success-message-container').style.display = 'block';
                                 document.querySelector('.form-container').style.marginTop = '2rem';
                                 document.getElementById("regCodeDisplay").textContent = regCode;
+                                const recommendRole = document.getElementById("recommendRole").value;
+                                const waShareContainer = document.getElementById("waShareContainer");
+
+                                if (recommendRole === "EGF Secretary / EGF President") {
+                                    waShareContainer.style.display = "flex";
+                                }
+
                             } else {
                                 showDialog("⚠ Error", "Something went wrong!");
                             }
