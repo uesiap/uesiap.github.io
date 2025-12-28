@@ -1074,7 +1074,11 @@
                     <!--    <td>to be update</td>-->
                     <!--  </tr>-->
                       <tr>
-                        <td>🤝 Volunteer</td>
+                        <td>🤝 Student Volunteer</td>
+                        <td>₹ 100</td>
+                      </tr>
+                      <tr>
+                        <td>🤝 Graduate Volunteer</td>
                         <td>₹ 100</td>
                       </tr>
                 </table>
@@ -1166,7 +1170,7 @@
 
                         <label>I would like to attend as a/an<span class="required">*</span></label>
                         <select id="attendAs" required onchange="updateAttendeeType()">
-                            <!--<option value="" disabled selected>Select Category</option>-->
+                            <option value="" disabled selected>Select Category</option>
                             <!--<option value="Student">👨‍🎓 Student</option>-->
                             <!--<option value="Single Unemployed">🎓 Single Unemployed Graduate</option>-->
                             <!--<option value="Single Employed">👤 Single Employed Graduate</option>-->
@@ -1174,7 +1178,8 @@
                             <!-- <option value="Both Employed Family">👨‍👩‍👧‍👦 Both Employed Family</option> -->
                             <!--<option value="Staff">👔 Staff</option>-->
                             <!-- <option value="Choir">🎵 Choir Member</option> -->
-                            <option value="Volunteer" selected>🤝 Volunteer</option>
+                            <option value="Student Volunteer">Student Volunteer</option>
+                            <option value="Graduate Volunteer">Graduate Volunteer</option>
                             <!-- <option value="Other">📝 Other (specify)</option> -->
                         </select>
                         <span id="Volunteer"></span>
@@ -1629,7 +1634,8 @@
             //'Both Employed Family': 3000,
             'Staff': 0,
             // 'Choir': 0, // to be updated
-            'Volunteer': 100 // FREE
+            'Student Volunteer': 100,
+            'Graduate Volunteer': 100 // FREE
             //'Other': 500
         };
 
