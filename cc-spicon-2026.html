@@ -1030,11 +1030,10 @@
                 </p>
             </div>
 
-            <div class="info-box" id="eligibulity">
-                <strong>✅ ELIGIBILITY: Believeing Students & Graduates of UESI</strong>
-                <!-- <p><strong>📅 Last Day for Registration:</strong> 27th DEC 2025</p> -->
+            <div class="info-box">
+                <strong id="eligibulity">✅ ELIGIBILITY: Believeing Students & Graduates of UESI</strong>
+                <p><strong>📅 Last Day for Registration:</strong> 27th DEC 2025</p>
             </div>
-
 
             <div class="fee-table" id="close-category" style="background-color: #fff; border: 1.5px solid var(--brand)">
                 <table>
@@ -1081,65 +1080,22 @@
                 </table>
             </div>
 
-            <div id="open-registrer-info" class="instruction-section"
-                style="background-color: #fff; border: 1.5px solid var(--brand)">
-                <h3 style="text-decoration: underline">Payment Information</h3>
-                <p style="margin:0;color:#374151;line-height:1.7">
-                    <span style="color: red;">Must Transfer 50% of your registration fee to:</span><br>
-                    <strong>📱 Phone Number:</strong> 8341545549<br>
-                    <strong>👤 Name:</strong> DOKKA CHANDU BABU<br>
-                    <strong>💳 Accepted:</strong> Google Pay / PhonePe
-                </p>
-            </div>
-            <div class="instruction-section" style="background-color: #fff; border: 1.5px solid var(--brand)">
-                <h3 style="text-decoration: underline">Form Deadlines</h3>
-                <p style="margin:0;color:#374151;line-height:1.7">
-                    <strong>📝 Opens at:</strong> <span id="opens-at"></span><br>
-                    <strong>🔒 Close at:</strong> <span id="closes-at">
-                </p>
-                <script>
-                    const startDate = new Date("2026-01-03T16:00:00");
-                    const endDate = new Date("2026-01-04T23:59:59");
-                    const now = new Date();
-                    document.getElementById("opens-at").textContent = startDate.toLocaleString();
-
-                    document.getElementById("closes-at").textContent = endDate.toLocaleString();
-
-                    startDate.toLocaleString("en-US", {
-                        weekday: "short",
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit"
-                    });
-
-                    // One single IF handles both start + end logic
-                    if (now >= startDate && now <= endDate) {
-                        // ACTIVE / OPEN
-                        document.getElementById("heaf").style.display = "block";
-                        document.getElementById("headf").style.display = "none";
-                        document.getElementById("eligibulity").style.display = "block";
-                        document.getElementById("close-category").style.display = "block";
-                        document.getElementById("open-registrer-info").style.display = "block";
-                        document.getElementById("open-registrer-i").style.display = "block";
-                        document.getElementById("closed-registrer-info").style.display = "none";
-                    } else {
-                        // NOT ACTIVE (either not started yet OR already ended)
-                        document.getElementById("heaf").style.display = "none";
-                        document.getElementById("headf").style.display = "block";
-                        document.getElementById("eligibulity").style.display = "none";
-                        document.getElementById("close-category").style.display = "none";
-                        document.getElementById("open-registrer-info").style.display = "none";
-                        document.getElementById("open-registrer-i").style.display = "none";
-                        document.getElementById("closed-registrer-info").style.display = "block";
-                    }
-                </script>
-            </div><br>
-            <div id="open-registrer-i" class="btn-right" style="margin-top: 1rem;">
-                <button class="btnn" onclick="pressThenStart(this)">Start Registration &nbsp;<i
-                        class="fa-solid fa-arrow-up-right-from-square"></i></button>
-            </div>
+            <span id="open-registrer-info">
+                <div class="instruction-section" style="background-color: #fff; border: 1.5px solid var(--brand)">
+                    <h3 style="text-decoration: underline">Payment Information</h3>
+                    <p style="margin:0;color:#374151;line-height:1.7">
+                        <span style="color: red;">Must Transfer 50% of your registration fee to:</span><br>
+                        <strong>📱 Phone Number:</strong> 8341545549<br>
+                        <strong>👤 Name:</strong> DOKKA CHANDU BABU<br>
+                        <strong>💳 Accepted:</strong> Google Pay / PhonePe
+                    </p>
+                </div>
+                <br>
+                <div class="btn-right" style="margin-top: 1rem;">
+                    <button class="btnn" onclick="pressThenStart(this)">Start Registration &nbsp;<i
+                            class="fa-solid fa-arrow-up-right-from-square"></i></button>
+                </div>
+            </span>
             <span id="closed-registrer-info" style="display: none;">
                 <div class="instruction-section" id="closed-regitrer-info"
                     style="background-color: #fff; border: 1.5px solid var(--brand);">
@@ -1499,6 +1455,18 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+
+        const deadline = new Date("2025-12-27T23:59:59");
+        const now = new Date();
+
+        if (now > deadline) {
+            document.getElementById("heaf").style.display = "none";
+            document.getElementById("headf").style.display = "block";
+            document.getElementById("eligibulity").style.display = "none";
+            document.getElementById("close-category").style.display = "none";
+            document.getElementById("open-registrer-info").style.display = "none";
+            document.getElementById("closed-registrer-info").style.display = "block";
+        }
 
         const firebaseConfig = {
             apiKey: "AIzaSyAaQdWKBdtqqe3pu9XDdPoFuvcEm2YG_wA",
