@@ -1032,7 +1032,7 @@
 
             <div id="eligibulity" class="info-box">
                 <strong>✅ ELIGIBILITY: Believeing Students & Graduates of UESI</strong>
-                <p><strong>📅 Last Day for Registration:</strong> 27th DEC 2025</p>
+                <p><strong>📅 Last Day for Registration:</strong> 4th Jan 2026</p>
             </div>
 
             <div class="fee-table" id="close-category" style="background-color: #fff; border: 1.5px solid var(--brand)">
@@ -1085,9 +1085,18 @@
                     <h3 style="text-decoration: underline">Payment Information</h3>
                     <p style="margin:0;color:#374151;line-height:1.7">
                         <span style="color: red;">Must Transfer 50% of your registration fee to:</span><br>
+                        <strong><span style="color: #D05C14;">Person 1</span></strong><br>
+                    <p style="margin:0;color:#374151;line-height:1.7">
                         <strong>📱 Phone Number:</strong> 9866819908<br>
                         <strong>👤 Name:</strong> CHINNAM SYAM BABU<br>
-                        <strong>💳 Accepted:</strong> Google Pay / PhonePe
+                    </p>(or)<br>
+                    <strong><span style="color: #A932BC;">Person 2</span></strong><br>
+                    <p style="margin:0;color:#374151;line-height:1.7">
+                        <strong>📱 Phone Number:</strong> 8341545549<br>
+                        <strong>👤 Name:</strong> DOKKA CHANDU BABU<br>
+                    </p>
+                    <hr>
+                    <strong>💳 Accepted:</strong> Google Pay / PhonePe
                     </p>
                 </div>
                 <div class="instruction-section" style="background-color: #fff; border: 1.5px solid var(--brand)">
@@ -1308,7 +1317,14 @@
                                 <button type="button" class="copy-btn" onclick="copyPhoneNumber()">
                                     <i class="fa-solid fa-copy"></i> Copy
                                 </button><br>
-                                <strong>Name:</strong> CHINNAM SYAM BABU
+                                <span style="display: flex; margin-bottom: -1rem;"><strong>Name:</strong>&ensp;CHINNAM
+                                    SYAM BABU</span>
+                                (or)<br>
+                                <strong>Phone:</strong> 8341545549
+                                <button type="button" class="copy-btn" onclick="copyPhoneNumberer()">
+                                    <i class="fa-solid fa-copy"></i> Copy
+                                </button><br>
+                                <span style="display: flex;"><strong>Name:</strong>&ensp;DOKKA CHANDU BABU</span>
                             </p>
                         </div>
 
@@ -1464,7 +1480,7 @@
     <script>
 
         const startDate = new Date("2026-01-03T16:00:00");
-        const endDate   = new Date("2026-01-04T23:59:59");
+        const endDate = new Date("2026-01-04T23:59:59");
         const now = new Date();
 
         if (now >= startDate && now <= endDate) {
@@ -1698,6 +1714,14 @@
             });
         }
 
+        function copyPhoneNumberer() {
+            navigator.clipboard.writeText('8341545549').then(() => {
+                showDialog('📋 Copied', 'Phone number: 8341545549');
+            }).catch(() => {
+                showDialog('📞 Contact', 'Phone number: 8341545549');
+            });
+        }
+
         function openPaymentApp(app) {
             const totalFeeText = document.getElementById('feeAmount').textContent;
             const totalFee = parseFloat(totalFeeText.replace('₹', '').replace(',', ''));
@@ -1721,7 +1745,7 @@
 
             showDialogg(
                 '💰 Make Payment',
-                `Please pay ₹${amount}/ full amount to:<br><strong>9866819908</strong><br>(CHINNAM SYAM BABU)<br><br>Click OK to continue`
+                `Please pay ₹${amount}/ full amount to:<br><strong>Provided</strong><br>Contacts<br><br>Click OK to continue`
             );
         }
 
