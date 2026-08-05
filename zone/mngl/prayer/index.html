@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mngl Zone Prayer Requests Data</title>
+    <script>
+        window.onload = function () {
+            localStorage.clear();
+        };
+    </script>
+    <meta property="og:site_name" content="Mngl Zone">
+    <meta property="og:title" content="Mngl Zone Prayer Requests Data">
+    <meta property="og:description" content="See the Mngl Zone Prayer Points">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container {
+            max-width: 720px;
+            margin-top: 3rem;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            margin-top: 15px;
+            background-color: #fff;
+            color: #000;
+            border-bottom: 0;
+            border-radius: 10px 10px 0 0;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .btn-custom {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 140px;
+            height: 30px;
+            margin: 0 auto;
+        }
+
+        .button {
+            min-width: 100%;
+            border-radius: 16px;
+            border: 2px solid #1cb0f6;
+            border-bottom: 6px solid #1cb0f6;
+            margin: 10px;
+            transition: all 0.1s;
+            display: inline-flex;
+            padding: 8px 3px;
+        }
+
+        .button:hover {
+            background-color: #ddf4ff;
+            border-color: #1cb0f6;
+        }
+
+        .button:active {
+            border-bottom: 2px solid #1cb0f6;
+        }
+
+        .answer-number {
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .answer-choice {
+            width: 100%;
+            text-align: center;
+            font-size: 24px;
+            color: #4b4b4b;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="margin-top: 0px;  background-color: white; padding: 5px;
+    box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.2); ">
+        <div style="display: flex; margin-top: 10px; justify-content: space;">
+            <img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" width="55" height="55" class="d-inline-block align-center"
+                style="margin-left: 10px; padding: 5px" alt="MNGL ZONE">&emsp;
+            <h2
+                style="margin-top: 10px; margin-left: -3px; font-family: 'Google Sans', sans-serif; font-size: 22px;  color: black">
+                MNGL ZONE Prayer Secretary
+            </h2>
+        </div>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                MNGL ZONE<br>Prayer & Praising Points
+            </div>
+            <div class="card-body">
+                <form id="selectionForm">
+                    <div class="form-group">
+                        <label for="year" class="form-label">Year</label>
+                        <select id="year" class="form-select">
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="month" class="form-label">Month</label>
+                        <select id="month" class="form-select">
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="category" class="form-label">Select Category</label>
+                        <select id="category" class="form-select">
+                            <option value="students" selected>Students</option>
+                            <option value="graduates">Graduates</option>
+                        </select>
+                    </div><br>
+
+                    <div class="button-container">
+                        <div class="button" onclick="submitForm()">
+                            <h4 class="answer-choice">Submit</h4>
+                        </div>
+                    </div>
+                </form>
+                <div id="error-message" class="error" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Populate year and month dynamically
+        document.addEventListener("DOMContentLoaded", function () {
+            const yearSelect = document.getElementById('year');
+            const monthSelect = document.getElementById('month');
+            document.querySelector('.button').addEventListener('click', submitForm);
+
+            // Get current year and month
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth() + 1; // Months are 0-indexed in JavaScript
+
+            // Populate year options (Previous Year, Current Year, Next Year)
+            const startYear = currentYear - 1;
+            const endYear = currentYear + 1;
+
+            for (let year = startYear; year <= endYear; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+
+                if (year === currentYear) {
+                    option.selected = true; // Set the current year as default
+                }
+
+                yearSelect.appendChild(option);
+            }
+
+            // Populate month options
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May',
+                'June', 'July', 'August', 'September', 'October',
+                'November', 'December'
+            ];
+
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = monthNames[i - 1];
+
+                if (i === currentMonth) {
+                    option.selected = true; // Set the current month as default
+                }
+
+                monthSelect.appendChild(option);
+            }
+        });
+
+        // Function to encode parameters using Base64
+        function encodeParameter(param) {
+            return btoa(param);
+        }
+
+        function submitForm() {
+            const year = document.getElementById('year').value;
+            const month = document.getElementById('month').value;
+            const category = document.getElementById('category').value;
+
+            const errorMessage = document.getElementById('error-message');
+
+            if (year && month && category) {
+                // Encode parameters
+                const encodedYear = encodeParameter(year);
+                const encodedMonth = encodeParameter(month);
+
+                // Redirect to the respective page with encoded query parameters
+                const targetPage = category === 'students'
+                    ? '/zone/mngl/prayer/students_data_page'
+                    : '/zone/mngl/prayer/graduates_data_page';
+
+                window.location.href =
+                    `${targetPage}?utm=${encodeURIComponent(encodedYear)}&auth=${encodeURIComponent(encodedMonth)}`;
+            } else {
+                // Display an error message if year, month, or category is not selected
+                errorMessage.textContent = 'Please select all fields.';
+                errorMessage.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>
