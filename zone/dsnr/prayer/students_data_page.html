@@ -90,7 +90,7 @@
 
 <body>
     <div class="container">
-         <div class="page-head"><img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" style="width: 45px; height: 45px;"> <h2 style="font-weight: bold">DSNR ZONE</h2></div><br>
+         <div class="page-head"><img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" style="width: 45px; height: 45px;"> <h2 style="font-weight: bold">Dilshuknagar Zone</h2></div><br>
         <h4><strong>Students</strong> Prayer and Praising Points (<span id="mnth"></span>/<span id="yr"></span>)</h4><br>
           <div id="error-message" class="error" style="display: none;"></div>
         <table class="table table-bordered" style="border: 1px solid #999;">
@@ -181,6 +181,18 @@
 
         function handleBulkDelete() {
             const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"].student-checkbox:checked');
+            
+            if (selectedCheckboxes.length === 0) {
+                alert("Please select at least one student to delete.");
+                return;
+            }
+
+            const isConfirmed = confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected student(s)? This action cannot be undone.`);
+            
+            if (!isConfirmed) {
+                return;
+            }
+
             const deletePromises = [];
 
             selectedCheckboxes.forEach(checkbox => {
@@ -196,9 +208,13 @@
 
             Promise.all(deletePromises)
                 .then(() => {
+                    alert("Selected student(s) deleted successfully.");
                     window.location.reload();
                 })
-                .catch(error => console.error("Error deleting selected students:", error));
+                .catch(error => {
+                    console.error("Error deleting selected students:", error);
+                    alert("An error occurred while deleting. Please try again.");
+                });
         }
 
         function retrieveData() {
