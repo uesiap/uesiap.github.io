@@ -17,82 +17,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"> <!-- Font Awesome -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-    <style>
-        body {
-            -webkit-tap-highlight-color: transparent;
-            tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            font-size: 0.8rem;
-            line-height: 1.2;
-        }
-
-        .container {
-            max-width: 100%;
-            margin-top: 1rem;
-        }
-
-        .student-container {
-            cursor: pointer;
-            padding-bottom: 0;
-            margin-bottom: 0;
-        }
-
-        .checkbox-column,
-        .delete-button-column {
-            display: none;
-        }
-
-        table {
-            width: 100%;
-            table-layout: fixed;
-        }
-
-        th, td {
-            padding: 0.5rem;
-            vertical-align: top;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f8f9fa;
-            font-weight: bold;
-        }
-
-        ul {
-            padding-left: 1rem;
-            margin: 0;
-        }
-
-        li {
-            margin-bottom: 0;
-        }
-
-        .btn-custom {
-            margin-bottom: 5px;
-        }
-        .error {
-            color: red;
-            font-weight: bold;
-        }
-        .page-head{
-           display: flex;
-           flex-direction: row;
-           text-align: center;
-           align-items: center;
-           justify-content: center;
-        }
-    </style>
+    <style>body{-webkit-tap-highlight-color:transparent;tap-highlight-color:transparent;-webkit-touch-callout:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;font-size:.8rem;line-height:1.2}.container{max-width:100%;margin-top:1rem}.student-container{cursor:pointer;padding-bottom:0;margin-bottom:0}.checkbox-column,.delete-button-column{display:none}table{width:100%;table-layout:fixed}th,td{padding:.5rem;vertical-align:top;text-align:left}th{background-color:#f8f9fa;font-weight:bold}ul{padding-left:1rem;margin:0}li{margin-bottom:0}.btn-custom{margin-bottom:5px}.error{color:red;font-weight:bold}.page-head{display:flex;flex-direction:row;text-align:center;align-items:center;justify-content:center}#loaderContainer{display:none;position:fixed;left:0;top:0;width:100%;height:100%;background-color:rgba(0,0,0,.55);z-index:9999}#loader{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;color:#fff}.lds-spinner{color:official;display:inline-block;position:relative;width:80px;height:80px}.lds-spinner div{transform-origin:40px 40px;animation:lds-spinner 1.2s linear infinite}.lds-spinner div:after{content:" ";display:block;position:absolute;top:3px;left:37px;width:6px;height:18px;border-radius:20%;background:#fff}.lds-spinner div:nth-child(1){transform:rotate(0deg);animation-delay:-1.1s}.lds-spinner div:nth-child(2){transform:rotate(30deg);animation-delay:-1s}.lds-spinner div:nth-child(3){transform:rotate(60deg);animation-delay:-.9s}.lds-spinner div:nth-child(4){transform:rotate(90deg);animation-delay:-.8s}.lds-spinner div:nth-child(5){transform:rotate(120deg);animation-delay:-.7s}.lds-spinner div:nth-child(6){transform:rotate(150deg);animation-delay:-.6s}.lds-spinner div:nth-child(7){transform:rotate(180deg);animation-delay:-.5s}.lds-spinner div:nth-child(8){transform:rotate(210deg);animation-delay:-.4s}.lds-spinner div:nth-child(9){transform:rotate(240deg);animation-delay:-.3s}.lds-spinner div:nth-child(10){transform:rotate(270deg);animation-delay:-.2s}.lds-spinner div:nth-child(11){transform:rotate(300deg);animation-delay:-.1s}.lds-spinner div:nth-child(12){transform:rotate(330deg);animation-delay:0s}@keyframes lds-spinner{0%{opacity:1}100%{opacity:0}}#loader p{margin-top:16px;margin-left:30px;letter-spacing:.5px}@media(max-width:600px){.lds-spinner{width:60px;height:60px}#loader p{font-size:.95rem}}</style>
 </head>
 
 <body>
     <div class="container">
-         <div class="page-head"><img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" style="width: 45px; height: 45px;"> <h2 style="font-weight: bold">Dilshuknagar Zone</h2></div><br>
+         <div class="page-head"><img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" style="width: 45px; height: 45px;"> <h2 style="font-weight: bold">Dilsukhnagar Zone</h2></div><br>
         <h4><strong>Students</strong> Prayer and Praising Points (<span id="mnth"></span>/<span id="yr"></span>)</h4><br>
-          <div id="error-message" class="error" style="display: none;"></div>
+        <div id="error-message" class="error" style="display: none;"></div>
         <table class="table table-bordered" style="border: 1px solid #999;">
             <thead>
                 <tr>
@@ -117,8 +49,19 @@
     </div>
     <footer style="margin-left: 20px; font-size: 13px;">This is a auto generated document. designed by Rahul.</footer>
 
+    <!-- Loader HTML -->
+    <div id="loaderContainer">
+        <div id="loader">
+            <div class="lds-spinner">
+                <div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+            <div style="height: 10px;"></div>
+            <p style="font-size: 1.4rem;">Loading...</p>
+        </div>
+    </div>
+
     <script>
-        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyAaQdWKBdtqqe3pu9XDdPoFuvcEm2YG_wA",
             authDomain: "melam-rahul.firebaseapp.com",
@@ -129,12 +72,11 @@
             measurementId: "G-SCNKZYJ3TT"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
         function decodeParameter(param) {
-            return atob(param); // Base64 decoding
+            return atob(param);
         }
 
         function getQueryParams() {
@@ -152,26 +94,18 @@
         document.getElementById('yr').textContent = year;
         const category = 'student';
          
-        let deleteStudentId = null;
-
         function handleLongPress(event, studentId) {
             let timer;
-            deleteStudentId = studentId;
-
             const startLongPress = () => {
                 timer = setTimeout(() => {
                     document.querySelectorAll('.checkbox-column').forEach(el => el.style.display = 'table-cell');
                     document.getElementById('bulkDelete').style.display = 'inline-block';
                     document.getElementById('cancelSelection').style.display = 'inline-block';
-
                     const deleteCheckbox = document.querySelector(`input[type='checkbox'][data-student-id='${studentId}']`);
                     if (deleteCheckbox) deleteCheckbox.checked = true;
                 }, 700);
             };
-
-            const cancelLongPress = () => {
-                clearTimeout(timer);
-            };
+            const cancelLongPress = () => clearTimeout(timer);
 
             event.target.addEventListener('touchstart', startLongPress);
             event.target.addEventListener('touchend', cancelLongPress);
@@ -188,17 +122,12 @@
             }
 
             const isConfirmed = confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected student(s)? This action cannot be undone.`);
-            
-            if (!isConfirmed) {
-                return;
-            }
+            if (!isConfirmed) return;
 
             const deletePromises = [];
-
             selectedCheckboxes.forEach(checkbox => {
                 const studentId = checkbox.getAttribute('data-student-id');
                 const path = 'students';
-
                 deletePromises.push(
                     db.ref(`zone/dsnr/prayer/${year}/${month}/${path}/details/${studentId}`).remove()
                         .then(() => db.ref(`zone/dsnr/prayer/${year}/${month}/${path}/PraisingPoints/${studentId}`).remove())
@@ -217,83 +146,65 @@
                 });
         }
 
-        function retrieveData() {
-            const path = category === 'student' ? `students` : `graduates`;
+        async function retrieveData() {
+            const path = category === 'student' ? 'students' : 'graduates';
             const dataContainer = document.getElementById('dataContainer');
+            
+            // Show loader
+            document.getElementById('loaderContainer').style.display = 'block';
             dataContainer.innerHTML = '';
 
-            db.ref(`zone/dsnr/prayer/${year}/${month}/${path}/details`).once('value')
-                .then(snapshot => {
-                    const details = snapshot.val();
-                    if (details) {
-                        const sortedDetails = Object.keys(details)
-                            .map(key => ({
-                                id: key,
-                                data: details[key]
-                            }))
-                            .sort((a, b) => (a.data.gender || '').localeCompare(b.data.gender || ''))
-                            .map(student => student.id);
+            try {
+                const snapshot = await db.ref(`zone/dsnr/prayer/${year}/${month}/${path}/details`).once('value');
+                const details = snapshot.val();
 
-                        const detailsPromises = sortedDetails.map((studentId, index) => {
-                            const studentData = details[studentId];
+                if (details) {
+                    const sortedDetails = Object.keys(details)
+                        .map(key => ({ id: key, data: details[key] }))
+                        .sort((a, b) => (a.data.gender || '').localeCompare(b.data.gender || ''))
+                        .map(student => student.id);
 
-                            return db.ref(`zone/dsnr/prayer/${year}/${month}/${path}/PraisingPoints/${studentId}/points`).once('value')
-                                .then(praisingSnapshot => {
-                                    const praisingPoints = praisingSnapshot.val() || {};
-                                    const praisingPointsHtml = Object.keys(praisingPoints).map(ppKey => `
-                                        <li>${praisingPoints[ppKey]}</li>
-                                    `).join('');
+                    const detailsHtml = await Promise.all(sortedDetails.map(async (studentId, index) => {
+                        const studentData = details[studentId];
+                        try {
+                            const praisingSnapshot = await db.ref(`zone/dsnr/prayer/${year}/${month}/${path}/PraisingPoints/${studentId}/points`).once('value');
+                            const praisingPoints = praisingSnapshot.val() || {};
+                            const praisingPointsHtml = Object.keys(praisingPoints).map(ppKey => `<li>${praisingPoints[ppKey]}</li>`).join('');
 
-                                    return db.ref(`zone/dsnr/prayer/${year}/${month}/${path}/PrayerPoints/${studentId}/points`).once('value')
-                                        .then(prayerSnapshot => {
-                                            const prayerPoints = prayerSnapshot.val() || {};
-                                            const prayerPointsHtml = Object.keys(prayerPoints).map(prayerKey => `
-                                                <li>${prayerPoints[prayerKey]}</li>
-                                            `).join('');
+                            const prayerSnapshot = await db.ref(`zone/dsnr/prayer/${year}/${month}/${path}/PrayerPoints/${studentId}/points`).once('value');
+                            const prayerPoints = prayerSnapshot.val() || {};
+                            const prayerPointsHtml = Object.keys(prayerPoints).map(prayerKey => `<li>${prayerPoints[prayerKey]}</li>`).join('');
 
-                                            return `
-                                                <tr class="student-container" data-student-id="${studentId}"
-                                                    ontouchstart="handleLongPress(event, '${studentId}')"
-                                                    onmousedown="handleLongPress(event, '${studentId}')">
-                                                    <td class="checkbox-column">
-                                                        <input type="checkbox" class="student-checkbox" data-student-id="${studentId}">
-                                                    </td>
-                                                    <td>
-                                                      <strong>${index + 1}. ${studentData.name}</strong><br>
-                                                      <strong></strong> ${studentData.classAndBranch || ''}<br>
-                                                    </td>
-                                                    <td><ul>${praisingPointsHtml}</ul></td>
-                                                    <td><ul>${prayerPointsHtml}</ul></td>
-                                                </tr>
-                                            `;
-                                        })
-                                        .catch(error => {
-                                            console.error('Error retrieving prayer points:', error);
-                                            return `<tr><td colspan="4">Error retrieving prayer points for ${studentId}</td></tr>`;
-                                        });
-                                })
-                                .catch(error => {
-                                    console.error('Error retrieving praising points:', error);
-                                    return `<tr><td colspan="4">Error retrieving praising points for ${studentId}</td></tr>`;
-                                });
-                        });
-
-                        Promise.all(detailsPromises)
-                            .then(studentHtmlArray => {
-                                dataContainer.innerHTML = studentHtmlArray.join('');
-                            })
-                            .catch(error => {
-                                console.error('Error processing student data:', error);
-                                dataContainer.innerHTML = '<tr><td colspan="4">Error processing student data</td></tr>';
-                            });
-                    } else {
-                        dataContainer.innerHTML = '<tr><td colspan="4">No students found.</td></tr>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error retrieving student data:', error);
-                    dataContainer.innerHTML = '<tr><td colspan="4">Error retrieving student data.</td></tr>';
-                });
+                            return `
+                                <tr class="student-container" data-student-id="${studentId}" 
+                                    ontouchstart="handleLongPress(event, '${studentId}')" 
+                                    onmousedown="handleLongPress(event, '${studentId}')">
+                                    <td class="checkbox-column">
+                                        <input type="checkbox" class="student-checkbox" data-student-id="${studentId}">
+                                    </td>
+                                    <td>
+                                      <strong>${index + 1}. ${studentData.name}</strong><br>
+                                      ${studentData.classAndBranch || ''}<br>
+                                    </td>
+                                    <td><ul>${praisingPointsHtml}</ul></td>
+                                    <td><ul>${prayerPointsHtml}</ul></td>
+                                </tr>
+                            `;
+                        } catch (error) {
+                            return `<tr><td colspan="4">Error retrieving data for ${studentId}</td></tr>`;
+                        }
+                    }));
+                    dataContainer.innerHTML = detailsHtml.join('');
+                } else {
+                    dataContainer.innerHTML = '<tr><td colspan="4">No students found.</td></tr>';
+                }
+            } catch (error) {
+                console.error('Error retrieving student data:', error);
+                dataContainer.innerHTML = '<tr><td colspan="4">Error retrieving student data.</td></tr>';
+            } finally {
+                // Hide loader
+                document.getElementById('loaderContainer').style.display = 'none';
+            }
         }
 
         function closefun() {
@@ -309,10 +220,10 @@
             } else {
                 document.getElementById('error-message').textContent = 'Year and month parameters are required.';
                 document.getElementById('error-message').style.display = 'block';
+                document.getElementById('loaderContainer').style.display = 'none';
             }
 
             document.getElementById('bulkDelete').addEventListener('click', handleBulkDelete);
-
             document.getElementById('selectAll').addEventListener('change', function() {
                 const isChecked = this.checked;
                 document.querySelectorAll('input[type="checkbox"].student-checkbox').forEach(checkbox => {
@@ -321,6 +232,7 @@
             });
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
