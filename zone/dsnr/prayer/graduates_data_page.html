@@ -95,14 +95,14 @@
                     <th style="text-align: center;" class="checkbox-column">
                         <div style="display: flex; flex-direction: row; gap: 4px;">
                         <button class="btn btn-danger btn-sm" id="bulkDelete" style="display: none; margin-bottom: 5px; height: 40px; width: 40px;"><i class="fa-solid fa-trash"></i></button> 
-<button class="btn btn-secondary btn-sm" id="cancelSelection" onclick="closefun()" style="display: none; margin-bottom: 5px;height: 40px; width: 40px; font-size: 20px">
-   <i class="fa-solid fa-xmark"></i></button>
-   </div>
-<br> 
+                        <button class="btn btn-secondary btn-sm" id="cancelSelection" onclick="closefun()" style="display: none; margin-bottom: 5px;height: 40px; width: 40px; font-size: 20px">
+                           <i class="fa-solid fa-xmark"></i>
+                        </button>
+                        </div>
+                        <br> 
                         <div style="display: flex; flex-direction: row; gap: 4px;">
-                           
-                        <label style="font-size: 13px; font-weight: 400">Select All</label>                       
-                        <input type="checkbox" id="selectAll">
+                            <label style="font-size: 13px; font-weight: 400">Select All</label>                       
+                            <input type="checkbox" id="selectAll">
                         </div>
                     </th>
                     <th style="text-align: center;">Graduate Name</th>
@@ -174,6 +174,21 @@
 
         function handleBulkDelete() {
             const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"].student-checkbox:checked');
+            
+            // Check if any checkboxes are selected
+            if (selectedCheckboxes.length === 0) {
+                alert("Please select at least one graduate to delete.");
+                return;
+            }
+
+            // Show confirmation dialog
+            const isConfirmed = confirm(`Are you sure you want to delete ${selectedCheckboxes.length} selected graduate(s)? This action cannot be undone.`);
+            
+            // Exit if the user cancels the action
+            if (!isConfirmed) {
+                return;
+            }
+
             const deletePromises = [];
 
             selectedCheckboxes.forEach(checkbox => {
@@ -189,9 +204,13 @@
 
             Promise.all(deletePromises)
                 .then(() => {
+                    alert("Selected graduate(s) deleted successfully.");
                     window.location.reload(); // Refresh the page after bulk deletion
                 })
-                .catch(error => console.error("Error deleting selected graduates:", error));
+                .catch(error => {
+                    console.error("Error deleting selected graduates:", error);
+                    alert("An error occurred while deleting. Please try again.");
+                });
         }
 
         async function retrieveData() {
@@ -263,11 +282,12 @@
         document.addEventListener('DOMContentLoaded', () => {
             const { year, month } = getQueryParams();
             if (year && month) {
-                retrieveData(year, month);
+                retrieveData();
             } else {
                 document.getElementById('error-message').textContent = 'Year and month parameters are required.';
                 document.getElementById('error-message').style.display = 'block';
             }
+            
             document.getElementById('selectAll').addEventListener('change', (event) => {
                 const isChecked = event.target.checked;
                 document.querySelectorAll('input[type="checkbox"].student-checkbox').forEach(checkbox => {
@@ -276,6 +296,7 @@
             });
             
             document.getElementById('bulkDelete').addEventListener('click', handleBulkDelete);
+            
             localStorage.clear();
             Object.defineProperty(window, 'localStorage', {
                 value: {
@@ -303,11 +324,10 @@
             // Uncheck the "Select All" checkbox
             document.getElementById('selectAll').checked = false;
         }
-
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script defer>
-            localStorage.clear();
+        localStorage.clear();
     </script>
 </body>
 
