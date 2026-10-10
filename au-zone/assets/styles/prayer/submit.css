@@ -98,7 +98,15 @@ select,
 }
 
 .point-row .mic-button {
-    min-width: 56px;
+    min-width: 46px;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/* Default boxes: the mic button is the last item, so round its right corners */
+.point-row .mic-button:last-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 /* Delete button for extra point boxes: square on the left, narrower */
