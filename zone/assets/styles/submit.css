@@ -51,41 +51,12 @@ body {
     font-size: 12px;
 }
 
-.mic-button {
-    background-color: #029012;
-    border: none;
-    color: white;
-}
-
-.mic-button:hover {
-    background-color: #45a049;
-    color: white;
-}
-
-.point-number {
-    margin-right: 6px;
-    min-width: 10px;
-    align-self: center;
-}
-
-.input-group.point-row > .pt-input {
-    border-top-left-radius: 10px !important;
-    border-bottom-left-radius: 10px !important;
-    border-top-right-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-}
-
-.point-row .mic-button {
-    min-width: 56px;
-}
-
-.point-row {
-    margin-bottom: 10px;
-}
-
+/* Inputs: rounded, taller, slightly larger text */
 .form-control,
 .form-select {
     border-radius: 10px;
+    min-height: 48px;
+    font-size: 1.05rem;
 }
 
 select,
@@ -93,20 +64,44 @@ select,
     cursor: pointer;
 }
 
-.form-control,
-.form-select {
-    min-height: 48px;
+/* Point rows: number, input, mic button, delete button */
+.point-row {
+    margin-bottom: 10px;
 }
 
-/* Dynamic point inputs have a mic button on the right */
-.point-row .pt-input {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+.point-number {
+    margin-right: 6px;
+    min-width: 10px;
+    align-self: center;
+    font-size: 1.05rem;
 }
 
-/* Delete button for extra point boxes sits after the mic button */
+/* Input with a mic button: rounded on the left only */
+.input-group.point-row > .pt-input {
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+/* Mic button: square on all sides, wider */
+.mic-button {
+    background-color: #029012;
+    border: none;
+    color: white;
+    border-radius: 0;
+}
+
+.mic-button:hover {
+    background-color: #45a049;
+    color: white;
+}
+
+.point-row .mic-button {
+    min-width: 56px;
+}
+
+/* Delete button for extra point boxes: square on the left, narrower */
 .point-row .btn-danger {
     min-width: 40px;
     padding-left: 0;
@@ -115,6 +110,7 @@ select,
     border-bottom-left-radius: 0;
 }
 
+/* Mic listening popup */
 #micFeedback {
     display: none;
     position: fixed;
