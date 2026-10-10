@@ -1,0 +1,170 @@
+---
+---
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dilsukhnagar Prayer & Praising Points</title>
+    <meta property="og:site_name" content="Dsnr Zone">
+    <meta property="og:title" content="Dilsukhnagar Prayer & Praising Points">
+    <meta property="og:description" content="Dilsukhnagar Prayer Secretary - Students and Graduates/Staff">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <link rel="stylesheet" href="/zone/assets/styles/requests.css?v={{ site.github.build_revision }}">
+</head>
+
+<body>
+    <div class="topbar no-print">
+        <img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" alt="DSNR Zone logo">
+        <h2>Dilsukhnagar Prayer Secretary</h2>
+    </div>
+
+    <!-- Title shown only when printing: logo and title centered at the top -->
+    <div class="print-only">
+        <img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" alt="DSNR Zone logo">
+        <h2>Dilsukhnagar Prayer &amp; Praising Points</h2>
+    </div>
+
+    <div class="page-wrap">
+        <div class="d-flex justify-content-between align-items-center mb-2 no-print">
+            <a href="/zone/dsnr/prayer/" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <h4 class="mb-2 text-center no-print">
+            Prayer and Praising Points (<span id="mnth"></span>/<span id="yr"></span>)
+        </h4>
+
+        <div class="toolbar no-print">
+            <div class="hint" id="modeHint">Long-press a row to select requests for deletion.</div>
+            <div class="d-flex gap-2 flex-wrap">
+                <button class="btn btn-outline-primary btn-sm" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" id="selectAllBtn" style="display: none;">
+                    <i class="fas fa-check-double"></i> Select All
+                </button>
+                <button class="btn btn-danger btn-sm" id="bulkDelete" style="display: none;">
+                    <i class="fas fa-trash"></i> Delete Selected
+                </button>
+                <button class="btn btn-secondary btn-sm" id="cancelSelection" style="display: none;">
+                    <i class="fas fa-xmark"></i> Cancel
+                </button>
+            </div>
+        </div>
+
+        <div id="error-message" class="error"></div>
+
+        <div id="mainArea">
+            <!-- Students -->
+            <div class="section-block">
+                <div class="section-heading">Students</div>
+                <div class="table-wrap">
+                    <table class="hpc-table">
+                        <colgroup>
+                            <col class="col-chk">
+                            <col class="col-sno">
+                            <col class="col-name">
+                            <col class="col-zone">
+                            <col class="col-area">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="col-chk"></th>
+                                <th rowspan="2">S. No</th>
+                                <th rowspan="2">Full Name</th>
+                                <th rowspan="2">Local Zone Name</th>
+                                <th rowspan="2">Assigned Pioneering Area</th>
+                                <th colspan="2">HPC Ministry</th>
+                                <th colspan="2">Personal</th>
+                            </tr>
+                            <tr>
+                                <th class="sub">Praising Points</th>
+                                <th class="sub">Prayer Points</th>
+                                <th class="sub">Praising Points</th>
+                                <th class="sub">Prayer Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Graduates/Staff -->
+            <div class="section-block">
+                <div class="section-heading">Graduate/Staff</div>
+                <div class="table-wrap">
+                    <table class="hpc-table">
+                        <colgroup>
+                            <col class="col-chk">
+                            <col class="col-sno">
+                            <col class="col-name">
+                            <col class="col-zone">
+                            <col class="col-area">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="col-chk"></th>
+                                <th rowspan="2">S. No</th>
+                                <th rowspan="2">Full Name</th>
+                                <th rowspan="2">Local Zone Name</th>
+                                <th rowspan="2">Assigned Pioneering Area</th>
+                                <th colspan="2">HPC Ministry</th>
+                                <th colspan="2">Personal</th>
+                            </tr>
+                            <tr>
+                                <th class="sub">Praising Points</th>
+                                <th class="sub">Prayer Points</th>
+                                <th class="sub">Praising Points</th>
+                                <th class="sub">Prayer Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="graduatesBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>This is an auto generated document. designed by Rahul.</footer>
+
+    <!-- Loader -->
+    <div id="loaderContainer">
+        <div id="loader">
+            <div class="lds-spinner">
+                <div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+            <div style="height: 10px;"></div>
+            <p style="font-size: 1.4rem;">Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        // Page settings used by the shared script
+        window.PRAYER_CONFIG = {
+            zoneName: "Dilsukhnagar",
+            basePath: "zone/dsnr/prayer/dilsukhnagar",
+            homePath: "/zone/dsnr/prayer/",
+            submitPath: "/zone/dsnr/prayer/submit_requests",
+            requestsPath: "/zone/dsnr/prayer/requests_data_page"
+        };
+    </script>
+    <script src="/zone/assets/scripts/requests.js?v={{ site.github.build_revision }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
