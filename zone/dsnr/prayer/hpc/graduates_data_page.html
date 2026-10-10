@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hyderabad HPC Graduates/Staff Prayer & Praising Points</title>
+    <meta property="og:site_name" content="Dsnr Zone">
+    <meta property="og:title" content="Hyderabad HPC Graduates/Staff Prayer & Praising Points">
+    <meta property="og:description" content="HPC Prayer Secretary - Graduates/Staff">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+            margin: 0;
+            font-size: 0.85rem;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .topbar {
+            background-color: #fff;
+            padding: 10px 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topbar img {
+            width: 45px;
+            height: 45px;
+        }
+
+        .topbar h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .page-wrap {
+            max-width: 1300px;
+            margin: 1.2rem auto;
+            padding: 0 12px;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table.hpc-table {
+            width: 100%;
+            min-width: 1100px;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+
+        table.hpc-table th,
+        table.hpc-table td {
+            border: 1px solid #333;
+            padding: 6px;
+            vertical-align: top;
+        }
+
+        table.hpc-table th {
+            background-color: #fff;
+            text-align: center;
+            font-weight: bold;
+            vertical-align: middle;
+        }
+
+        table.hpc-table th.sub {
+            font-weight: normal;
+            font-size: 12px;
+        }
+
+        table.hpc-table ul {
+            padding-left: 1rem;
+            margin: 0;
+        }
+
+        table.hpc-table li {
+            margin-bottom: 2px;
+        }
+
+        .col-chk {
+            width: 40px;
+            display: none;
+            text-align: center;
+        }
+
+        .selection-mode .col-chk {
+            display: table-cell;
+        }
+
+        .col-sno {
+            width: 45px;
+        }
+
+        .col-name {
+            width: 150px;
+        }
+
+        .col-cat {
+            width: 110px;
+        }
+
+        .col-zone {
+            width: 120px;
+        }
+
+        .col-area {
+            width: 140px;
+        }
+
+        .col-pts {
+            width: 170px;
+        }
+
+        tr.selected {
+            background-color: #e8f0fe;
+        }
+
+        tr.graduate-row {
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        #loaderContainer {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.55);
+            z-index: 9999;
+        }
+
+        #loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+        }
+
+        .lds-spinner {
+            display: inline-block;
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+
+        .lds-spinner div {
+            transform-origin: 40px 40px;
+            animation: lds-spinner 1.2s linear infinite;
+        }
+
+        .lds-spinner div:after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 3px;
+            left: 37px;
+            width: 6px;
+            height: 18px;
+            border-radius: 20%;
+            background: #fff;
+        }
+
+        .lds-spinner div:nth-child(1) { transform: rotate(0deg); animation-delay: -1.1s; }
+        .lds-spinner div:nth-child(2) { transform: rotate(30deg); animation-delay: -1s; }
+        .lds-spinner div:nth-child(3) { transform: rotate(60deg); animation-delay: -0.9s; }
+        .lds-spinner div:nth-child(4) { transform: rotate(90deg); animation-delay: -0.8s; }
+        .lds-spinner div:nth-child(5) { transform: rotate(120deg); animation-delay: -0.7s; }
+        .lds-spinner div:nth-child(6) { transform: rotate(150deg); animation-delay: -0.6s; }
+        .lds-spinner div:nth-child(7) { transform: rotate(180deg); animation-delay: -0.5s; }
+        .lds-spinner div:nth-child(8) { transform: rotate(210deg); animation-delay: -0.4s; }
+        .lds-spinner div:nth-child(9) { transform: rotate(240deg); animation-delay: -0.3s; }
+        .lds-spinner div:nth-child(10) { transform: rotate(270deg); animation-delay: -0.2s; }
+        .lds-spinner div:nth-child(11) { transform: rotate(300deg); animation-delay: -0.1s; }
+        .lds-spinner div:nth-child(12) { transform: rotate(330deg); animation-delay: 0s; }
+
+        @keyframes lds-spinner {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        footer {
+            text-align: center;
+            font-size: 13px;
+            margin: 20px 0;
+        }
+
+        /* Print in landscape, like the paper sheet */
+        @page {
+            size: A4 landscape;
+            margin: 10mm;
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: #fff;
+            }
+
+            .page-wrap {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            .table-wrap {
+                box-shadow: none;
+                overflow: visible;
+            }
+
+            table.hpc-table {
+                min-width: 0;
+            }
+
+            tr.selected {
+                background: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar no-print">
+        <img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" alt="DSNR Zone logo">
+        <h2>Hyderabad HPC Prayer Secretary</h2>
+    </div>
+
+    <div class="page-wrap">
+        <div class="d-flex justify-content-between align-items-center mb-2 no-print">
+            <a href="/zone/dsnr/prayer/hpc/" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <h4 class="mb-3 text-center">
+            <strong>Graduates/Staff</strong> Prayer and Praising Points (<span id="mnth"></span>/<span id="yr"></span>)
+        </h4>
+
+        <div class="toolbar no-print">
+            <div class="hint" id="modeHint">Long-press a row to select graduates/staff for deletion.</div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="window.print()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button class="btn btn-danger btn-sm" id="bulkDelete" style="display: none;">
+                    <i class="fas fa-trash"></i> Delete Selected
+                </button>
+                <button class="btn btn-secondary btn-sm" id="cancelSelection" style="display: none;">
+                    <i class="fas fa-xmark"></i> Cancel
+                </button>
+            </div>
+        </div>
+
+        <div id="error-message" class="error"></div>
+
+        <div class="table-wrap" id="tableWrap">
+            <table class="hpc-table">
+                <colgroup>
+                    <col class="col-chk">
+                    <col class="col-sno">
+                    <col class="col-name">
+                    <col class="col-cat">
+                    <col class="col-zone">
+                    <col class="col-area">
+                    <col class="col-pts">
+                    <col class="col-pts">
+                    <col class="col-pts">
+                    <col class="col-pts">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th rowspan="2" class="col-chk">
+                            <input type="checkbox" id="selectAll" title="Select all">
+                        </th>
+                        <th rowspan="2">S. No</th>
+                        <th rowspan="2">Full Name</th>
+                        <th rowspan="2">Student/Graduate/Staff</th>
+                        <th rowspan="2">Local Zone Name</th>
+                        <th rowspan="2">Assigned Pioneering Area</th>
+                        <th colspan="2">HPC Ministry</th>
+                        <th colspan="2">Personal</th>
+                    </tr>
+                    <tr>
+                        <th class="sub">Praising Points</th>
+                        <th class="sub">Prayer Points</th>
+                        <th class="sub">Praising Points</th>
+                        <th class="sub">Prayer Points</th>
+                    </tr>
+                </thead>
+                <tbody id="dataContainer"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>This is an auto generated document. designed by Rahul.</footer>
+
+    <!-- Loader -->
+    <div id="loaderContainer">
+        <div id="loader">
+            <div class="lds-spinner">
+                <div></div><div></div><div></div><div></div><div></div><div></div>
+                <div></div><div></div><div></div><div></div><div></div><div></div>
+            </div>
+            <div style="height: 10px;"></div>
+            <p style="font-size: 1.4rem;">Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAaQdWKBdtqqe3pu9XDdPoFuvcEm2YG_wA",
+            authDomain: "melam-rahul.firebaseapp.com",
+            projectId: "melam-rahul",
+            storageBucket: "melam-rahul.appspot.com",
+            messagingSenderId: "742315739002",
+            appId: "1:742315739002:web:329ea957fa38f66ab078c3",
+            measurementId: "G-SCNKZYJ3TT"
+        };
+
+        // HPC branch root in Firebase
+        const BASE_PATH = "zone/dsnr/prayer/hpc";
+        const GROUP = "graduates";
+
+        let db = null;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+        } catch (e) {
+            console.error("Firebase could not load", e);
+        }
+
+        // ---------- URL parameters (base64 encoded, same as the hub page) ----------
+        function decodeParameter(param) {
+            try {
+                return atob(param);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                year: params.get('utm') ? decodeParameter(params.get('utm')) : null,
+                month: params.get('auth') ? decodeParameter(params.get('auth')) : null
+            };
+        }
+
+        const { year, month } = getQueryParams();
+        document.getElementById('mnth').textContent = month || '';
+        document.getElementById('yr').textContent = year || '';
+
+        // ---------- Helpers ----------
+        function esc(value) {
+            return String(value ?? '').replace(/[&<>"']/g, c => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            })[c]);
+        }
+
+        // Firebase returns lists as objects or arrays; handle both
+        function list(value) {
+            return value ? Object.values(value) : [];
+        }
+
+        function pointsHTML(points) {
+            return list(points).map(p => `<li>${esc(p)}</li>`).join('');
+        }
+
+        function showError(message) {
+            const box = document.getElementById('error-message');
+            box.textContent = message;
+            box.style.display = 'block';
+        }
+
+        function showLoader(show) {
+            document.getElementById('loaderContainer').style.display = show ? 'block' : 'none';
+        }
+
+        // ---------- Load the table ----------
+        function rowHTML(id, d, number) {
+            const hpc = d.hpc || {};
+            const personal = d.personal || {};
+            const category = d.category === 'student' ? 'Student' : 'Graduate/Staff';
+            return `
+                <tr class="graduate-row" data-id="${esc(id)}">
+                    <td class="col-chk"><input type="checkbox" class="row-check" data-id="${esc(id)}"></td>
+                    <td class="text-center">${number}</td>
+                    <td><strong>${esc(d.name)}</strong></td>
+                    <td class="text-center">${category}</td>
+                    <td>${esc(d.localZone)}</td>
+                    <td>${esc(d.pioneeringArea)}</td>
+                    <td><ul>${pointsHTML(hpc.praising)}</ul></td>
+                    <td><ul>${pointsHTML(hpc.prayer)}</ul></td>
+                    <td><ul>${pointsHTML(personal.praising)}</ul></td>
+                    <td><ul>${pointsHTML(personal.prayer)}</ul></td>
+                </tr>`;
+        }
+
+        async function retrieveData() {
+            const tbody = document.getElementById('dataContainer');
+            tbody.innerHTML = '';
+
+            if (!db) {
+                showError('Could not connect to the database. Please check your internet connection and reload.');
+                return;
+            }
+
+            showLoader(true);
+            try {
+                const snapshot = await db.ref(`${BASE_PATH}/${year}/${month}/${GROUP}`).once('value');
+                const records = snapshot.val();
+
+                if (!records) {
+                    tbody.innerHTML = '<tr><td colspan="10" class="text-center">No graduates/staff found for this month.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = Object.entries(records)
+                    .map(([id, d], i) => rowHTML(id, d, i + 1))
+                    .join('');
+            } catch (error) {
+                console.error('Error retrieving graduate data:', error);
+                showError('Error retrieving graduate data.');
+            } finally {
+                showLoader(false);
+            }
+        }
+
+        // ---------- Selection mode (long press to select, then bulk delete) ----------
+        const LONG_PRESS_MS = 600;
+        let pressTimer = null;
+
+        function setSelectionMode(on) {
+            document.getElementById('tableWrap').classList.toggle('selection-mode', on);
+            document.getElementById('bulkDelete').style.display = on ? 'inline-block' : 'none';
+            document.getElementById('cancelSelection').style.display = on ? 'inline-block' : 'none';
+            document.getElementById('modeHint').textContent = on
+                ? 'Tick the graduates/staff you want to delete.'
+                : 'Long-press a row to select graduates/staff for deletion.';
+            if (!on) {
+                document.querySelectorAll('.row-check').forEach(cb => cb.checked = false);
+                document.getElementById('selectAll').checked = false;
+                document.querySelectorAll('tr.selected').forEach(tr => tr.classList.remove('selected'));
+            }
+        }
+
+        function startPress(event) {
+            const row = event.target.closest('tr.graduate-row');
+            if (!row) return;
+            cancelPress();
+            pressTimer = setTimeout(() => {
+                setSelectionMode(true);
+                const cb = row.querySelector('.row-check');
+                if (cb) {
+                    cb.checked = true;
+                    row.classList.add('selected');
+                }
+            }, LONG_PRESS_MS);
+        }
+
+        function cancelPress() {
+            clearTimeout(pressTimer);
+        }
+
+        const tbody = document.getElementById('dataContainer');
+        tbody.addEventListener('mousedown', startPress);
+        tbody.addEventListener('touchstart', startPress, { passive: true });
+        tbody.addEventListener('mouseup', cancelPress);
+        tbody.addEventListener('mouseleave', cancelPress);
+        tbody.addEventListener('touchend', cancelPress);
+        tbody.addEventListener('touchmove', cancelPress, { passive: true });
+        tbody.addEventListener('contextmenu', e => e.preventDefault());
+
+        tbody.addEventListener('change', function (event) {
+            if (event.target.classList.contains('row-check')) {
+                event.target.closest('tr').classList.toggle('selected', event.target.checked);
+            }
+        });
+
+        document.getElementById('selectAll').addEventListener('change', function () {
+            document.querySelectorAll('.row-check').forEach(cb => {
+                cb.checked = this.checked;
+                cb.closest('tr').classList.toggle('selected', this.checked);
+            });
+        });
+
+        document.getElementById('cancelSelection').addEventListener('click', () => setSelectionMode(false));
+
+        // ---------- Bulk delete ----------
+        async function handleBulkDelete() {
+            const selected = Array.from(document.querySelectorAll('.row-check:checked'));
+            if (selected.length === 0) {
+                alert('Please select at least one graduate/staff to delete.');
+                return;
+            }
+            if (!confirm(`Are you sure you want to delete ${selected.length} selected graduate/staff record(s)? This action cannot be undone.`)) {
+                return;
+            }
+
+            showLoader(true);
+            try {
+                await Promise.all(selected.map(cb =>
+                    db.ref(`${BASE_PATH}/${year}/${month}/${GROUP}/${cb.dataset.id}`).remove()
+                ));
+                alert('Selected graduate/staff record(s) deleted successfully.');
+                window.location.reload();
+            } catch (error) {
+                console.error('Error deleting selected graduates:', error);
+                alert('An error occurred while deleting. Please try again.');
+                showLoader(false);
+            }
+        }
+
+        document.getElementById('bulkDelete').addEventListener('click', handleBulkDelete);
+
+        // ---------- Start ----------
+        document.addEventListener('DOMContentLoaded', () => {
+            if (year && month) {
+                retrieveData();
+            } else {
+                showError('Year and month parameters are required.');
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
