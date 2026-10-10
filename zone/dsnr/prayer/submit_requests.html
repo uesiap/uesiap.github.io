@@ -39,57 +39,16 @@
             </div>
 
             <div class="mb-3">
-                <label for="name" class="form-label">Full Name:</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="category" class="form-label">Select Category</label>
+                <label for="category" class="form-label">Select Category:</label>
                 <p class="section-note">Select Student or Graduate/Staff.</p>
                 <select class="form-select" id="category" name="category" required>
                     <option value="" disabled selected>Select here</option>
-                    <option value="student">Student</option>
-                    <option value="graduate">Graduate/Staff</option>
+                    <option value="student">👨‍🎓|👩🏻‍🎓 Student</option>
+                    <option value="graduate">👨🏻‍🍼|👩🏻‍🍼 Graduate/Staff</option>
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label for="localZone" class="form-label">Local Zone Name:</label>
-                <input type="text" class="form-control" id="localZone" name="localZone">
-            </div>
-
-            <div class="mb-3">
-                <label for="pioneeringArea" class="form-label">Assigned Pioneering Area:</label>
-                <input type="text" class="form-control" id="pioneeringArea" name="pioneeringArea">
-            </div>
-        </div>
-
-        <div class="container-box">
-            <h4 class="form-label">HPC Ministry</h4>
-
-            <h5 class="form-label mt-3">🙌🏻 Praising Points</h5>
-            <p class="section-note">Please verify the fields you entered, before submit.</p>
-            <div id="hpcPraisingContainer"></div>
-            <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('hpcPraising')">Add More Praising Points</button>
-
-            <h5 class="form-label mt-3">🙏🏻 Prayer Points</h5>
-            <p class="section-note">Please verify the fields you entered, before submit.</p>
-            <div id="hpcPrayerContainer"></div>
-            <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('hpcPrayer')">Add More Prayer Points</button>
-        </div>
-
-        <div class="container-box">
-            <h4 class="form-label">Personal</h4>
-
-            <h5 class="form-label mt-3">🙌🏻 Praising Points</h5>
-            <p class="section-note">Please verify the fields you entered, before submit.</p>
-            <div id="personalPraisingContainer"></div>
-            <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('personalPraising')">Add More Praising Points</button>
-
-            <h5 class="form-label mt-3">🙏🏻 Prayer Points</h5>
-            <p class="section-note">Please verify the fields you entered, before submit.</p>
-            <div id="personalPrayerContainer"></div>
-            <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('personalPrayer')">Add More Prayer Points</button>
+            <div id="dynamicFields"></div>
         </div>
 
         <div class="container-box">
@@ -157,7 +116,8 @@
         // Page settings used by the shared script
         window.PRAYER_CONFIG = {
             zoneName: "Dilsukhnagar",
-            basePath: "zone/dsnr/prayer/dilsukhnagar",
+            formType: "dsnr",
+            basePath: "zone/dsnr/prayer",
             homePath: "/zone/dsnr/prayer/",
             submitPath: "/zone/dsnr/prayer/submit_requests",
             requestsPath: "/zone/dsnr/prayer/requests_data_page"

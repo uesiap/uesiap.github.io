@@ -1,6 +1,7 @@
 // Shared script for the prayer submit page.
-// Each page sets window.PRAYER_CONFIG (basePath, etc.) before loading this file.
+// Each page sets window.PRAYER_CONFIG first: formType ("dsnr" or "hpc"), basePath, etc.
 const CONFIG = window.PRAYER_CONFIG;
+const FORM_TYPE = CONFIG.formType;
 const BASE_PATH = CONFIG.basePath;
 
 // Firebase configuration
@@ -43,18 +44,25 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
     monthSelect.value = `${monthNames[cur]} ${curYear}`;
 })();
 
-// ---------- Points sections ----------
-// Starting number of boxes per section
-const POINT_SECTIONS = {
-    hpcPraising: { container: "hpcPraisingContainer", start: 2 },
-    hpcPrayer: { container: "hpcPrayerContainer", start: 3 },
-    personalPraising: { container: "personalPraisingContainer", start: 2 },
-    personalPrayer: { container: "personalPrayerContainer", start: 3 }
+// ---------- Point boxes ----------
+// Sections per form type. "start" = boxes shown first; "removable" = user can delete extra boxes.
+const SECTIONS = {
+    dsnr: {
+        praisingPoints: { container: "praisingPointsContainer", start: 2, removable: false },
+        prayerPoints: { container: "prayerPointsContainer", start: 3, removable: false }
+    },
+    hpc: {
+        hpcPraising: { container: "hpcPraisingContainer", start: 2, removable: true },
+        hpcPrayer: { container: "hpcPrayerContainer", start: 3, removable: true },
+        personalPraising: { container: "personalPraisingContainer", start: 2, removable: true },
+        personalPrayer: { container: "personalPrayerContainer", start: 3, removable: true }
+    }
 };
+const POINT_SECTIONS = SECTIONS[FORM_TYPE];
 
 function pointRowHTML(section, number, removable) {
     return `
-    <div class="input-group point-row" data-section="${section}">
+    <div class="input-group point-row mb-3" data-section="${section}">
         <span class="point-number">${number}:</span>
         <input type="text" class="form-control pt-input" data-section="${section}">
         <button type="button" class="btn mic-button" onclick="startDictation(this)">
@@ -71,9 +79,10 @@ function renumber(container) {
 }
 
 function addPoint(section) {
-    const container = document.getElementById(POINT_SECTIONS[section].container);
+    const cfg = POINT_SECTIONS[section];
+    const container = document.getElementById(cfg.container);
     const count = container.querySelectorAll(".point-row").length + 1;
-    container.insertAdjacentHTML("beforeend", pointRowHTML(section, count, true));
+    container.insertAdjacentHTML("beforeend", pointRowHTML(section, count, cfg.removable));
 }
 
 function removePoint(button) {
@@ -82,13 +91,68 @@ function removePoint(button) {
     renumber(container);
 }
 
-// Create the starting boxes for each section
-Object.entries(POINT_SECTIONS).forEach(([section, cfg]) => {
-    const container = document.getElementById(cfg.container);
-    for (let i = 1; i <= cfg.start; i++) {
-        container.insertAdjacentHTML("beforeend", pointRowHTML(section, i, false));
+// Create the starting boxes for each section that exists on the page
+function initPointBoxes() {
+    Object.entries(POINT_SECTIONS).forEach(([section, cfg]) => {
+        const container = document.getElementById(cfg.container);
+        if (!container || container.querySelector(".point-row")) return;
+        for (let i = 1; i <= cfg.start; i++) {
+            container.insertAdjacentHTML("beforeend", pointRowHTML(section, i, false));
+        }
+    });
+}
+
+// ---------- Dilsukhnagar form: fields change with the category ----------
+function buildDsnrFields(category) {
+    const box = document.getElementById("dynamicFields");
+    box.innerHTML = "";
+    if (!category) return;
+
+    let html = `
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>`;
+
+    if (category === "student") {
+        html += `
+        <div class="divider"></div>
+        <h4 class="form-label">Course & Personal Details</h4>
+        <div class="mb-3">
+            <label for="courseBranch" class="form-label">Course & Branch:</label>
+            <input type="text" class="form-control" id="courseBranch" name="courseBranch" required>
+        </div>
+        <div class="mb-3">
+            <label for="gender" class="form-label">Gender:</label>
+            <select class="form-control" id="gender" name="gender" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </div>`;
     }
-});
+
+    html += `
+        <div class="divider"></div>
+        <h4 class="form-label">🙌🏻 Praising Points</h4>
+        <p class="section-note">Please verify the fields you entered, before submit.</p>
+        <div id="praisingPointsContainer"></div>
+        <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('praisingPoints')">Add More Praising Points</button>
+        <div class="divider"></div>
+        <h4 class="form-label">🙏🏻 Prayer Points</h4>
+        <p class="section-note">Please verify the fields you entered, before submit.</p>
+        <div id="prayerPointsContainer"></div>
+        <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('prayerPoints')">Add More Prayer Points</button>`;
+
+    box.innerHTML = html;
+    initPointBoxes();
+}
+
+if (FORM_TYPE === "dsnr") {
+    document.getElementById("category").addEventListener("change", function () {
+        buildDsnrFields(this.value);
+    });
+}
 
 // ---------- Dictation ----------
 function startDictation(button) {
@@ -146,6 +210,62 @@ async function saveSubmission() {
     const month = monthNames.indexOf(monthName) + 1;
     const year = parseInt(yearText, 10);
 
+    try {
+        if (FORM_TYPE === "dsnr") {
+            await saveDsnr(year, month);
+        } else {
+            await saveHpc(year, month);
+        }
+        await cleanupOldMonthsOnce();
+
+        loader.style.display = "none";
+        document.getElementById("successMessage").style.display = "block";
+        document.getElementById("prayerRequestForm").style.display = "none";
+    } catch (error) {
+        console.error("Error writing prayer data to Firebase Database", error);
+        loader.style.display = "none";
+        alert("Something went wrong while submitting. Please try again.");
+    }
+}
+
+// Same ID rule as the original Dilsukhnagar form
+function makeId(text, category) {
+    const prefix = category === "student" ? "stu_" : "grad_";
+    return prefix + text
+        .trim()
+        .replace(/[^\w\s]/g, "")
+        .replace(/\s+/g, "_")
+        .toLowerCase();
+}
+
+// Dilsukhnagar: original data format
+// zone/dsnr/prayer/{year}/{month}/{students|graduates}/details|PraisingPoints|PrayerPoints/{id}
+async function saveDsnr(year, month) {
+    const category = document.getElementById("category").value;
+    const group = category === "student" ? "students" : "graduates";
+    const name = document.getElementById("name").value.trim();
+    const uniqueId = makeId(name, category);
+    const root = `${BASE_PATH}/${year}/${month}/${group}`;
+
+    const details = { name: name };
+    if (category === "student") {
+        details.gender = document.getElementById("gender").value;
+        details.classAndBranch = document.getElementById("courseBranch").value.trim();
+    }
+    await db.ref(`${root}/details/${uniqueId}`).set(details);
+
+    const praising = collectPoints("praisingPoints");
+    const prayer = collectPoints("prayerPoints");
+    if (praising.length > 0) {
+        await db.ref(`${root}/PraisingPoints/${uniqueId}`).set({ points: praising });
+    }
+    if (prayer.length > 0) {
+        await db.ref(`${root}/PrayerPoints/${uniqueId}`).set({ points: prayer });
+    }
+}
+
+// HPC: one record per person under zone/dsnr/prayer/hpc/{year}/{month}/{students|graduates}
+async function saveHpc(year, month) {
     const category = document.getElementById("category").value;
     const group = category === "student" ? "students" : "graduates";
 
@@ -165,19 +285,7 @@ async function saveSubmission() {
         submittedAt: firebase.database.ServerValue.TIMESTAMP
     };
 
-    try {
-        await db.ref(`${BASE_PATH}/${year}/${month}/${group}`).push(data);
-        await cleanupOldMonthsOnce();
-
-        loader.style.display = "none";
-        document.getElementById("successMessage").style.display = "block";
-        document.getElementById("prayerRequestForm").reset();
-        document.getElementById("prayerRequestForm").style.display = "none";
-    } catch (error) {
-        console.error("Error writing prayer data to Firebase Database", error);
-        loader.style.display = "none";
-        alert("Something went wrong while submitting. Please try again.");
-    }
+    await db.ref(`${BASE_PATH}/${year}/${month}/${group}`).push(data);
 }
 
 // ---------- Keep only the latest 3 months under this zone's branch ----------
@@ -214,3 +322,6 @@ async function cleanupOldMonthsOnce() {
 
     await cleanupRef.set(cleanupKey);
 }
+
+// Start: HPC boxes are static on the page; Dilsukhnagar boxes appear after choosing a category
+initPointBoxes();

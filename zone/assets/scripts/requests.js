@@ -1,6 +1,7 @@
 // Shared script for the prayer requests data page.
-// Each page sets window.PRAYER_CONFIG (basePath, etc.) before loading this file.
+// Each page sets window.PRAYER_CONFIG first: formType ("dsnr" or "hpc"), basePath, etc.
 const CONFIG = window.PRAYER_CONFIG;
+const FORM_TYPE = CONFIG.formType;
 const BASE_PATH = CONFIG.basePath;
 
 // Firebase configuration
@@ -76,7 +77,23 @@ function showLoader(show) {
 }
 
 // ---------- Rows ----------
-function rowHTML(groupKey, id, d, number) {
+// Dilsukhnagar: name (with course & branch for students), praising, prayer
+function dsnrRowHTML(groupKey, entry, number) {
+    return `
+        <tr class="request-row" data-group="${groupKey}" data-id="${esc(entry.id)}">
+            <td class="col-chk"><input type="checkbox" class="row-check" data-group="${groupKey}" data-id="${esc(entry.id)}"></td>
+            <td class="text-center">${number}</td>
+            <td>
+                <strong>${esc(entry.name)}</strong>
+                ${entry.sub ? `<br><small>${esc(entry.sub)}</small>` : ''}
+            </td>
+            <td><ul>${pointsHTML(entry.praising)}</ul></td>
+            <td><ul>${pointsHTML(entry.prayer)}</ul></td>
+        </tr>`;
+}
+
+// HPC: name, local zone, pioneering area, HPC and personal points
+function hpcRowHTML(groupKey, id, d, number) {
     const hpc = d.hpc || {};
     const personal = d.personal || {};
     return `
@@ -93,19 +110,45 @@ function rowHTML(groupKey, id, d, number) {
         </tr>`;
 }
 
+// Dilsukhnagar stores each record in several places; join them into one list
+function dsnrEntries(val) {
+    const details = val.details || {};
+    const praisingAll = val.PraisingPoints || {};
+    const prayerAll = val.PrayerPoints || {};
+
+    return Object.entries(details).map(([id, d]) => ({
+        id: id,
+        name: d.name,
+        sub: d.classAndBranch || '',
+        praising: (praisingAll[id] || {}).points,
+        prayer: (prayerAll[id] || {}).points
+    }));
+}
+
 // ---------- Load both tables ----------
 async function loadGroup(group) {
     const body = document.getElementById(group.bodyId);
     const snapshot = await db.ref(`${BASE_PATH}/${year}/${month}/${group.key}`).once('value');
-    const records = snapshot.val();
+    const val = snapshot.val() || {};
 
-    if (!records) {
-        body.innerHTML = `<tr><td colspan="9" class="text-center">No ${group.label} found for this month.</td></tr>`;
+    if (FORM_TYPE === 'dsnr') {
+        const entries = dsnrEntries(val);
+        if (entries.length === 0) {
+            body.innerHTML = `<tr><td colspan="10" class="text-center">No ${group.label} found for this month.</td></tr>`;
+            return;
+        }
+        body.innerHTML = entries.map((e, i) => dsnrRowHTML(group.key, e, i + 1)).join('');
         return;
     }
 
-    body.innerHTML = Object.entries(records)
-        .map(([id, d], i) => rowHTML(group.key, id, d, i + 1))
+    // HPC
+    const keys = Object.keys(val);
+    if (keys.length === 0) {
+        body.innerHTML = `<tr><td colspan="10" class="text-center">No ${group.label} found for this month.</td></tr>`;
+        return;
+    }
+    body.innerHTML = Object.entries(val)
+        .map(([id, d], i) => hpcRowHTML(group.key, id, d, i + 1))
         .join('');
 }
 
@@ -190,6 +233,15 @@ document.getElementById('selectAllBtn').addEventListener('click', function () {
 document.getElementById('cancelSelection').addEventListener('click', () => setSelectionMode(false));
 
 // ---------- Bulk delete (works across both tables) ----------
+// Dilsukhnagar records are removed from details, PraisingPoints and PrayerPoints
+function pathsToRemove(groupKey, id) {
+    const root = `${BASE_PATH}/${year}/${month}/${groupKey}`;
+    if (FORM_TYPE === 'dsnr') {
+        return [`${root}/details/${id}`, `${root}/PraisingPoints/${id}`, `${root}/PrayerPoints/${id}`];
+    }
+    return [`${root}/${id}`];
+}
+
 async function handleBulkDelete() {
     const selected = Array.from(document.querySelectorAll('.row-check:checked'));
     if (selected.length === 0) {
@@ -202,9 +254,10 @@ async function handleBulkDelete() {
 
     showLoader(true);
     try {
-        await Promise.all(selected.map(cb =>
-            db.ref(`${BASE_PATH}/${year}/${month}/${cb.dataset.group}/${cb.dataset.id}`).remove()
-        ));
+        const removals = selected.flatMap(cb =>
+            pathsToRemove(cb.dataset.group, cb.dataset.id).map(path => db.ref(path).remove())
+        );
+        await Promise.all(removals);
         alert('Selected request(s) deleted successfully.');
         window.location.reload();
     } catch (error) {
