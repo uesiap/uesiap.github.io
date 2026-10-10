@@ -69,10 +69,14 @@ body {
 }
 
 .input-group.point-row > .pt-input {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
+    border-top-left-radius: 10px !important;
+    border-bottom-left-radius: 10px !important;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.point-row .mic-button {
+    min-width: 56px;
 }
 
 .point-row {
@@ -104,6 +108,9 @@ select,
 
 /* Delete button for extra point boxes sits after the mic button */
 .point-row .btn-danger {
+    min-width: 40px;
+    padding-left: 0;
+    padding-right: 0;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
