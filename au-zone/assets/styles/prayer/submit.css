@@ -83,6 +83,11 @@ select,
     cursor: pointer;
 }
 
+.form-control,
+.form-select {
+    min-height: 48px;
+}
+
 /* Dynamic point inputs have a mic button on the right */
 .point-row .pt-input {
     border-top-left-radius: 10px;
