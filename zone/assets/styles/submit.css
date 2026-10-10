@@ -63,7 +63,9 @@ body {
 }
 
 .point-number {
-    margin-right: 4px;
+    margin-right: 6px;
+    min-width: 10px;
+    align-self: center;
 }
 
 .input-group.point-row > .pt-input {
