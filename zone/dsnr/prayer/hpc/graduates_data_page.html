@@ -114,28 +114,33 @@
             display: table-cell;
         }
 
+        /* Percentages add up to 100% so the table fits the screen and the printed page */
         .col-sno {
-            width: 45px;
+            width: 4%;
         }
 
         .col-name {
-            width: 150px;
+            width: 15%;
         }
 
         .col-cat {
-            width: 110px;
+            width: 11%;
         }
 
         .col-zone {
-            width: 120px;
+            width: 11%;
         }
 
         .col-area {
-            width: 140px;
+            width: 13%;
         }
 
         .col-pts {
-            width: 170px;
+            width: 11.5%;
+        }
+
+        .print-only {
+            display: none;
         }
 
         tr.selected {
@@ -247,8 +252,34 @@
                 overflow: visible;
             }
 
+            .print-only {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+
+            .print-only img {
+                width: 45px;
+                height: 45px;
+            }
+
+            .print-only h2 {
+                margin: 0;
+                font-size: 18pt;
+                font-weight: bold;
+                color: #000;
+            }
+
             table.hpc-table {
                 min-width: 0;
+                width: 100%;
+                font-size: 9.5pt;
+            }
+
+            table.hpc-table th,
+            table.hpc-table td {
+                padding: 4px;
             }
 
             tr.selected {
@@ -262,6 +293,12 @@
     <div class="topbar no-print">
         <img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" alt="DSNR Zone logo">
         <h2>Hyderabad HPC Prayer Secretary</h2>
+    </div>
+
+    <!-- Title shown only when printing -->
+    <div class="print-only">
+        <img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" alt="DSNR Zone logo">
+        <h2>Hyderabad HPC Prayer &amp; Praising Points</h2>
     </div>
 
     <div class="page-wrap">
