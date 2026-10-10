@@ -15,7 +15,47 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="/au-zone/assets/styles/prayer/requests.css?v={{ site.github.build_revision }}">
-    <style>@page {size: A4 portrait;margin: 8mm;}
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 8mm;
+        }
+
+        @media print {
+            body {
+                font-size: .8rem;
+                line-height: 1.2;
+                background: #fff;
+            }
+
+            table.hpc-table {
+                width: 100%;
+                table-layout: fixed;
+                font-size: .8rem;
+            }
+
+            table.hpc-table th,
+            table.hpc-table td {
+                border: 1px solid #777;
+                padding: .5rem;
+                vertical-align: top;
+                text-align: left;
+            }
+
+            table.hpc-table th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+            }
+
+            table.hpc-table ul {
+                padding-left: 1rem;
+                margin: 0;
+            }
+
+            table.hpc-table li {
+                margin-bottom: 0;
+            }
+        }
     </style>
 </head>
 
