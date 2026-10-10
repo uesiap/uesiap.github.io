@@ -55,6 +55,7 @@ body {
     background-color: #029012;
     border: none;
     color: white;
+    border-radius: 0;
 }
 
 .mic-button:hover {
@@ -75,7 +76,21 @@ body {
 
 .form-control,
 .form-select {
-    border-radius: 5px;
+    border-radius: 10px;
+}
+
+/* Dynamic point inputs have a mic button on the right */
+.point-row .pt-input {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Delete button for extra point boxes sits after the mic button */
+.point-row .btn-danger {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 #micFeedback {

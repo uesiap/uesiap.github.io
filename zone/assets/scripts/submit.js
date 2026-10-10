@@ -48,8 +48,8 @@ const monthNames = ["January", "February", "March", "April", "May", "June", "Jul
 // Sections per form type. "start" = boxes shown first; "removable" = user can delete extra boxes.
 const SECTIONS = {
     dsnr: {
-        praisingPoints: { container: "praisingPointsContainer", start: 2, removable: false },
-        prayerPoints: { container: "prayerPointsContainer", start: 3, removable: false }
+        praisingPoints: { container: "praisingPointsContainer", start: 2, removable: true },
+        prayerPoints: { container: "prayerPointsContainer", start: 3, removable: true }
     },
     hpc: {
         hpcPraising: { container: "hpcPraisingContainer", start: 2, removable: true },
