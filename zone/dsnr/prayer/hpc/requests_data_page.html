@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hyderabad HPC Graduates/Staff Prayer & Praising Points</title>
+    <title>Hyderabad HPC Prayer & Praising Points</title>
     <meta property="og:site_name" content="Dsnr Zone">
-    <meta property="og:title" content="Hyderabad HPC Graduates/Staff Prayer & Praising Points">
-    <meta property="og:description" content="HPC Prayer Secretary - Graduates/Staff">
+    <meta property="og:title" content="Hyderabad HPC Prayer & Praising Points">
+    <meta property="og:description" content="HPC Prayer Secretary - Students and Graduates/Staff">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -62,6 +62,13 @@
             color: #6c757d;
         }
 
+        .section-heading {
+            font-size: 1.05rem;
+            font-weight: bold;
+            margin: 18px 0 8px;
+            text-align: left;
+        }
+
         .table-wrap {
             overflow-x: auto;
             background: #fff;
@@ -71,7 +78,7 @@
 
         table.hpc-table {
             width: 100%;
-            min-width: 1100px;
+            min-width: 1000px;
             border-collapse: collapse;
             table-layout: fixed;
         }
@@ -104,39 +111,37 @@
             margin-bottom: 2px;
         }
 
+        /* Checkbox column only appears in selection mode */
         .col-chk {
-            width: 40px;
+            width: 0;
             display: none;
             text-align: center;
         }
 
         .selection-mode .col-chk {
             display: table-cell;
+            width: 40px;
         }
 
-        /* Percentages add up to 100% so the table fits the screen and the printed page */
+        /* Percentages add up to 100% for the screen and the printed page */
         .col-sno {
-            width: 4%;
+            width: 5%;
         }
 
         .col-name {
-            width: 15%;
-        }
-
-        .col-cat {
-            width: 11%;
+            width: 19%;
         }
 
         .col-zone {
-            width: 11%;
+            width: 12%;
         }
 
         .col-area {
-            width: 13%;
+            width: 14%;
         }
 
         .col-pts {
-            width: 11.5%;
+            width: 12.5%;
         }
 
         .print-only {
@@ -147,7 +152,7 @@
             background-color: #e8f0fe;
         }
 
-        tr.graduate-row {
+        tr.request-row {
             cursor: pointer;
         }
 
@@ -226,10 +231,10 @@
             margin: 20px 0;
         }
 
-        /* Print in landscape, like the paper sheet */
+        /* Print: A4 landscape, title centered at the top, both tables on one page */
         @page {
             size: A4 landscape;
-            margin: 10mm;
+            margin: 8mm;
         }
 
         @media print {
@@ -239,6 +244,7 @@
 
             body {
                 background: #fff;
+                font-size: 8pt;
             }
 
             .page-wrap {
@@ -250,36 +256,52 @@
             .table-wrap {
                 box-shadow: none;
                 overflow: visible;
+                border-radius: 0;
             }
 
             .print-only {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                margin-bottom: 10px;
+                display: block;
+                text-align: center;
+                margin-bottom: 6px;
             }
 
             .print-only img {
-                width: 45px;
-                height: 45px;
+                width: 40px;
+                height: 40px;
+                display: block;
+                margin: 0 auto 4px;
             }
 
             .print-only h2 {
                 margin: 0;
-                font-size: 18pt;
+                font-size: 15pt;
                 font-weight: bold;
                 color: #000;
+            }
+
+            .section-heading {
+                font-size: 10pt;
+                margin: 6px 0 3px;
+                page-break-after: avoid;
+            }
+
+            .section-block {
+                page-break-inside: avoid;
             }
 
             table.hpc-table {
                 min-width: 0;
                 width: 100%;
-                font-size: 9.5pt;
+                font-size: 7.5pt;
             }
 
             table.hpc-table th,
             table.hpc-table td {
-                padding: 4px;
+                padding: 2px 3px;
+            }
+
+            table.hpc-table li {
+                margin-bottom: 0;
             }
 
             tr.selected {
@@ -295,7 +317,7 @@
         <h2>Hyderabad HPC Prayer Secretary</h2>
     </div>
 
-    <!-- Title shown only when printing -->
+    <!-- Title shown only when printing: logo and title centered at the top -->
     <div class="print-only">
         <img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" alt="DSNR Zone logo">
         <h2>Hyderabad HPC Prayer &amp; Praising Points</h2>
@@ -308,15 +330,18 @@
             </a>
         </div>
 
-        <h4 class="mb-3 text-center">
-            <strong>Graduates/Staff</strong> Prayer and Praising Points (<span id="mnth"></span>/<span id="yr"></span>)
+        <h4 class="mb-2 text-center no-print">
+            Prayer and Praising Points (<span id="mnth"></span>/<span id="yr"></span>)
         </h4>
 
         <div class="toolbar no-print">
-            <div class="hint" id="modeHint">Long-press a row to select graduates/staff for deletion.</div>
-            <div class="d-flex gap-2">
+            <div class="hint" id="modeHint">Long-press a row to select requests for deletion.</div>
+            <div class="d-flex gap-2 flex-wrap">
                 <button class="btn btn-outline-primary btn-sm" onclick="window.print()">
                     <i class="fas fa-print"></i> Print
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" id="selectAllBtn" style="display: none;">
+                    <i class="fas fa-check-double"></i> Select All
                 </button>
                 <button class="btn btn-danger btn-sm" id="bulkDelete" style="display: none;">
                     <i class="fas fa-trash"></i> Delete Selected
@@ -329,42 +354,82 @@
 
         <div id="error-message" class="error"></div>
 
-        <div class="table-wrap" id="tableWrap">
-            <table class="hpc-table">
-                <colgroup>
-                    <col class="col-chk">
-                    <col class="col-sno">
-                    <col class="col-name">
-                    <col class="col-cat">
-                    <col class="col-zone">
-                    <col class="col-area">
-                    <col class="col-pts">
-                    <col class="col-pts">
-                    <col class="col-pts">
-                    <col class="col-pts">
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th rowspan="2" class="col-chk">
-                            <input type="checkbox" id="selectAll" title="Select all">
-                        </th>
-                        <th rowspan="2">S. No</th>
-                        <th rowspan="2">Full Name</th>
-                        <th rowspan="2">Graduate/Staff Name</th>
-                        <th rowspan="2">Local Zone Name</th>
-                        <th rowspan="2">Assigned Pioneering Area</th>
-                        <th colspan="2">HPC Ministry</th>
-                        <th colspan="2">Personal</th>
-                    </tr>
-                    <tr>
-                        <th class="sub">Praising Points</th>
-                        <th class="sub">Prayer Points</th>
-                        <th class="sub">Praising Points</th>
-                        <th class="sub">Prayer Points</th>
-                    </tr>
-                </thead>
-                <tbody id="dataContainer"></tbody>
-            </table>
+        <div id="mainArea">
+            <!-- Students -->
+            <div class="section-block">
+                <div class="section-heading">Students</div>
+                <div class="table-wrap">
+                    <table class="hpc-table">
+                        <colgroup>
+                            <col class="col-chk">
+                            <col class="col-sno">
+                            <col class="col-name">
+                            <col class="col-zone">
+                            <col class="col-area">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="col-chk"></th>
+                                <th rowspan="2">S. No</th>
+                                <th rowspan="2">Full Name</th>
+                                <th rowspan="2">Local Zone Name</th>
+                                <th rowspan="2">Assigned Pioneering Area</th>
+                                <th colspan="2">HPC Ministry</th>
+                                <th colspan="2">Personal</th>
+                            </tr>
+                            <tr>
+                                <th class="sub">Praising Points</th>
+                                <th class="sub">Prayer Points</th>
+                                <th class="sub">Praising Points</th>
+                                <th class="sub">Prayer Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Graduates/Staff -->
+            <div class="section-block">
+                <div class="section-heading">Graduate/Staff</div>
+                <div class="table-wrap">
+                    <table class="hpc-table">
+                        <colgroup>
+                            <col class="col-chk">
+                            <col class="col-sno">
+                            <col class="col-name">
+                            <col class="col-zone">
+                            <col class="col-area">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                            <col class="col-pts">
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" class="col-chk"></th>
+                                <th rowspan="2">S. No</th>
+                                <th rowspan="2">Full Name</th>
+                                <th rowspan="2">Local Zone Name</th>
+                                <th rowspan="2">Assigned Pioneering Area</th>
+                                <th colspan="2">HPC Ministry</th>
+                                <th colspan="2">Personal</th>
+                            </tr>
+                            <tr>
+                                <th class="sub">Praising Points</th>
+                                <th class="sub">Prayer Points</th>
+                                <th class="sub">Praising Points</th>
+                                <th class="sub">Prayer Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="graduatesBody"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -396,7 +461,12 @@
 
         // HPC branch root in Firebase
         const BASE_PATH = "zone/dsnr/prayer/hpc";
-        const GROUP = "graduates";
+
+        // Each group shown on the page: Firebase group name -> table body id
+        const GROUPS = [
+            { key: "students", bodyId: "studentsBody", label: "students" },
+            { key: "graduates", bodyId: "graduatesBody", label: "graduates/staff" }
+        ];
 
         let db = null;
         try {
@@ -453,17 +523,15 @@
             document.getElementById('loaderContainer').style.display = show ? 'block' : 'none';
         }
 
-        // ---------- Load the table ----------
-        function rowHTML(id, d, number) {
+        // ---------- Rows ----------
+        function rowHTML(groupKey, id, d, number) {
             const hpc = d.hpc || {};
             const personal = d.personal || {};
-            const category = d.category === 'student' ? 'Student' : 'Graduate/Staff';
             return `
-                <tr class="graduate-row" data-id="${esc(id)}">
-                    <td class="col-chk"><input type="checkbox" class="row-check" data-id="${esc(id)}"></td>
+                <tr class="request-row" data-group="${groupKey}" data-id="${esc(id)}">
+                    <td class="col-chk"><input type="checkbox" class="row-check" data-group="${groupKey}" data-id="${esc(id)}"></td>
                     <td class="text-center">${number}</td>
                     <td><strong>${esc(d.name)}</strong></td>
-                    <td class="text-center">${category}</td>
                     <td>${esc(d.localZone)}</td>
                     <td>${esc(d.pioneeringArea)}</td>
                     <td><ul>${pointsHTML(hpc.praising)}</ul></td>
@@ -473,10 +541,23 @@
                 </tr>`;
         }
 
-        async function retrieveData() {
-            const tbody = document.getElementById('dataContainer');
-            tbody.innerHTML = '';
+        // ---------- Load both tables ----------
+        async function loadGroup(group) {
+            const body = document.getElementById(group.bodyId);
+            const snapshot = await db.ref(`${BASE_PATH}/${year}/${month}/${group.key}`).once('value');
+            const records = snapshot.val();
 
+            if (!records) {
+                body.innerHTML = `<tr><td colspan="9" class="text-center">No ${group.label} found for this month.</td></tr>`;
+                return;
+            }
+
+            body.innerHTML = Object.entries(records)
+                .map(([id, d], i) => rowHTML(group.key, id, d, i + 1))
+                .join('');
+        }
+
+        async function retrieveData() {
             if (!db) {
                 showError('Could not connect to the database. Please check your internet connection and reload.');
                 return;
@@ -484,45 +565,35 @@
 
             showLoader(true);
             try {
-                const snapshot = await db.ref(`${BASE_PATH}/${year}/${month}/${GROUP}`).once('value');
-                const records = snapshot.val();
-
-                if (!records) {
-                    tbody.innerHTML = '<tr><td colspan="10" class="text-center">No graduates/staff found for this month.</td></tr>';
-                    return;
-                }
-
-                tbody.innerHTML = Object.entries(records)
-                    .map(([id, d], i) => rowHTML(id, d, i + 1))
-                    .join('');
+                await Promise.all(GROUPS.map(loadGroup));
             } catch (error) {
-                console.error('Error retrieving graduate data:', error);
-                showError('Error retrieving graduate data.');
+                console.error('Error retrieving requests:', error);
+                showError('Error retrieving requests.');
             } finally {
                 showLoader(false);
             }
         }
 
-        // ---------- Selection mode (long press to select, then bulk delete) ----------
+        // ---------- Selection mode (long press, then bulk delete) ----------
         const LONG_PRESS_MS = 600;
         let pressTimer = null;
 
         function setSelectionMode(on) {
-            document.getElementById('tableWrap').classList.toggle('selection-mode', on);
+            document.getElementById('mainArea').classList.toggle('selection-mode', on);
             document.getElementById('bulkDelete').style.display = on ? 'inline-block' : 'none';
             document.getElementById('cancelSelection').style.display = on ? 'inline-block' : 'none';
+            document.getElementById('selectAllBtn').style.display = on ? 'inline-block' : 'none';
             document.getElementById('modeHint').textContent = on
-                ? 'Tick the graduates/staff you want to delete.'
-                : 'Long-press a row to select graduates/staff for deletion.';
+                ? 'Tick the requests you want to delete.'
+                : 'Long-press a row to select requests for deletion.';
             if (!on) {
                 document.querySelectorAll('.row-check').forEach(cb => cb.checked = false);
-                document.getElementById('selectAll').checked = false;
                 document.querySelectorAll('tr.selected').forEach(tr => tr.classList.remove('selected'));
             }
         }
 
         function startPress(event) {
-            const row = event.target.closest('tr.graduate-row');
+            const row = event.target.closest('tr.request-row');
             if (!row) return;
             cancelPress();
             pressTimer = setTimeout(() => {
@@ -539,50 +610,53 @@
             clearTimeout(pressTimer);
         }
 
-        const tbody = document.getElementById('dataContainer');
-        tbody.addEventListener('mousedown', startPress);
-        tbody.addEventListener('touchstart', startPress, { passive: true });
-        tbody.addEventListener('mouseup', cancelPress);
-        tbody.addEventListener('mouseleave', cancelPress);
-        tbody.addEventListener('touchend', cancelPress);
-        tbody.addEventListener('touchmove', cancelPress, { passive: true });
-        tbody.addEventListener('contextmenu', e => e.preventDefault());
+        const mainArea = document.getElementById('mainArea');
+        mainArea.addEventListener('mousedown', startPress);
+        mainArea.addEventListener('touchstart', startPress, { passive: true });
+        mainArea.addEventListener('mouseup', cancelPress);
+        mainArea.addEventListener('mouseleave', cancelPress);
+        mainArea.addEventListener('touchend', cancelPress);
+        mainArea.addEventListener('touchmove', cancelPress, { passive: true });
+        mainArea.addEventListener('contextmenu', e => e.preventDefault());
 
-        tbody.addEventListener('change', function (event) {
+        mainArea.addEventListener('change', function (event) {
             if (event.target.classList.contains('row-check')) {
                 event.target.closest('tr').classList.toggle('selected', event.target.checked);
             }
         });
 
-        document.getElementById('selectAll').addEventListener('change', function () {
-            document.querySelectorAll('.row-check').forEach(cb => {
-                cb.checked = this.checked;
-                cb.closest('tr').classList.toggle('selected', this.checked);
+        // Select All toggles every checkbox on the page
+        document.getElementById('selectAllBtn').addEventListener('click', function () {
+            const boxes = document.querySelectorAll('.row-check');
+            const allChecked = Array.from(boxes).every(cb => cb.checked);
+            boxes.forEach(cb => {
+                cb.checked = !allChecked;
+                cb.closest('tr').classList.toggle('selected', !allChecked);
             });
         });
 
         document.getElementById('cancelSelection').addEventListener('click', () => setSelectionMode(false));
 
-        // ---------- Bulk delete ----------
+        // ---------- Bulk delete (works across both tables) ----------
         async function handleBulkDelete() {
             const selected = Array.from(document.querySelectorAll('.row-check:checked'));
             if (selected.length === 0) {
-                alert('Please select at least one graduate/staff to delete.');
+                alert('Please select at least one request to delete.');
                 return;
             }
-            if (!confirm(`Are you sure you want to delete ${selected.length} selected graduate/staff record(s)? This action cannot be undone.`)) {
+            if (!confirm(`Are you sure you want to delete ${selected.length} selected request(s)? This action cannot be undone.`)) {
                 return;
             }
 
             showLoader(true);
             try {
                 await Promise.all(selected.map(cb =>
-                    db.ref(`${BASE_PATH}/${year}/${month}/${GROUP}/${cb.dataset.id}`).remove()
+                    db.ref(`${BASE_PATH}/${year}/${month}/${cb.dataset.group}/${cb.dataset.id}`).remove()
                 ));
-                alert('Selected graduate/staff record(s) deleted successfully.');
+                alert('Selected request(s) deleted successfully.');
                 window.location.reload();
             } catch (error) {
-                console.error('Error deleting selected graduates:', error);
+                console.error('Error deleting selected requests:', error);
                 alert('An error occurred while deleting. Please try again.');
                 showLoader(false);
             }

@@ -143,13 +143,6 @@
                         <label for="month" class="form-label">Month</label>
                         <select id="month" class="form-select"></select>
                     </div>
-                    <div class="mb-3">
-                        <label for="category" class="form-label">Select Category</label>
-                        <select id="category" class="form-select">
-                            <option value="students" selected>Students</option>
-                            <option value="graduates">Graduate/Staff</option>
-                        </select>
-                    </div>
                     <button type="submit" class="btn-view">View Requests</button>
                 </form>
 
@@ -157,6 +150,8 @@
             </div>
         </div>
     </div>
+
+    <footer>This is an auto generated page. designed by Rahul.</footer>
 
     <script>
         const monthNames = [
@@ -195,11 +190,10 @@
 
             const year = document.getElementById('year').value;
             const month = document.getElementById('month').value;
-            const category = document.getElementById('category').value;
             const errorMessage = document.getElementById('error-message');
 
-            if (!year || !month || !category) {
-                errorMessage.textContent = 'Please select all fields.';
+            if (!year || !month) {
+                errorMessage.textContent = 'Please select year and month.';
                 errorMessage.style.display = 'block';
                 return;
             }
@@ -207,12 +201,8 @@
             const encodedYear = btoa(year);
             const encodedMonth = btoa(month);
 
-            const targetPage = category === 'students'
-                ? '/zone/dsnr/prayer/hpc/students_data_page'
-                : '/zone/dsnr/prayer/hpc/graduates_data_page';
-
             window.location.href =
-                `${targetPage}?utm=${encodeURIComponent(encodedYear)}&auth=${encodeURIComponent(encodedMonth)}`;
+                `/zone/dsnr/prayer/hpc/requests_data_page?utm=${encodeURIComponent(encodedYear)}&auth=${encodeURIComponent(encodedMonth)}`;
         });
     </script>
 
