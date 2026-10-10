@@ -102,47 +102,48 @@ function initPointBoxes() {
     });
 }
 
-// ---------- Dilsukhnagar form: fields change with the category ----------
+// ---------- Dilsukhnagar form: cards change with the category ----------
+// Name and Category sit in the top card (static). Each section below is its own card.
 function buildDsnrFields(category) {
     const box = document.getElementById("dynamicFields");
     box.innerHTML = "";
     if (!category) return;
 
-    let html = `
-        <div class="mb-3">
-            <label for="name" class="form-label">Name:</label>
-            <input type="text" class="form-control" id="name" name="name" required>
-        </div>`;
+    let html = "";
 
     if (category === "student") {
         html += `
-        <div class="divider"></div>
-        <h4 class="form-label">Course & Personal Details</h4>
-        <div class="mb-3">
-            <label for="courseBranch" class="form-label">Course & Branch:</label>
-            <input type="text" class="form-control" id="courseBranch" name="courseBranch" required>
-        </div>
-        <div class="mb-3">
-            <label for="gender" class="form-label">Gender:</label>
-            <select class="form-control" id="gender" name="gender" required>
-                <option value="" disabled selected>Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-            </select>
+        <div class="container-box">
+            <h4 class="form-label">Course & Personal Details</h4>
+            <div class="mb-3">
+                <label for="courseBranch" class="form-label">Course & Branch:</label>
+                <input type="text" class="form-control" id="courseBranch" name="courseBranch" required>
+            </div>
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender:</label>
+                <select class="form-select" id="gender" name="gender" required>
+                    <option value="" disabled selected>Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
         </div>`;
     }
 
     html += `
-        <div class="divider"></div>
-        <h4 class="form-label">🙌🏻 Praising Points</h4>
-        <p class="section-note">Please verify the fields you entered, before submit.</p>
-        <div id="praisingPointsContainer"></div>
-        <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('praisingPoints')">Add More Praising Points</button>
-        <div class="divider"></div>
-        <h4 class="form-label">🙏🏻 Prayer Points</h4>
-        <p class="section-note">Please verify the fields you entered, before submit.</p>
-        <div id="prayerPointsContainer"></div>
-        <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('prayerPoints')">Add More Prayer Points</button>`;
+        <div class="container-box">
+            <h4 class="form-label">🙌🏻 Praising Points</h4>
+            <p class="section-note">Please verify the fields you entered, before submit.</p>
+            <div id="praisingPointsContainer"></div>
+            <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('praisingPoints')">Add More Praising Points</button>
+        </div>
+
+        <div class="container-box">
+            <h4 class="form-label">🙏🏻 Prayer Points</h4>
+            <p class="section-note">Please verify the fields you entered, before submit.</p>
+            <div id="prayerPointsContainer"></div>
+            <button type="button" class="btn btn-outline-primary mb-3" onclick="addPoint('prayerPoints')">Add More Prayer Points</button>
+        </div>`;
 
     box.innerHTML = html;
     initPointBoxes();

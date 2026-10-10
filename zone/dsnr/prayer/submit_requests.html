@@ -39,17 +39,23 @@
             </div>
 
             <div class="mb-3">
-                <label for="category" class="form-label">Select Category:</label>
+                <label for="name" class="form-label">Full Name:</label>
+                <input type="text" class="form-control" id="name" name="name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="category" class="form-label">Select Category</label>
                 <p class="section-note">Select Student or Graduate/Staff.</p>
                 <select class="form-select" id="category" name="category" required>
                     <option value="" disabled selected>Select here</option>
-                    <option value="student">👨‍🎓|👩🏻‍🎓 Student</option>
-                    <option value="graduate">👨🏻‍🍼|👩🏻‍🍼 Graduate/Staff</option>
+                    <option value="student">Student</option>
+                    <option value="graduate">Graduate/Staff</option>
                 </select>
             </div>
-
-            <div id="dynamicFields"></div>
         </div>
+
+        <!-- Cards for the category-specific sections are added here -->
+        <div id="dynamicFields"></div>
 
         <div class="container-box">
             <input type="submit" value="Submit Requests" class="btn btn-outline-success" style="display: block; margin: 0 auto;">
