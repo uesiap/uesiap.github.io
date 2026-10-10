@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Birls Bible Study Details..</title>
+    <meta property="og:title" content="Submit Girls Bible Study Details..">
+    <meta property="og:image" content="https://example.com/path-to-your-image.jpg">
+    <meta property="og:url" content="https://Melam%20Rahul">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Melam Rahul">
+    <meta property="og:locale" content="en_US">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;700&family=Nunito:wght@400;700&display=swap">    
+  <style>
+    body {
+        font-family: google sans, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f6f9fe;
+        -webkit-tap-highlight-color: transparent;
+        /* For iOS Safari */
+        tap-highlight-color: transparent;
+        /* For other browsers */
+        -webkit-touch-callout: none;
+        /* Disable long press on mobile */
+        -webkit-user-select: none;
+        /* Disable selection */
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .container {
+        margin-top: 25px;
+        margin-left: 15px;
+        margin-right: 15px;
+        margin-bottom: px;
+        width: 150px margin: 20px auto;
+        background-color: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px #444;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        background: #fff;
+        color: #0c1319;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        color: #197afe;
+        background: #fff;
+        margin-bottom: 5px;
+    }
+
+    .form-group textarea::before {
+        border-color: #0eab1e;
+    }
+
+    .form-group input,
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        background: #fff;
+        color: #000;
+        font-size: 17px;
+        border: 2px solid #11b030;
+        border-radius: 5px;
+        box-sizing: border-box;
+        border-color: #0eab1e;
+        box-shadow: 0 0 2px #ccc;
+    }
+
+    .form-group input[type="submit"] {
+        background-color: #34abeb;
+        border: 2px solid #34abeb;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-group input[type="submit"]:hover {
+        background-color: #197afe;
+        border: 2px solid #017cc2;
+    }
+
+    select::before {
+        content: '\25BC';
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        font-size: 17px;
+        transform: translateY(-50%);
+        pointer-events: none;
+        border-radius: 5px;
+        box-sizing: border-box;
+        border-color: #999;
+        box-shadow: 0 0 2px #ccc;
+        width: 100%;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+
+    .select:hover {
+        border-color: #017cc2;
+    }
+
+    .select:focus {
+        outline-color: #017cc2;
+        border-color: #017cc2;
+        font-size: 20px;
+        box-shadow: 0 0 2px #017cc2;
+    }
+
+    .select::after {
+        outline-color: #017cc2;
+        border-color: #017cc2;
+        font-size: 20px;
+        box-shadow: 0 0 2px #017cc2;
+    }
+
+    .success-message {
+        display: none;
+        margin-top: 20px;
+        color: green;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .access-denied {
+        display: none;
+        text-align: center;
+        color: #ff0000;
+        margin-top: 20px;
+    }
+
+    .whatsapp-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 10px;
+        margin-left: 10%;
+        margin-right: 10%;
+        border: 2px solid #00acee;
+        border-radius: 5px;
+        color: #00acee;
+        background-color: transparent;
+        text-decoration: none;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .whatsapp-button:hover {
+        background-color: #00acee;
+        color: white;
+    }
+
+    .whatsapp-icon {
+        margin-right: 10px;
+    }
+
+    input,
+    textarea {
+        outline-color: #999;
+        border-radius: 5px;
+        border: 2px solid #999;
+    }
+
+    input,
+    textarea:focus {
+        outline-color: #017cc2;
+        border-radius: 5px;
+        font-size: 17px;
+        border: 3px solid #017cc2;
+    }
+
+    textarea {
+        font-size: 13px;
+    }
+</style>
+</head>
+<body>
+  <div id="openclose" style="display: block">
+    <div class="container">
+        <h2 style="color: #b51818">South <span style="color: #3d2eda;">Girls</span> Bible Study Details</h2>
+            <h3 style="color: #000">Hello, Please Submit Your Details Here:</h3>
+      <br>
+      <form id="bibleStudyForm">
+        <div class="form-group">
+          <label for="hostel_name">Hostel/Venue Name:</label>
+          <input type="text" id="hostel_name" name="hostel_name" placeholder="ex: Nagarjuna/Vidya Tharangani" required>
+        </div>
+        <div class="form-group">
+          <label for="speaker_name">Speaker Name:</label>
+          <input type="text" id="speaker_name" name="speaker_name" placeholder="ex: Sis. Helen" required>
+        </div>
+        <div class="form-group">
+          <label for="topic">Topic or Passage Name:</label>
+          <textarea id="topic" name="topic" rows="2" placeholder="ex: Prodigal son(Luke 15:11-24)" required></textarea>
+        </div>
+        <div class="form-group">
+        <label for="std_count">No. of Students Attended: </label>
+        <select id="std_count" name="std_count" required>
+          <option value="" selected disabled></option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option>
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option>
+          <option value="30">30</option>
+          <option value="31">31</option>
+          <option value="32">32</option>
+          <option value="33">33</option>
+          <option value="34">34</option>
+          <option value="35">35</option>
+          <option value="36">36</option>
+          <option value="37">37</option>
+          <option value="38">38</option>
+          <option value="39">39</option>
+          <option value="40">40</option>
+        </select>
+      </div>
+        <div class="form-group">
+          <label for="date">Date:</label>
+          <input type="date" id="date" name="date" required>
+        </div>
+        <div class="form-group">
+          <label for="time">Time:</label>
+          <input type="text" id="time" name="time" placeholder="ex: 6:30pm" required>
+        </div>
+        <div class="form-group">
+        <label for="day">Select Day:</label>
+        <select id="day" name="day" required>
+          <option value="" selected disabled></option>
+          <option value="Mon">Monday</option>
+          <option value="Tue">Tuesday</option>
+          <option value="Wed">Wednesday</option>
+          <option value="Thu">Thursday</option>
+          <option value="Fri">Friday</option>
+          <option value="Sat">Saturday</option>
+          <option value="Sun">Sunday</option>
+        </select>
+      </div>
+        <div class="form-group">
+          <label for="type">Bible Study Type: EBS/BBS</label>
+          <select id="type" name="type" required>
+            <option value="" selected disabled></option>
+            <option value="EBS">EBS</option>
+            <option value="BBS">BBS</option>
+          </select>
+        </div>
+        <!--<div class="form-group">
+          <label style="color: blue"><a style="color: red; margin-right: 5px;">Note:</a>After Successful Submission, Please click on <a style="color: green; margin-right: 1px;">Convey Me</a> Button</label>
+          </div> -->
+        <div class="form-group">
+          <input type="submit" name="submit" value="Submit">
+        </div>
+      </form>
+    </div>
+  </div>
+
+      <div id="noPermission" class="access-denied" style="font-size: 22px"><br>
+        <br>
+    Rahul temporarly Closed this page..
+    <br>
+        <br>
+    <a href="https://wa.me/+919347450441?text=Hi%20Rahul,%20I%20want%20to%20submit%20Bible%20Study%20Details.%20Could%20you%20please%20give%20me%20the%20Permission.." class="whatsapp-button">
+      <img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" class="whatsapp-icon" alt="WhatsApp Icon">
+      Message Rahul
+    </a>
+  </div>
+
+  <div id="successMessage" class="success-message">
+    <br>
+    <br>
+      <h2>Data Submitted Successfully!</h2>
+      <br>
+      <button onclick="window.location.reload()" class="whatsapp-button">
+        Submit More 
+      </button>
+    </div>
+  </div>
+
+  <!-- Firebase App (the core Firebase SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <!-- Firebase Database -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyDGS4dCnRS7ywHWRBjnaOpDmL28323flw8",
+      authDomain: "melamrahul.firebaseapp.com",
+      databaseURL: "https://melamrahul-default-rtdb.firebaseio.com",
+      projectId: "melamrahul",
+      storageBucket: "melamrahul.appspot.com",
+      messagingSenderId: "721100209859",
+      appId: "1:721100209859:web:52b007dd6becf1d54c6c76",
+      measurementId: "G-8ZH6Z66ESH"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Reference to the database
+    var adminPageRef = firebase.database().ref('AdminPage');
+
+    // Get elements
+    var opencloseContainer = document.getElementById('openclose');
+    //var noPermissionContainer = document.getElementById('noPermission');
+    var successMessage = document.getElementById('successMessage');
+
+    // Check database value
+    /* adminPageRef.on('value', function(snapshot) {
+      var state = snapshot.val();
+      if (state === 1) {
+        opencloseContainer.style.display = 'block';
+        noPermissionContainer.style.display = 'none';
+      } else {
+        opencloseContainer.style.display = 'none';
+        noPermissionContainer.style.display = 'block';
+      }
+    }); */
+
+    // Reference to the BibleStudyDetails database
+    var bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Girls/');
+
+    // Listen for form submit
+    document.getElementById('bibleStudyForm').addEventListener('submit', submitForm);
+
+    function submitForm(e) {
+      e.preventDefault();
+
+      // Get values
+      var hostel_name = getInputVal('hostel_name');
+      var speaker_name = getInputVal('speaker_name');
+      var topic = getInputVal('topic');
+      var std_count = getInputVal('std_count');
+      var date = getInputVal('date');
+      var time = getInputVal('time');
+      var day = getInputVal('day');
+      var type = getInputVal('type');
+
+      // Save data to Firebase
+      saveData(hostel_name, speaker_name, topic, std_count, date, time, day, type);
+
+      // Reset form after submission
+      document.getElementById('bibleStudyForm').reset();
+    }
+
+    // Function to get form values
+    function getInputVal(id) {
+      return document.getElementById(id).value;
+    }
+
+    // Function to save data to Firebase
+    function saveData(hostel_name, speaker_name, topic, std_count, date, time, day, type) {
+      bibleStudyRef.once('value', function(snapshot) {
+        var count = snapshot.numChildren(); // Get current number of entries
+        var nextKey = count + 1; // Determine next sequential key
+
+        // Save data with the next sequential key
+        bibleStudyRef.child(nextKey).set({
+          hostel_name: hostel_name,
+          speaker_name: speaker_name,
+          topic: topic,
+          std_count: std_count,
+          date: date,
+          time: time,
+          day: day,
+          type: type
+        }).then(function() {
+          console.log('Data saved successfully');
+          // Show success message and hide form
+          successMessage.style.display = 'block';
+          opencloseContainer.style.display = 'none';
+        }).catch(function(error) {
+          console.error('Error saving data: ', error);
+        });
+      });
+    }
+  </script>
+  <footer style="margin-bottom: 20px; margin-top: 40px; width: 100%; background-color: #f6f9fe; color: #333; text-align: center; padding: 10px 0;font-family: 'Google Sans', sans-serif;">        <p style="margin: 0; font-family: 'Google Sans', sans-serif; font-size: 18px;">© Designed by <a href="https://t.ly/irfrc" style="text-decoration: none;">Melam Rahul</a></p>
+    </footer>
+</body>
+</html>

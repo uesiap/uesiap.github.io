@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:site_name" content="Melam Rahul">
+    <meta property="og:title" content="AfroVibes - Enjoy the Experience">
+    <meta property="og:description" content="It's not a Party, It's an Experience.">
+    <meta property="og:url" content="https://Melam.Rahul">
+    <meta property="og:image" content="https://gcdnb.pbrd.co/images/6Ny8njssrYmb.jpg">
+    <meta property="og:image:width" content="883">
+    <meta property="og:image:height" content="1250">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+            /* For iOS Safari */
+            tap-highlight-color: transparent;
+            /* For other browsers */
+            -webkit-touch-callout: none;
+            /* Disable long press on mobile */
+            -webkit-user-select: none;
+            /* Disable selection */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .container {
+            margin-top: 10px;
+            margin-left: 15px;
+            margin-right: 15px;
+            width: 100%;
+            max-width: 350px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .contain {
+            width: 100%;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .label-input {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 16px;
+            color: #777;
+            pointer-events: none;
+            transition: top 0.3s, font-size 0.3s, color 0.3s;
+            background-color: #fff;
+            height: 20px;
+            width: 250px;
+            padding: 0 5px;
+        }
+
+        .input-field {
+            width: calc(100% - 22px);
+            font-size: 20px;
+            padding: 10px;
+            border: 2px solid transparent;
+            outline-color: #fff;
+            border-radius: 0px;
+            color: #017d07;
+            border-bottom: 2px solid #ccc;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            border-bottom: 4px solid #bea155;
+        }
+
+        .input-field:focus+.label-input,
+        .input-field:valid+.label-input {
+            top: -18px;
+            margin-left: 0px;
+            height: 8px;
+            width: 100%;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #197afe;
+        }
+
+        .submit-btn {
+            background-color: #bea155;
+            color: white;
+            width: 70%;
+            font-size: 20px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        .note {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .note a {
+            color: red;
+            font-size: 13px;
+        }
+
+        .thank-you {
+            display: none;
+            color: green;
+            text-align: center;
+        }
+
+        /* Loader Styles */
+        #loaderContainer {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        #loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            text-align: center;
+        }
+
+        #loader .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #fff;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        .required {
+            color: red;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Style for the input container */
+        .input-containe {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .select-field {
+            width: 100%;
+            padding: 10px;
+            font-size: 17px;
+            outline: none;
+            background-color: transparent;
+            color: #777;
+            border: 2px solid transparent;
+            border-bottom: 2px solid #ccc;
+            border-radius: 0;
+            appearance: none;
+            transition: color 0.3s, border-color 0.3s;
+        }
+
+        .select-field:focus {
+            border-bottom: 2px solid #197afe;
+            outline: none;
+        }
+
+        .select-field:valid {
+            color: #017d07;
+        }
+
+        .select-field::after {
+            content: '▼';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: #333;
+            font-size: 20px;
+        }
+
+        .select-field option[value=""][disabled] {
+            display: none;
+        }
+
+        .radio-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            margin: 0 15px;
+            font-size: 14px;
+        }
+
+        .radio-label input[type="radio"] {
+            margin-right: 15px;
+        }
+
+        .bank p {
+            margin: 0;
+            text-align: left;
+            font-weight: bold;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .phone-number-container {
+            display: flex;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 95%;
+            align-items: center;
+            justify-content: center;
+            max-width: 500px;
+        }
+
+        .phone-number {
+            font-size: 18px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .copy-button {
+            background-color: #fff;
+            color: green;
+            margin-left: 20px;
+            border: none;
+            padding: 10px;
+            border: 1px solid green;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+        .copy-button img {
+            width: 20px;
+            height: 20px;
+            color: black;
+            margin-right: 5px;
+            filter: invert(100%);
+        }
+
+        .copy-button:hover {
+            background-color: #f6f9fe;
+        }
+
+        .payment-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 10px;
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #000;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .payment-link img {
+            width: 34px;
+            height: 34px;
+            margin-right: 20px;
+        }
+
+        .payment-link:hover,
+        .payment-link:focus {
+            opacity: 0.9;
+            color: #000;
+            text-decoration: none;
+        }
+
+        .phonepe {
+            border: 2px solid #5F259F;
+        }
+
+        .paytm {
+            border: 2px solid #00B9F2;
+        }
+
+        .googlepay {
+            border: 2px solid #4285F4;
+        }
+
+        .amazonpay {
+            border: 2px solid #FF9900;
+        }
+
+        .whatsapppay {
+            border: 2px solid #25D366;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .overlay-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            color: green;
+        }
+
+        .cont {
+            text-align: center;
+            margin-top: -20px;
+            background-color: transparent;
+            padding: 25px;
+            width: 85%;
+            margin-right: 0px;
+            align-items: left;
+            justify-content: center;
+            max-width: 350px;
+            border: 2px solid #197afe;
+        }
+
+        .contain {
+            margin-top: 40%;
+            margin-bottom: 40%;
+            margin-left: 20px;
+            margin-right: 20px;
+            width: 350px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px #444;
+        }
+
+        .dialog {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .dialog-content {
+            background-color: #fff;
+            padding: 20px;
+            height: 150px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            width: 70%;
+        }
+
+        .close {
+            float: right;
+            margin-top: -65px;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .dialog button {
+            position: sticky;
+            border: 1px solid grey;
+            background: #197afe;
+            border-radius: 10px;
+            padding: 5px;
+            color: white;
+            width: 80px;
+        }
+
+        #dialog-message {
+            color: red;
+            font-size: large;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="reg" class="container">
+        <!--<img src="https://gcdnb.pbrd.co/images/6Ny8njssrYmb.jpg" alt="Event Image"
+            style="width: 100%; height: 100%; margin-bottom: 20px; margin-top: -25px; border: 2px solid #bea155; border-radius: 20px;">-->
+        <h2 style="font-weight: 400; font-size: 25px;"><span style="color: #bea155">JOY CAMP - Registration</span></h2>
+        <hr><br><br>
+        <form id="sheetdb-form" method="POST"
+            action="https://script.google.com/macros/s/AKfycbxaLjkVHBuwqZYOCLoTaxc6bgQhQrlfyeN116MIPBHJl_SU6yOrR1x8o9UaAUt5PsVN/exec">
+
+            <div class="input-container"> <input class="input-field" type="text" name="Name" id="Name"
+                    placeholder="" required> <label class="label-input" for="Name">Name <span
+                        class="required">*</span></label> </div><br>
+            <div class="input-container"> <input class="input-field" type="text" name="Hostel/Place" id="HostelPlace"
+                    placeholder="" required> <label class="label-input" for="Hostel/Place">Hostel / Place<span
+                        class="required">*</span></label> </div><br>
+            <div class="input-container"> <select class="select-field" name="Student/Graduate" id="Student/Graduate" required>
+                    <option value="" disabled selected>Student / Graduate</option>
+                    <option value="Student">Student</option>
+                    <option value="Graduate">Graduate</option>
+                </select>
+            </div><br>
+            <div class="input-container"> <select class="select-field" name="1st/2nd Time" id="1st/2nd Time" required>
+                    <option value="" disabled selected>How Many times Attended to this Camp</option>
+                    <option value="1st Time">1st Time</option>
+                    <option value="2nd Time">2nd Time</option>
+                    <option value="3rd Time">3rd Time</option>
+                    <option value="4th Time">4th Time</option>
+                    <option value="5th Time">5th Time</option>
+                    <option value="6th Time">6th Time</option>
+                </select>
+            </div><br>
+            <div class="input-container"> <input class="input-field" type="tel" name="Phone Number" id="whatsappNumber"
+                    placeholder="" required> <label class="label-input" for="Phone Number">Phone Number<span
+                        class="required">*</span></label> </div><br>
+
+            <div class="input-container"> <input class="input-field" type="text" name="Amount Paid" id="whatsappNumber"
+                    placeholder="" required> <label class="label-input" for="Amount Paid">Amount Paid ₹<span
+                        class="required">*</span></label> </div><br>
+
+            <div class="input-container"> <input class="input-field" type="text" name="Transaction Id"
+                    placeholder="" required> <label class="label-input" for="TransactionId">Transaction Id<span
+                        class="required">*</span></label> </div><br>
+            <h2 style="font-weight: 400; font-size: 22px;"><span style="color: #bea155">Send Money</span></h2>
+            <hr>
+
+            <div class="phone-number-container">
+                <div class="phone-number">+91 7893313732</div> <span class="copy-button" onclick="copyPhoneNumber()"> <i
+                        class="fas fa-copy"></i>&ensp; Copy </span>
+            </div> <br>
+            <div class="cont">
+                <h3 style="margin-left: -10px; font-size: 20px; color: green; margin-bottom: 20px;">Choose Your Payment
+                    App</h3>
+                <p style="font-size: 14px;">Complete the Payment before <br>buying the Ticket</p>
+                <div><a class="payment-link phonepe" href="https://phone.pe/home"> <img
+                            src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/phonepe-icon.png"
+                            alt="PhonePe">PhonePe </a>&emsp; </div>
+                <div style="margin-top: -25px; display: flex"> <a class="payment-link googlepay"
+                        href="https://gpay.app.goo.gl/bjy4"> <img
+                            src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/google-pay-icon.png"
+                            alt="Google Pay" style="width: 50px;">GPay </a>&emsp; <a class="payment-link paytm"
+                        href="https://m.p-y.tm/home"> <img src="https://img.icons8.com/color/48/000000/paytm.png"
+                            alt="Paytm">
+                        <div style="color: black;">Paytm</div>
+                    </a> </div>
+                <div class="bank">
+                    <p>Banking Name: <a style="color: green">Hruday</a></p>
+                </div>
+            </div> <br><br>
+            <!--
+            <div class="cont" style="display: flex; justify-content: space-evenly;">
+                <div style="display: flex; gap: 10px;">
+                    <h3>Send Payment Screenshot</h3>
+                    <div class="bank" style="justify-content: right;"> <a href="javascript:void(0)"
+                            onclick="sendWhatsAppMessage()" style="color: green; text-decoration: none;"> <img
+                                src="https://cdn-icons-png.flaticon.com/512/15713/15713434.png"
+                                style="width: 35px; height: 35px; margin-top: 10px;"> </a> </div>
+                </div>
+            </div>-->
+        </form> <br> <button class="submit-btn" type="submit" form="sheetdb-form">Submit Registration</button>
+    </div>
+    <div class="overlay" id="overlay">
+        <div class="overlay-content"> 🎉 Phone Number Copied! 🥳 </div>
+    </div>
+    <div id="thankYouMessage" class="contain" style="align-items: center; justify-content: center;display: none">
+        <h1 style="text-align: center;">Thank You!</h1> <i class="fa fa-check-circle fa-3x"
+            style="color: green; font-size: 60px; margin-right: 40%; margin-left: 40%;" aria-hidden="true"></i>
+        <div style="text-align: center;">
+            <h5 class="label-input100" style="font-size: 18px;">Your Ticked is Reserved. <br>
+                <p style="font-weight: 500; font-size: medium;color: #4a6bf0">if you not Completed the Payment,
+                    <br>Please make the Payment and send the Screenshot to this <a href="javascript:void(0)"
+                        onclick="sendWhatsAppMessage()" style="color: green; text-decoration: underline;">Whatsapp</a>
+                </p>
+            </h5>
+            <div style="display: flex; gap: 10px;">
+                <h3>Share this Invitation!</h3>
+                <div class="bank" style="justify-content: right;"> <a
+                        href="https://api.whatsapp.com/send?text=Hi,%20Book%20your%20Ticket%20for%20AfroVibes%20(It's%20not%20a%20Party,%20It's%20an%20Experience).%0AUse%20the%20below%20Link%20to%20Book%20your%20ticket:%0Ahttps://melamrahul.github.io/AfroVibes"
+                        style="color: green; text-decoration: none;"> <img
+                            src="https://cdn-icons-png.flaticon.com/512/7205/7205676.png"
+                            style="width: 35px; height: 35px; margin-top: 10px;"> </a> </div>
+            </div>
+        </div>
+    </div> <!-- Loader Container -->
+    <div id="loaderContainer">
+        <div id="loader">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div> <!-- Custom Dialog Box -->
+    <div id="dialog" class="dialog" style="display: none;">
+        <div class="dialog-content" style="text-align: left;">
+            <h2>Submission Error</h2> <span class="close" onclick="closeDialog()">&times;</span>
+            <p id="dialog-message"></p>
+        </div>
+    </div>
+    
+    <script>
+        var form = document.getElementById('sheetdb-form');
+        var loaderContainer = document.getElementById('loaderContainer');
+        var thankYouMessage = document.getElementById('thankYouMessage');
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+            // Validate the form first
+            if (validateForm()) {
+                // Show confirmation dialog
+                if (confirm("Are you sure you want to submit the details?")) {
+                    // Show loader
+                    loaderContainer.style.display = 'block';
+
+                    // Send form data via Fetch API
+                    fetch(form.action, {
+                        method: "POST",
+                        body: new FormData(form),
+                    }).then(response => response.json()) // Parse JSON response
+                        .then((result) => {
+                            if (result) {
+                                // Display thank you message
+                                thankYouMessage.style.display = 'block';
+                                // Hide form
+                                document.getElementById('reg').style.display = 'none';
+                            }
+                        }).catch(error => {
+                            console.error("Error submitting the form:", error);
+                            alert("There was an error submitting the form. Please try again.");
+                        }).finally(() => {
+                            // Hide loader in all cases
+                            loaderContainer.style.display = 'none';
+                        });
+                }
+            }
+        });
+
+        // Validation function
+        function validateForm() {
+            const firstName = document.getElementById('Name').value.trim();
+            const lastName = document.getElementById('TransactionId').value.trim();
+            const nationality = document.getElementById('nationality').value.trim();
+            const whatsappNumber = document.getElementById('whatsappNumber').value.trim();
+
+            const nameRegex = /^[A-Za-z\s]+$/; // Allow alphabets and spaces
+            const phoneRegex = /^\d{10}$/; // Regex for exactly 10 digits
+
+            // Validate first name
+            if (!nameRegex.test(firstName)) {
+                openDialog('First Name should not contain Letters or Special Characters.');
+                return false;
+            }
+
+            // Validate last name
+            if (!nameRegex.test(lastName)) {
+                openDialog('First Name should not contain Letters or Special Characters.');
+                return false;
+            }
+
+            // Validate nationality
+            if (!nameRegex.test(nationality)) {
+                openDialog('Nationality should contain only alphabets.');
+                return false;
+            }
+
+            // Validate WhatsApp number
+            if (!phoneRegex.test(whatsappNumber)) {
+                openDialog('Enter valid 10 digit WhatsApp Number.');
+                return false;
+            }
+
+            return true; // If all validations pass
+        }
+
+        // Dialog functions
+        function openDialog(message) {
+            document.getElementById('dialog-message').innerText = message;
+            document.getElementById('dialog').style.display = 'flex';
+        }
+
+        function closeDialog() {
+            document.getElementById('dialog').style.display = 'none';
+        }
+
+        function copyPhoneNumber() {
+            const phoneNumber = "7893313732";
+            navigator.clipboard.writeText(phoneNumber).then(() => {
+                const overlay = document.getElementById('overlay');
+                overlay.style.display = 'flex';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 2000);
+            });
+        }
+
+        function sendWhatsAppMessage() {
+            const firstName = document.getElementById("firstName").value;
+            const lastName = document.getElementById("lastName").value;
+            const phone = "+917893313732";
+            const message = `Hi, Ariel Henoc. My Name is ${firstName} ${lastName}. Here's my Payment Screenshot.`;
+            const url = `https://api.whatsapp.com/send?phone=${phone}&text=${encodeURIComponent(message)}`;
+            window.location.href = url;
+        }
+
+    </script>
+
+    <script>
+        // Disable right-click context menu
+        document.oncontextmenu = function () {
+            return false;
+        };
+
+        // Disable certain key combinations
+        document.onkeydown = function (e) {
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                return false;
+            }
+        };
+    </script>
+</body>
+
+</html>

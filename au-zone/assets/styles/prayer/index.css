@@ -1,0 +1,100 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0;
+}
+
+.topbar {
+    background-color: #fff;
+    padding: 10px 16px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topbar img {
+    width: 50px;
+    height: 50px;
+    padding: 4px;
+}
+
+.topbar h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.page-wrap {
+    max-width: 620px;
+    margin: 2rem auto;
+    padding: 0 12px;
+}
+
+.card {
+    border-radius: 10px;
+    border: 0;
+}
+
+.card-title-custom {
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 1.2rem 1rem 0.5rem;
+    line-height: 1.5;
+}
+
+.card-body {
+    padding: 1.5rem 2rem 2rem;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #197afe;
+}
+
+.section-title {
+    font-weight: bold;
+    color: #029012;
+    border-top: 2px solid #029012;
+    padding-top: 12px;
+    margin-top: 20px;
+    margin-bottom: 16px;
+}
+
+.btn-submit-req {
+    display: block;
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+}
+
+.btn-view {
+    background-color: #029012;
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin-top: 8px;
+}
+
+.btn-view:hover {
+    background-color: #45a049;
+    color: #fff;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+    margin-top: 1rem;
+    display: none;
+}
+
+footer {
+    text-align: center;
+    font-size: 13px;
+    margin: 30px 0 20px;
+}

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:site_name" content="Melam Rahul">        
+    <meta property="og:title" content="Edit - South Girls Bible Study Details">
+    <meta property="og:url" content="https://Melam Rahul">
+    <meta property="og:image:width" content="32">
+    <meta property="og:image:height" content="32">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Edit - South Girls Bible Study Details</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;700&family=Nunito:wght@400;700&display=swap">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f6f9fe;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+      
+        .container {
+            max-width: 1200px;
+            margin: 20px auto 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            border: 2px solid #197afe;
+            overflow-x: auto;
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #007bff;
+            
+        }
+      
+      .cont {
+            max-width: 1000px;            
+            margin: 20px auto 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 20px;
+            border: 2px solid #197afe;
+            box-shadow: 0 0 8px #197afe;
+            overflow-x: auto;
+            align-items: center;                       
+           justify-content: center;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+            font-size: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+            border-left: 1px solid #ddd;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            border-right: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .edit-button,
+        .save-button {
+            display: inline-block;
+            padding: 4px 8px;
+            border: 1px solid #007bff;
+            color: #000;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 15px;
+            margin: auto;
+            display: block;
+            text-align: center;
+        }
+
+        .skeleton {
+            animation: pulse 1s infinite ease-in-out;
+            background-color: #ececfd;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            height: 1000px;
+            border-radius: 0px;
+            max-width: 1000px;
+        }
+
+        .skel-h1 {
+            animation: pulse 1s infinite ease-in-out;
+            background-color: #ececfd;
+            border-radius:  20px;
+            height: 40px;
+            margin-left: 15%;
+            margin-right: 10%;
+            max-width: 300px;
+            margin-top: 30px;
+            
+            
+      }
+
+        .skel-field {
+            animation: pulse 1s infinite ease-in-out;
+            background-color: #ececfd;
+            border-radius: 8px;
+            height: 35px;
+            width: 300px;
+            margin-top: 0px;
+            margin-left: 10px;
+        }
+
+        @keyframes pulse {
+            0% {
+                background-color: #ececfd;
+            }
+
+            50% {
+                background-color: #d9d8fa;
+            }
+
+            100% {
+                background-color: #d0e8f3;
+            }
+        }
+
+        /* Password Dialog Styles */
+        .password-dialog {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-dialog-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .password-dialog h2 {
+            margin-top: 0;
+            font-size: 18px;
+            color: #007bff;
+        }
+
+        .password-dialog input {
+            margin-top: 10px;
+            padding: 8px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .password-dialog button {
+            margin: 0 5px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .password-dialog button:hover {
+            background-color: #0056b3;
+        }
+
+        .password-dialog button.cancel {
+            background-color: #dc3545;
+        }
+
+        .password-dialog .error-message {
+            display: block;
+            color: #dc3545;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container1">
+        <div class="cont">
+            <h1 class="skel-h1">&nbsp;</h1>
+            <h1 class="skeleton">&nbsp;</h1>
+        </div>
+    </div>
+    <div id="container2" style="display: none">
+        <div class="container">
+            <h2>South Girls Bible Study Report</h2>
+            <div class="table-wrapper">
+                <table id="bibleStudyTable">
+                    <thead>
+                        <tr>
+                            <th>Hostel/Venue</th>
+                            <th>Speaker</th>
+                            <th>Topic or Passage Name</th>
+                            <th>Stds Att</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Day</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Dialog -->
+    <div class="password-dialog" id="passwordDialog">
+        <div class="password-dialog-box">
+            <h2>Password Required</h2>
+            <input id="passwordInput" placeholder="Enter password">
+            <br><br>
+            <button id="confirmButton">Confirm</button>
+            <button id="cancelButton" class="cancel">Cancel</button>
+        </div>
+    </div>
+    <div class="password-dialog" id="passwordDialo">
+        <div class="password-dialog-box">
+            <h3>Incorrect Password!</h3>
+            <br>
+            <button onclick="cancel()" class="cancel">Exit</button>
+        </div>
+    </div>
+  <footer style="margin-bottom: 20px; margin-top: 40px; width: 100%; background-color: #f6f9fe; color: #333; text-align: center; padding: 10px 0;font-family: 'Google Sans', sans-serif;"><p style="margin: 0; font-family: 'Google Sans', sans-serif; font-size: 14px;">©2024 Designed with ❤️ by <a href="https://rahul.serv00.net/profile" style="text-decoration: underline; color: #197afe">M.Rahul</a></p>    </footer>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDGS4dCnRS7ywHWRBjnaOpDmL28323flw8",
+            authDomain: "melamrahul.firebaseapp.com",
+            databaseURL: "https://melamrahul-default-rtdb.firebaseio.com",
+            projectId: "melamrahul",
+            storageBucket: "melamrahul.appspot.com",
+            messagingSenderId: "721100209859",
+            appId: "1:721100209859:web:52b007dd6becf1d54c6c76",
+            measurementId: "G-8ZH6Z66ESH"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Reference to the database
+        var database = firebase.database();
+
+        // Retrieve Bible Study data based on date
+        var bibleStudyRef = database.ref('AU-Zone/BibleStudy/South/Girls/');
+
+        // Listen for changes in the database
+        bibleStudyRef.on('value', function (snapshot) {
+            var tableBody = document.getElementById('bibleStudyTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = ''; // Clear existing table rows
+
+            snapshot.forEach(function (childSnapshot) {
+                var data = childSnapshot.val();
+                var row = tableBody.insertRow();
+                row.setAttribute('data-id', childSnapshot.key);
+
+                // Populate table cells with data
+                var hostelCell = row.insertCell(0);
+                hostelCell.textContent = data.hostel_name;
+
+                var speakerCell = row.insertCell(1);
+                speakerCell.textContent = data.speaker_name;
+
+                var topicCell = row.insertCell(2);
+                topicCell.textContent = data.topic;
+
+                var stdCountCell = row.insertCell(3);
+                stdCountCell.textContent = data.std_count;
+
+                var dateCell = row.insertCell(4);
+                var dateObj = new Date(data.date);
+                var formattedDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()}`;
+                dateCell.textContent = formattedDate;
+
+                var timeCell = row.insertCell(5);
+                timeCell.textContent = data.time;
+
+                var dayCell = row.insertCell(6);
+                dayCell.textContent = data.day;
+
+                var typeCell = row.insertCell(7);
+                typeCell.textContent = data.type;
+
+                var actionsCell = row.insertCell(8);
+                actionsCell.innerHTML = `<button class="edit-button">Edit</button> <button class="save-button" style="display: none;">Save</button>`;
+            });
+
+            // Add event listeners to the edit and save buttons
+            document.querySelectorAll('.edit-button').forEach(function (button) {
+                button.addEventListener('click', handleEdit);
+            });
+
+            document.querySelectorAll('.save-button').forEach(function (button) {
+                button.addEventListener('click', handleSave);
+            });
+        });
+
+        function handleEdit(event) {
+            var passwordDialog = document.getElementById('passwordDialog');
+            var passwordInput = document.getElementById('passwordInput');
+            var confirmButton = document.getElementById('confirmButton');
+            var cancelButton = document.getElementById('cancelButton');
+            var row = event.target.closest('tr');
+
+            // Show password dialog
+            passwordDialog.style.display = 'flex';
+
+            // Clear input field
+            passwordInput.value = '';
+
+            // Handle confirm button click
+            confirmButton.onclick = function () {
+                var password = passwordInput.value.trim();
+
+                // Check password
+                if (password === 'southgirlsbbs') {
+                    // Proceed with edit
+                    passwordDialog.style.display = 'none';
+                    proceedWithEdit(row);
+                } else {
+                    passwordInput.value = '';
+                    passwordDialog.style.display = 'none';
+                    passwordDialo.style.display = 'flex';
+                }
+            };
+
+            // Handle cancel button click
+            cancelButton.onclick = function () {
+                passwordDialog.style.display = 'none';
+            };
+        }
+
+        function cancel() {
+            passwordDialo.style.display = 'none';
+        }
+
+        function proceedWithEdit(row) {
+            row.querySelectorAll('td:not(:last-child)').forEach(function (cell, index) {
+                var input = document.createElement('input');
+                input.type = 'text';
+
+                if (index === 4) {
+                    // Transform date from "d/m/y" to "y-m-d"
+                    var dateParts = cell.textContent.split('/');
+                    if (dateParts.length === 3) {
+                        var day = dateParts[0].padStart(2, '0');
+                        var month = dateParts[1].padStart(2, '0');
+                        var year = dateParts[2];
+                        input.value = `${year}-${month}-${day}`;
+                    } else {
+                        input.value = cell.textContent;
+                    }
+                } else {
+                    input.value = cell.textContent;
+                }
+
+                cell.textContent = '';
+                cell.appendChild(input);
+            });
+
+            row.querySelector('.edit-button').style.display = 'none';
+            row.querySelector('.save-button').style.display = 'inline-block';
+        }
+
+        function handleSave(event) {
+            var row = event.target.closest('tr');
+            var id = row.getAttribute('data-id');
+            var updatedData = {};
+
+            row.querySelectorAll('td:not(:last-child)').forEach(function (cell, index) {
+                var input = cell.querySelector('input');
+                if (input) {
+                    var value = input.value;
+
+                    if (index === 4) {
+                        // Save the date in "y-m-d" format
+                        cell.textContent = value;
+                        updatedData.date = value;
+                    } else {
+                        cell.textContent = value;
+
+                        switch (index) {
+                            case 0:
+                                updatedData.hostel_name = value;
+                                break;
+                            case 1:
+                                updatedData.speaker_name = value;
+                                break;
+                            case 2:
+                                updatedData.topic = value;
+                                break;
+                            case 3:
+                                updatedData.std_count = value;
+                                break;
+                            case 5:
+                                updatedData.time = value;
+                                break;
+                            case 6:
+                                updatedData.day = value;
+                                break;
+                            case 7:
+                                updatedData.type = value;
+                                break;
+                        }
+                    }
+                }
+            });
+
+            row.querySelector('.edit-button').style.display = 'inline-block';
+            row.querySelector('.save-button').style.display = 'none';
+
+            // Update the data in Firebase
+            database.ref('AU-Zone/BibleStudy/South/Girls/' + id).update(updatedData).then(function () {
+                // Refresh the page after updating the data
+                location.reload();
+            });
+        }
+
+        function showContainers() {
+            const container1 = document.getElementById('container1');
+            const container2 = document.getElementById('container2');
+
+            container1.style.display = 'block';
+
+            // Show container2 after a delay (2 seconds for demonstration)
+            setTimeout(function () {
+                container2.style.display = 'block';
+                container1.style.display = 'none';
+            }, 2000); // 2000 milliseconds = 2 seconds
+        }
+
+        document.addEventListener('DOMContentLoaded', showContainers);
+
+        // Disable right-click context menu
+        document.oncontextmenu = function () {
+            return false;
+        };
+
+        // Disable certain key combinations
+        document.onkeydown = function (e) {
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+                return false;
+            }
+        };
+    </script>
+</body>
+
+</html>

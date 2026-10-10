@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        (function () {
+            // Keys to retain in localStorage
+            const keysToRetain = ["bbsRole", "bbsName"];
+
+            // Retrieve the values of the keys to retain
+            const valuesToRetain = {};
+            keysToRetain.forEach((key) => {
+                const value = localStorage.getItem(key);
+                if (value !== null) {
+                    valuesToRetain[key] = value;
+                }
+            });
+
+            // Clear all keys in localStorage except the specified keys
+            Object.keys(localStorage).forEach((key) => {
+                if (!keysToRetain.includes(key)) {
+                    localStorage.removeItem(key);
+                }
+            });
+
+            // Restore the retained key-value pairs
+            Object.keys(valuesToRetain).forEach((key) => {
+                localStorage.setItem(key, valuesToRetain[key]);
+            });
+
+            console.log("LocalStorage cleared except for:", keysToRetain);
+
+            // Clear sessionStorage
+            sessionStorage.clear();
+            console.log("SessionStorage cleared.");
+
+            // Clear IndexedDB data
+            const clearIndexedDB = () => {
+                if (!window.indexedDB) {
+                    console.warn("IndexedDB is not supported by this browser.");
+                    return;
+                }
+                indexedDB.databases().then((databases) => {
+                    databases.forEach((db) => {
+                        indexedDB.deleteDatabase(db.name);
+                        console.log(`Deleted IndexedDB: ${db.name}`);
+                    });
+                }).catch((error) => {
+                    console.error("Error clearing IndexedDB:", error);
+                });
+            };
+
+            // Clear browser cache
+            const clearCache = () => {
+                if ("caches" in window) {
+                    caches.keys().then((cacheNames) => {
+                        cacheNames.forEach((cacheName) => {
+                            caches.delete(cacheName);
+                            console.log(`Deleted Cache: ${cacheName}`);
+                        });
+                    }).catch((error) => {
+                        console.error("Error clearing cache:", error);
+                    });
+                } else {
+                    console.warn("Cache API is not supported by this browser.");
+                }
+            };
+
+            // Execute cleanup functions
+            clearIndexedDB();
+            clearCache();
+
+            console.log(`All data cleared except for ${keysToRetain.join(", ")} in localStorage.`);
+        })();
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- App Title and Description -->
+    <meta name="description" content="Submit, Edit, Generate Report using BS I/C App." />
+
+    <!-- App Theme and Colors -->
+    <meta name="theme-color" content="#6750A4" />
+    <meta name="background-color" content="#ffffff" />
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" href="/au-zone/bbs/icons/icon-32.png" type="image/png">
+    <link rel="apple-touch-icon" href="/au-zone/bbs/icons/icon-192.png">
+
+    <!-- Web App Manifest for PWA -->
+    <link rel="manifest" href="/au-zone/bbs/manifest.json" />
+    <link rel="canonical" href="https://uesiap.github.io/au-zone/bbs/" />
+
+    <meta property="og:title" content="AU - ZONE Bible Study I/C App" />
+    <meta property="og:description" content="Submit, Edit, Generate Report using BS I/C App." />
+    <meta property="og:image" content="https://uesiap.github.io/au-zone/bbs/icons/icon-192.png" />
+    <meta property="og:url" content="https://uesiap.github.io/au-zone/bbs/" />
+    <meta property="og:type" content="website" />
+
+    <!-- Enable Standalone Mode on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="BS I/C" />
+    <title>AU - ZONE Bible Study I/C App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #fff;
+            color: #202124;
+        }
+
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background-color: #eee;
+            margin-right: 20px;
+            object-fit: cover;
+        }
+
+        .app-info {
+            flex: 1;
+        }
+
+        .app-title-head {
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .app-author {
+            font-size: 14px;
+            color: #5f6368;
+            margin-top: 4px;
+        }
+
+        .share-button {
+            background-color: #0ca632;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .share-button:hover {
+            background-color: #0f5bd8;
+        }
+
+        .app-screenshots {
+            display: flex;
+            gap: 12px;
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+
+        .screenshot {
+            width: 180px;
+            height: 320px;
+            background-color: #f1f3f4;
+            border-radius: 12px;
+            border: 1px dotted black;
+            object-fit: cover;
+        }
+
+        .app-description {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #3c4043;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .app-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .app-icon {
+                margin-bottom: 10px;
+            }
+
+            .share-button {
+                width: 100%;
+            }
+        }
+
+        .install-btn {
+            background-color: #0ca632;
+            color: #fff;
+            border: none;
+            width: 100%;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+
+        .install-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .installed-btn {
+            color: white;
+            background-color: #6c757d;
+            border: none;
+            width: 100%;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 16px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            display: block;
+            margin: 6rem auto 0;
+            width: auto;
+            max-width: 90%;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        .caption {
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+
+        .close {
+            position: fixed;
+            top: 20px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px 15px;
+            border-radius: 50%;
+            z-index: 1001;
+            transition: background-color 0.3s ease;
+        }
+
+        .nav-arrow:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        /* Mobile optimization */
+        @media only screen and (max-width: 700px) {
+            .modal-content {
+                max-width: 95%;
+            }
+
+            .nav-arrow {
+                padding: 8px 5px;
+                font-size: 28px;
+            }
+
+            .close {
+                top: 15px;
+                right: 25px;
+                font-size: 30px;
+            }
+        }
+
+        /* App Bar */
+        .action-bar {
+            background: #6750A4;
+            color: #FFFFFF;
+            border-bottom: 2px dashed #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        hr {
+            border-bottom: 2px dotted black;
+        }
+
+        .app-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.025rem;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            color: #1d1d1d;
+            font-size: 2.25rem;
+            cursor: pointer;
+            width: 3rem;
+            color: white;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            margin-right: 1rem;
+            /* Added margin-right */
+        }
+
+        .menu-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- App Bar -->
+    <div class="action-bar">
+        <div style="display: flex; align-items: center;">
+            <button class="menu-button" id="menuButton" onclick="history.back()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <span class="app-title">Install App</span>
+        </div>
+    </div>
+
+    <br><br><br>
+
+    <div class="app-container">
+        <div class="app-header" id="app-banner" style="display: none">
+            <div class="app-info">
+                <span style="display: flex;">
+                    <img src="https://uesiap.github.io/au-zone/bbs/icons/icon-512.png" alt="App Icon"
+                        class="app-icon" />
+                    <span style="display: grid;">
+                        <div class="app-title-head">BS I/C App</div>
+                        <div class="app-author" style="margin-top: -20px;">Submit, Edit/Review, Generate Report</div>
+                    </span>
+                </span>
+                <button class="install-btn">Install</button>
+            </div>
+        </div>
+
+        <div class="app-header" id="app-banner-open" style="display: none">
+            <div class="app-info">
+                <span style="display: flex;">
+                    <img src="https://uesiap.github.io/au-zone/bbs/icons/icon-512.png" alt="App Icon"
+                        class="app-icon" />
+                    <span style="display: grid;">
+                        <div class="app-title-head">BS I/C App</div>
+                        <div class="app-description" style="margin-top: -20px;">App Already Installed in your Device.
+                        </div>
+                    </span>
+                </span>
+                <button class="install-btn" style="color: white; background-color: #6c757d;">App Installed</button>
+            </div>
+        </div>
+
+        <div class="app-header" id="app-banner-installed" style="display: none">
+            <div class="app-info">
+                <span style="display: flex;">
+                    <img src="https://uesiap.github.io/au-zone/bbs/icons/icon-512.png" alt="App Icon"
+                        class="app-icon" />
+                    <span style="display: grid;">
+                        <div class="app-title-head">BS I/C App</div>
+                        <div class="app-description" style="margin-top: -20px;">App is already installed</div>
+                    </span>
+                </span>
+                <p id="share-info" style="display: none"><span style="color: red;">⚠</span> Share this App to your
+                    Upcoming Successor only. <br>Please keep this app Confidential. Thanks for your understanding.</p>
+                <span style="display: flex; gap: 5%;">
+                    <button class="share-button" style="background-color: #5f6368; color: white;">Installed</button>
+                    <button class="share-button" id="shareButton" style="display: none;">Share App</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="app-screenshots">
+            <img src="https://i.ibb.co/Ndr3mgHF/shot1.jpg" alt="Home" class="screenshot"
+                onclick="openFullImage(this, 0)">
+            <img src="https://i.ibb.co/Gv4WGwCk/shot2.jpg" alt="Menu Items" class="screenshot"
+                onclick="openFullImage(this, 1)">
+            <img src="https://i.ibb.co/39pcx5cY/shot3.jpg" alt="Edit/Review Data" class="screenshot"
+                onclick="openFullImage(this, 2)">
+            <img src="https://i.ibb.co/hJPfL7GV/shot4.jpg" alt="Generate Report" class="screenshot"
+                onclick="openFullImage(this, 3)">
+        </div>
+
+        <div id="imageModal" class="modal">
+            <span class="nav-arrow prev" onclick="navigateImages(-1)">&#10094;</span>
+            <span class="nav-arrow next" onclick="navigateImages(1)">&#10095;</span>
+            <img id="modalImage" class="modal-content" />
+            <div id="modalCaption" class="caption"></div>
+            <span class="close" onclick="closeModal()">&times;</span>
+        </div>
+
+        <div class="app-description">
+            <strong>About this app:</strong><br />
+            This app helps you to submit, edit, review, and generate reports for Bible Study efficiently. It
+            streamlines the process, ensuring accuracy and ease of use for all users.
+        </div>
+
+        <div class="app-description">
+            <strong>Features of this app:</strong><br />
+            <ul>
+                <li>Submit Bible Study reports with ease.</li>
+                <li>Edit and review reports for accuracy.</li>
+                <li>Generate detailed reports in seconds.</li>
+                <li>User-friendly interface for seamless navigation.</li>
+                <li>Secure data handling and storage.</li>
+                <li>Accessible on multiple devices.</li>
+            </ul>
+        </div>
+        <div class="app-description">
+            <strong>Contact Admin:</strong><br />
+            <ul>
+                <li>Email: <strong>mrahul.eu@gmail.com</strong></li>
+                <li>Phone: <strong>+91 9347450441</strong></li>
+                <li>Whatsapp: <a
+                        href="https://wa.me/9347450441?text=Hello%20Rahul,%20I%20need%20some%20assistance%20Regarding%20BBS%20App."
+                        target="_blank"><strong>Get Help</strong></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Global variable to keep track of current image index
+        let currentImageIndex = 0;
+        // Array to store all screenshots
+        let screenshots = [];
+        let deferredPrompt;
+
+        // Initialize the screenshots array when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get all screenshot images
+            screenshots = document.querySelectorAll('.screenshot');
+
+            // Check if app is already installed
+            if (isRunningAsPWA()) {
+                showInstalledBanner();
+            } else {
+                // Check if the app is installed but not running as PWA
+                if (isAppInstalled()) {
+                    showInstalledBanner();
+                } else {
+                    showOpenAppBanner();
+                }
+                // Show open app banner only when not in PWA mode
+                if (!isRunningAsPWA()) {
+                    showOpenAppBanner();
+                }
+            }
+
+            // Check if it's March, April, May, or June
+            let temporalChronicle = new Date();
+            let lunarPhaseIndex = temporalChronicle.getMonth(); // 0 for Jan, 1 for Feb, etc.
+
+            // Check if it's March (2), April (3), May (4), or June (5)
+            if (lunarPhaseIndex === 2 || lunarPhaseIndex === 3 || lunarPhaseIndex === 4 || lunarPhaseIndex === 5) {
+                let portalOfSharing = document.getElementById('shareButton');
+                let SharingInfo = document.getElementById('share-info');
+                if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                    if (portalOfSharing) portalOfSharing.style.display = 'block';
+                    if (SharingInfo) SharingInfo.style.display = 'block';
+                }
+            } else {
+                console.log('Sharing button is hidden because it is not the right month.');
+            }
+
+            const backButton = document.getElementById('menuButton');
+            // Check if the app is being viewed in standalone mode (as a PWA)
+            if (!window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
+                if (backButton) backButton.style.display = 'none'; // Hide the back button if not in PWA mode
+            } else {
+                if (backButton) backButton.style.display = 'block'; // Show the back button if in PWA mode
+            }
+
+            // Capture the beforeinstallprompt event
+            window.addEventListener('beforeinstallprompt', (e) => {
+                // Prevent the mini-infobar from appearing on mobile
+                e.preventDefault();
+                // Stash the event so it can be triggered later.
+                deferredPrompt = e;
+                // Show the install banner
+                showInstallBanner();
+            });
+
+            // Add install button event listener
+            const installButton = document.querySelector('.install-btn');
+            if (installButton) {
+                installButton.addEventListener('click', async () => {
+                    if (deferredPrompt) {
+                        // Show the install prompt
+                        deferredPrompt.prompt();
+                        // Wait for the user to respond to the prompt
+                        deferredPrompt.userChoice.then((choiceResult) => {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('User accepted the install prompt');
+                                // Show installed banner after installation
+                                showInstalledBanner();
+                            } else {
+                                console.log('User dismissed the install prompt');
+                            }
+                            deferredPrompt = null;
+                        });
+                    } else {
+                        // If deferredPrompt isn't available, just open the app
+                        window.open('https://uesiap.github.io/au-zone/bbs/', '_blank');
+                    }
+                });
+            }
+
+            // Add share button event listener
+            const shareButton = document.getElementById('shareButton');
+            if (shareButton) {
+                shareButton.addEventListener('click', shareContent);
+            }
+        });
+
+        // Function to open the image modal
+        function openFullImage(image, index) {
+            // Get the modal
+            var modal = document.getElementById("imageModal");
+            // Update current image index
+            currentImageIndex = index;
+
+            // Get the modal image and set its source to the clicked image's source
+            var modalImage = document.getElementById("modalImage");
+            modalImage.src = image.src;
+
+            // Get the caption and set it to the alt text of the image
+            var caption = document.getElementById("modalCaption");
+            caption.innerHTML = image.alt;
+
+            // Display the modal
+            modal.style.display = "block";
+
+            // Update navigation arrows visibility
+            updateNavigationArrows();
+
+            // Add keyboard navigation event listener
+            document.addEventListener('keydown', handleKeyNavigation);
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            var modal = document.getElementById("imageModal");
+            modal.style.display = "none";
+
+            // Remove keyboard navigation event listener
+            document.removeEventListener('keydown', handleKeyNavigation);
+        }
+
+        // Function to update navigation arrows visibility
+        function updateNavigationArrows() {
+            const prevArrow = document.querySelector('.prev');
+            const nextArrow = document.querySelector('.next');
+
+            if (prevArrow) {
+                prevArrow.style.display = currentImageIndex === 0 ? 'none' : 'block';
+            }
+
+            if (nextArrow) {
+                nextArrow.style.display = currentImageIndex === screenshots.length - 1 ? 'none' : 'block';
+            }
+        }
+
+        // Function to navigate to the previous or next image
+        function navigateImages(direction) {
+            // Calculate the new index
+            let newIndex = currentImageIndex + direction;
+
+            // Check if the new index is valid
+            if (newIndex >= 0 && newIndex < screenshots.length) {
+                // Update the current image index
+                currentImageIndex = newIndex;
+                // Update modal image and caption
+                var modalImage = document.getElementById("modalImage");
+                var caption = document.getElementById("modalCaption");
+
+                modalImage.src = screenshots[currentImageIndex].src;
+                caption.innerHTML = screenshots[currentImageIndex].alt;
+
+                // Update navigation arrows visibility
+                updateNavigationArrows();
+            }
+        }
+
+        // Handle keyboard navigation
+        function handleKeyNavigation(e) {
+            if (e.key === "ArrowLeft" && currentImageIndex > 0) {
+                navigateImages(-1);
+            } else if (e.key === "ArrowRight" && currentImageIndex < screenshots.length - 1) {
+                navigateImages(1);
+            } else if (e.key === "Escape") {
+                closeModal();
+            }
+        }
+
+        // Close the modal if the user clicks anywhere outside the image
+        window.onclick = function (event) {
+            var modal = document.getElementById("imageModal");
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        function hideBanners() {
+            const appBannerInstalled = document.getElementById('app-banner-installed');
+            if (appBannerInstalled) appBannerInstalled.style.display = 'none';
+        }
+
+        function showOpenAppBanner() {
+            const appBanner = document.getElementById('app-banner');
+            const appBannerOpen = document.getElementById('app-banner-open');
+            const appBannerInstalled = document.getElementById('app-banner-installed');
+
+            if (appBanner) appBanner.style.display = 'none';
+            if (appBannerOpen) appBannerOpen.style.display = 'flex';
+            if (appBannerInstalled) appBannerInstalled.style.display = 'none';
+        }
+
+        function showInstallBanner() {
+            const appBanner = document.getElementById('app-banner');
+            const appBannerOpen = document.getElementById('app-banner-open');
+            const appBannerInstalled = document.getElementById('app-banner-installed');
+
+            if (appBanner) appBanner.style.display = 'flex';
+            if (appBannerOpen) appBannerOpen.style.display = 'none';
+            if (appBannerInstalled) appBannerInstalled.style.display = 'none';
+        }
+
+        // Function to show the installed banner
+        function showInstalledBanner() {
+            const appBanner = document.getElementById('app-banner');
+            const appBannerOpen = document.getElementById('app-banner-open');
+            const appBannerInstalled = document.getElementById('app-banner-installed');
+
+            if (appBanner) appBanner.style.display = 'none';
+            if (appBannerOpen) appBannerOpen.style.display = 'none';
+            if (appBannerInstalled) appBannerInstalled.style.display = 'flex';
+        }
+
+        // Detect if app is running as PWA
+        function isRunningAsPWA() {
+            return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+        }
+
+        // Detect if app is installed (but might not be running as PWA)
+        function isAppInstalled() {
+            // Check if the app is in the list of installed apps
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                return true;
+            }
+
+            // For iOS
+            if (navigator.standalone) {
+                return true;
+            }
+
+            // Check if the beforeinstallprompt event was never fired (suggests already installed)
+            if ('beforeinstallprompt' in window && !deferredPrompt) {
+                return true;
+            }
+
+            return false;
+        }
+
+        async function shareContent() {
+            const bbsRole = localStorage.getItem('bbsRole') || "Member"; // fallback if bbsRole is null
+
+            // Define passwords
+            const passwords = {
+                "South Boys BBS I/C": "southboysbbs",
+                "South Girls BBS I/C": "southgirlsbbs",
+                "North Boys BBS I/C": "northboysbbs",
+                "North Girls BBS I/C": "northgirlsbbs",
+                "North Girls EBS I/C": "northgirlsebs",
+                "North Womens BBS I/C": "northwomensbbs",
+                "Maharanipet BBS I/C": "maharanipetbbs",
+                "Maharanipet EBS I/C": "maharanipetebs",
+                "BC Hostel BBS I/C": "bchotelbbs"
+            };
+
+            const password = passwords[bbsRole] || "No password assigned";
+
+            if (navigator.share) {
+                try {
+                    const title = document.querySelector('meta[property="og:title"]').content;
+                    const description = document.querySelector('meta[property="og:description"]').content;
+                    const url = "https://uesiap.github.io/au-zone/bbs/app";
+                    const urlDesk = "https://uesiap.github.io/au-zone/bbs/laptop";
+
+                    const introMessage = `Hi, Thank you for joining with AU-Zone Committee, as a *${bbsRole}*.\n\n`;
+
+                    const message = `${introMessage}Name: *${title}*\n\nUsage: *${description}*\n\nPassword: *${password}*\n\nWork on Mobile App: \n*${url}*\n\nWork on Laptop: \n*${urlDesk}*`;
+
+                    await navigator.share({
+                        title: title,
+                        text: message
+                    });
+
+                    console.log('App shared successfully');
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                }
+            } else {
+                alert('Sharing is not supported on your device/browser.');
+                console.log('navigator.share is not available');
+            }
+        }
+    </script>
+</body>
+
+</html>

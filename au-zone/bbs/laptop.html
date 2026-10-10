@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        (function () {
+            // Keys to retain in localStorage
+            const keysToRetain = ["bbsRole", "bbsName"];
+
+            // Retrieve the values of the keys to retain
+            const valuesToRetain = {};
+            keysToRetain.forEach((key) => {
+                const value = localStorage.getItem(key);
+                if (value !== null) {
+                    valuesToRetain[key] = value;
+                }
+            });
+
+            // Clear all keys in localStorage except the specified keys
+            Object.keys(localStorage).forEach((key) => {
+                if (!keysToRetain.includes(key)) {
+                    localStorage.removeItem(key);
+                }
+            });
+
+            // Restore the retained key-value pairs
+            Object.keys(valuesToRetain).forEach((key) => {
+                localStorage.setItem(key, valuesToRetain[key]);
+            });
+
+            console.log("LocalStorage cleared except for:", keysToRetain);
+
+            // Clear sessionStorage
+            sessionStorage.clear();
+            console.log("SessionStorage cleared.");
+
+            // Clear IndexedDB data
+            const clearIndexedDB = () => {
+                if (!window.indexedDB) {
+                    console.warn("IndexedDB is not supported by this browser.");
+                    return;
+                }
+                indexedDB.databases().then((databases) => {
+                    databases.forEach((db) => {
+                        indexedDB.deleteDatabase(db.name);
+                        console.log(`Deleted IndexedDB: ${db.name}`);
+                    });
+                }).catch((error) => {
+                    console.error("Error clearing IndexedDB:", error);
+                });
+            };
+
+            // Clear browser cache
+            const clearCache = () => {
+                if ("caches" in window) {
+                    caches.keys().then((cacheNames) => {
+                        cacheNames.forEach((cacheName) => {
+                            caches.delete(cacheName);
+                            console.log(`Deleted Cache: ${cacheName}`);
+                        });
+                    }).catch((error) => {
+                        console.error("Error clearing cache:", error);
+                    });
+                } else {
+                    console.warn("Cache API is not supported by this browser.");
+                }
+            };
+
+            // Execute cleanup functions
+            clearIndexedDB();
+            clearCache();
+
+            console.log(`All data cleared except for ${keysToRetain.join(", ")} in localStorage.`);
+        })();
+    </script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- App Title and Description -->
+    <meta name="description" content="Submit, Edit, Generate Report using BS I/C App." />
+
+    <!-- App Theme and Colors -->
+    <meta name="theme-color" content="#6750A4" />
+    <meta name="background-color" content="#ffffff" />
+
+    <!-- Favicon and Icons -->
+    <link rel="icon" href="/au-zone/bbs/icons/icon-32.png" type="image/png">
+    <link rel="apple-touch-icon" href="/au-zone/bbs/icons/icon-192.png">
+
+    <!-- Web App Manifest for PWA -->
+    <link rel="manifest" href="/au-zone/bbs/manifest.json" />
+    <link rel="canonical" href="https://uesiap.github.io/au-zone/bbs/" />
+
+    <meta property="og:title" content="AU - ZONE Bible Study I/C App" />
+    <meta property="og:description" content="Submit, Edit, Generate Report using BS I/C App." />
+    <meta property="og:image" content="https://uesiap.github.io/au-zone/bbs/icons/icon-192.png" />
+    <meta property="og:url" content="https://uesiap.github.io/au-zone/bbs/" />
+    <meta property="og:type" content="website" />
+
+    <!-- Enable Standalone Mode on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="BS I/C" />
+    <title>AU - ZONE Bible Study I/C App</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        /* App Bar */
+        .action-bar {
+            background: #6750A4;
+            color: #FFFFFF;
+            border-bottom: 2px dashed #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            height: 5rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        hr {
+            border-bottom: 2px dotted black;
+        }
+
+        .app-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.025rem;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            color: #1d1d1d;
+            font-size: 2.25rem;
+            cursor: pointer;
+            width: 3rem;
+            color: white;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            margin-right: 1rem;
+            /* Added margin-right */
+        }
+
+        .menu-button:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Navigation Drawer - Now on the left */
+        .nav-drawer {
+            position: fixed;
+            top: 5rem;
+            left: -300px;
+            /* Changed from right to left */
+            width: 300px;
+            height: calc(100vh - 5rem);
+            background: #FFFFFF;
+            box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+            /* Changed shadow direction */
+            transition: transform 0.4s ease-in-out;
+            z-index: 1000;
+            overflow-y: auto;
+            scrollbar-width: none;
+            /* For Firefox */
+            -ms-overflow-style: none;
+        }
+
+        .nav-drawer::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-drawer.open {
+            transform: translateX(300px);
+            /* Changed direction */
+        }
+
+        .nav-header {
+            padding: 2rem;
+            background: #6750A4;
+            color: #FFFFFF;
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.375rem;
+        }
+
+        .nav-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .nav-items {
+            padding: 1.25rem 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 1.125rem 1.25rem;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+            margin-bottom: 0.75rem;
+        }
+
+        .nav-item:hover {
+            background: #F3EDF7;
+        }
+
+        .nav-item i {
+            margin-right: 1.25rem;
+            font-size: 1.5rem;
+            width: 1.75rem;
+            text-align: center;
+            color: #6750A4;
+        }
+
+        .nav-item span {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+
+        .nav-divider {
+            /*height: 1px;
+            background: #e0e0e0;
+            margin: 1.25rem 0;*/
+            border-bottom: 2px dashed #555;
+        }
+
+        /* User Info Container */
+        .user-info-container {
+            padding: 1.25rem;
+            background: #FFF;
+            border-radius: 0.5rem;
+            border: 1.5px solid #6750A4;
+            margin: 0 1rem 1.25rem 1rem;
+        }
+
+        .user-info-title {
+            color: #6750A4;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .user-info-value {
+            font-size: 1.1rem;
+            color: green;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            word-break: break-word;
+        }
+
+        .user-info-value:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+        /* Dialog Box */
+        .dialog-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: #FFFFFF;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            width: 360px;
+            max-width: 90%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .dialog-box.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .dialog-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 1.25rem;
+        }
+
+        .dialog-box select,
+        .dialog-box input {
+            width: 100%;
+            padding: 0.95rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            color: #333;
+            background-color: #f9f9f9;
+            transition: border-color 0.2s;
+        }
+
+        .dialog-box select:focus,
+        .dialog-box input:focus {
+            border-color: #6750A4;
+            outline: none;
+        }
+
+        .dialog-box button {
+            width: 100%;
+            padding: 0.95rem;
+            background: #6750A4;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+
+        .dialog-box button:hover {
+            background: #5a46a1;
+        }
+
+        /* Confirmation Dialog */
+        .confirmation-dialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: #FFFFFF;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 1002;
+            width: 360px;
+            max-width: 90%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .confirmation-dialog.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .confirmation-icon {
+            font-size: 3rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .confirmation-message {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation-dialog button {
+            width: 100%;
+            padding: 0.95rem;
+            background: #6750A4;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+
+        .confirmation-dialog button:hover {
+            background: #5a46a1;
+        }
+
+        .container {
+            margin-top: -20px;
+            margin-left: -20px;
+            margin-right: 10px;
+            margin-bottom: 0px;
+            margin: 20px auto;
+            width: 100%;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            color: #0c1319;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #1d1d1d;
+            margin-bottom: 5px;
+        }
+
+        .form-group textarea::before {
+            border-color: #0eab1e;
+        }
+
+        .form-group input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            color: #000;
+            font-size: 17px;
+            border-bottom: 2px solid #11b030;
+            border-radius: 5px;
+            box-sizing: border-box;
+            border-color: #0eab1e;
+        }
+
+        .form-group input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #11b030;
+            /* Maintain the green border */
+            box-shadow: 0 0 5px #6750A4;
+            /* Optional: Add a subtle glow */
+            outline: none;
+            /* Ensure no orange outline */
+        }
+
+        .form-group input[type="submit"] {
+            background-color: #34abeb;
+            border: 2px solid #34abeb;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group input[type="submit"]:hover {
+            background-color: #197afe;
+            border: 2px solid #017cc2;
+        }
+
+        select::before {
+            content: '\25BC';
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            font-size: 17px;
+            transform: translateY(-50%);
+            pointer-events: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+            border-color: #999;
+            box-shadow: 0 0 2px #ccc;
+            width: 100%;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+
+        .select:hover {
+            border-color: #017cc2;
+        }
+
+        .select:focus {
+            outline-color: #017cc2;
+            border-color: #017cc2;
+            font-size: 20px;
+            box-shadow: 0 0 2px #017cc2;
+        }
+
+        .select::after {
+            outline-color: #017cc2;
+            border-color: #017cc2;
+            font-size: 20px;
+            box-shadow: 0 0 2px #017cc2;
+        }
+
+        .success-message {
+            display: none;
+            margin-top: 20px;
+            color: green;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .access-denied {
+            display: none;
+            text-align: center;
+            color: #ff0000;
+            margin-top: 20px;
+        }
+
+        .whatsapp-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 10px;
+            margin-left: 10%;
+            margin-right: 10%;
+            border: 2px solid #00acee;
+            border-radius: 5px;
+            color: #00acee;
+            background-color: transparent;
+            text-decoration: none;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .whatsapp-button:hover {
+            background-color: #00acee;
+            color: white;
+        }
+
+        .whatsapp-icon {
+            margin-right: 10px;
+        }
+
+        input,
+        textarea {
+            outline-color: #999;
+            border-radius: 5px;
+            border: 2px solid #999;
+        }
+
+        input,
+        textarea:focus {
+            outline-color: none;
+            border-radius: 5px;
+            font-size: 17px;
+            border: 3px solid #017cc2;
+        }
+
+        textarea {
+            font-size: 17px;
+        }
+
+        .confirmation-dialo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: #FFFFFF;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            z-index: 1002;
+            width: 290px;
+            max-width: 90%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .confirmation-dialo.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .confirmation-icon {
+            font-size: 3rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .confirmation-message {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .confirmation-dialo button {
+            width: 100%;
+            padding: 0.95rem;
+            background: #6750A4;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: background 0.2s;
+        }
+
+        .confirmation-dialo button:hover {
+            background: #5a46a1;
+        }
+
+        .app-banner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f7f9fc;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 16px;
+            max-width: 600px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .app-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+        }
+
+        .app-info {
+            flex: 1;
+            margin-left: 16px;
+        }
+
+        .app-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .app-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .install-btn {
+            background-color: green;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background-color 0.3s;
+        }
+
+        .install-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .install-btnn {
+            background-color: green;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background-color 0.3s;
+        }
+
+        .install-btnn:hover {
+            background-color: #0056b3;
+        }
+
+        .shareDialog {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background: #FFFFFF;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            z-index: 1002;
+            width: 290px;
+            max-width: 90%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .shareDialog.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .shareIcon .fa-check-circle {
+            font-size: 3rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+
+        .shareMessage {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        .Sharebutton {
+            width: 100%;
+            padding: 0.95rem;
+            background: #6750A4;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+            transition: background 0.2s;
+        }
+
+        .Sharebutton:hover {
+            background: #5a46a1;
+        }
+
+        .__desktop_notice_container {
+            background: white;
+            padding: 40px;
+            margin-top: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+
+        .__desktop_notice_title {
+            font-size: 19px;
+            margin-bottom: 20px;
+        }
+
+        .__desktop_notice_text {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* Hide this container on desktop */
+        @media (min-width: 768px) {
+            .__desktop_notice_container {
+                display: none;
+            }
+        }
+
+        /* Base state: show main content, hide error by default */
+        #main-content {
+            display: block;
+        }
+
+        #error-container {
+            display: none;
+        }
+
+        /* On screens smaller than 768px (mobile), switch the visibility */
+        @media (max-width: 767px) {
+            #main-content {
+                display: none;
+            }
+
+            #error-container {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="__desktop_notice_container" id="error-conatiner">
+        <h1 class="__desktop_notice_title">Work in Laptop/Desktop</h1>
+        <p class="__desktop_notice_text">
+            This page is only available on desktop or laptop devices.
+        </p>
+        <p class="__desktop_notice_text">
+            Please open this page from a Desktop/Laptop to work on large screen with best experience.
+        </p>
+    </div>
+    <span id="main-content">
+        <!-- App Bar -->
+        <div class="action-bar">
+            <div style="display: flex; align-items: center;">
+                <button class="menu-button" id="menuButton">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <span class="app-title" style="color: white;">AU ZONE BBS I/C</span>
+            </div>
+        </div>
+
+        <!-- Navigation Drawer -->
+        <div class="nav-drawer" id="navDrawer">
+            <div class="nav-header"
+                style="height: 7.5rem; margin-top: -1rem; background-color: #F3EDF7; border-bottom: 2px dashed #555;">
+                <div class="nav-title" style="color: #555;">Welcome,</div>
+                <div class="nav-subtitle" id="greet" style="color: #1d1d1d;">BBS Incharge</div>
+            </div>
+
+            <!-- User Info Container -->
+            <div class="nav-items">
+                <!-- Submit Data (Default Active) -->
+                <div class="nav-item active" id="submitDataBtn" onclick="toggleDrawer();">
+                    <i class="fas fa-upload"></i>
+                    <span>Submit Data</span>
+                </div>
+
+                <div class="nav-item" id="editReviewBtn" onclick="Redirect(this, '/au-zone/bbs/edit')">
+                    <i class="fas fa-edit"></i>
+                    <span>Edit/Review</span>
+                </div>
+
+                <div class="nav-item" id="genReportBtn" onclick="Redirect(this, '/au-zone/bbs/gen-report')">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Generate Report</span>
+                </div>
+
+                <div class="nav-divider"></div>
+                <div style="margin-bottom: 10px;"></div>
+                <div class="nav-item" id="chooseBBSRoleBtn">
+                    <i class="fas fa-users-cog"></i>
+                    <span>Select My Portfolio</span>
+                </div>
+
+                <!-- Portfolio Display -->
+                <div class="user-info-container" id="userInfoContainer">
+                    <div class="user-info-title">Your Portfolio:</div>
+                    <div class="user-info-value" id="selectedRoleDisplay">Not selected</div>
+                </div>
+
+                <!-- Enter Name -->
+                <div class="nav-item" id="setBBSNameBtn">
+                    <i class="fas fa-user-edit"></i>
+                    <span>Enter My Name</span>
+                </div>
+                <div class="user-info-container">
+                    <div class="user-info-title">Your Name:</div>
+                    <div class="user-info-value" id="selectedNameDisplay">Not entered</div>
+                </div>
+
+                <div class="nav-divider" style="margin-bottom: 15px;"></div>
+                <div class="nav-section-heading">Contact Admin</div>
+
+                <div class="nav-item" id="mail" onclick="openMail()">
+                    <i class="fa-regular fa-envelope"></i>
+                    <span>mrahul.eu</span>
+                </div>
+
+                <div class="nav-item" id="wa" onclick="openWhatsApp()">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <span>9347450441</span>
+                </div>
+
+                <div class="nav-divider" style="margin-bottom: 15px;"></div>
+                <div class="nav-section-heading">BBS App</div>
+                <div class="app-version" style="margin-bottom: 1rem; margin-left: 1rem; margin-top: 1rem;">
+                    <span style="font-size: 1rem; font-weight: bold;">App Version: 1.0</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay"></div>
+
+        <!-- Role Dialog Box -->
+        <div class="dialog-box" id="roleDialogBox">
+            <div class="dialog-title">Select Your Portfolio</div>
+            <select id="roleDropdown">
+                <option value="" selected disabled>-- Select Role --</option>
+                <option value="North Boys BBS I/C">North Boys BBS I/C</option>
+                <option value="North Girls BBS I/C">North Girls BBS I/C</option>
+                <option value="North Girls EBS I/C">North Girls EBS I/C</option>
+                <option value="North Womens BBS I/C">North Womens BBS I/C</option>
+                <option value="South Boys BBS I/C">South Boys BBS I/C</option>
+                <option value="South Girls BBS I/C">South Girls BBS I/C</option>
+                <option value="Maharanipet BBS I/C">Maharanipet BBS I/C</option>
+                <option value="Maharanipet EBS I/C">Maharanipet EBS I/C</option>
+                <option value="BC Hostel BBS I/C">BC Hostel BBS I/C</option>
+            </select>
+            <button id="confirmRoleBtn">Confirm Selection</button>
+        </div>
+
+        <!-- Name Dialog Box -->
+        <div class="dialog-box" id="nameDialogBox">
+            <div class="dialog-title">Enter Your Name</div>
+            <input type="text" id="nameInput" placeholder="Enter your name">
+            <button id="confirmNameBtn">Confirm Name</button>
+        </div>
+
+        <!-- Confirmation Dialog -->
+        <div class="confirmation-dialog" id="confirmationDialog">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="confirmation-message" id="confirmationMessage">
+                Your selection has been confirmed!
+            </div>
+            <button id="okButton">OK</button>
+        </div>
+        <br><br><br><br><br>
+        <div
+            style="display: flex;align-items: center;justify-content: left; margin-left: 1rem; margin-bottom: -1rem; margin-top: -1rem;">
+            <p style="color: black;font-weight: 500;">Hello,</p>&ensp;<p id="greetings"
+                style="color: green; font-weight: bold;">Select your Portfolio</p>
+        </div>
+        <hr>
+        <div id="openclose">
+            <div class="container" style="margin-top: -10px;">
+                <form id="bibleStudyForm">
+                    <div class="form-group">
+                        <label for="hostel_name">Hostel/Venue Name:</label>
+                        <input
+                            style="background-color: #f8f9fa;border-bottom: 2px solid #6750A4;border-top: 2px solid #f8f9fa;border-left: 2px solid #f8f9fa;border-right: 2px solid #f8f9fa;"
+                            type="text" id="hostel_name" name="hostel_name" placeholder="enter the hostel/venue name"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label for="speaker_name">Speaker Name:</label>
+                        <input
+                            style="background-color: #f8f9fa;border-bottom: 2px solid #6750A4;border-top: 2px solid #f8f9fa;border-left: 2px solid #f8f9fa;border-right: 2px solid #f8f9fa;"
+                            type="text" id="speaker_name" name="speaker_name"
+                            placeholder="enter bible study speaker name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="topic">Topic or Passage Name:</label>
+                        <textarea
+                            style="background-color: #f8f9fa; border: 2px solid #6750A4; border-top-color: #f8f9fa; border-left-color: #f8f9fa; border-right-color: #f8f9fa;"
+                            id="topic" name="topic" rows="2" placeholder="Ex: Prodigal son (Luke 15:11-24)"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="std_count">No. of Students Attended: </label>
+                        <select id="std_count" name="std_count"
+                            style="background-color: #f8f9fa; border-bottom: 2px solid #6750A4; border-top: 2px solid #f8f9fa; border-left: 2px solid #f8f9fa; border-right: 2px solid #f8f9fa;"
+                            required>
+                            <option value="" selected disabled> select count</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            <option value="32">32</option>
+                            <option value="33">33</option>
+                            <option value="34">34</option>
+                            <option value="35">35</option>
+                            <option value="36">36</option>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                        </select>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date:</label>
+                        <input
+                            style="background-color: #f8f9fa;border-bottom: 2px solid #6750A4;border-top: 2px solid #f8f9fa;border-left: 2px solid #f8f9fa;border-right: 2px solid #f8f9fa;"
+                            type="date" id="date" placeholder="select date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="time">Time:</label>
+                        <input
+                            style="background-color: #f8f9fa;border-bottom: 2px solid #6750A4;border-top: 2px solid #f8f9fa;border-left: 2px solid #f8f9fa;border-right: 2px solid #f8f9fa;"
+                            type="text" id="time" name="time" placeholder="ex: 6pm" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="day">Select Day:</label>
+                        <select
+                            style="background-color: #f8f9fa;border-bottom: 2px solid #6750A4;border-top: 2px solid #f8f9fa;border-left: 2px solid #f8f9fa;border-right: 2px solid #f8f9fa;"
+                            id="day" name="day" required>
+                            <option value="" selected disabled>select day</option>
+                            <option value="Mon">Monday</option>
+                            <option value="Tue">Tuesday</option>
+                            <option value="Wed">Wednesday</option>
+                            <option value="Thu">Thursday</option>
+                            <option value="Fri">Friday</option>
+                            <option value="Sat">Saturday</option>
+                            <option value="Sun">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="studyTypeGroup">
+                        <label for="type" id="typeLabel">Bible Study Type:</label>
+                        <select
+                            style="background-color: #f8f9fa; border-bottom: 2px solid #6750A4; border-top: 2px solid #f8f9fa; border-left: 2px solid #f8f9fa; border-right: 2px solid #f8f9fa;"
+                            id="type" name="type" required>
+                            <option value="" selected disabled>select bible study type</option>
+                            <option value="EBS" id="ebsOption">EBS</option>
+                            <option value="BBS" id="bbsOption">BBS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input style="background-color: #6750A4; border-color: #6750A4;" type="submit" name="submit"
+                            value="Submit">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="confirmation-dialo" id="confirmationDialo">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="confirmation-message" id="confirmationMessage">
+                Data Uploaded Successfully!
+            </div>
+            <button id="okkButton" onclick="window.location.reload()">Okay</button>
+        </div>
+
+        <!-- Share Dialog Box -->
+        <div class="shareDialog" id="share-dialog">
+            <div class="shareIcon">
+                <i class="fas fa-exclamation-circle" style="color: #D32F2F; font-size: 3rem;"></i>
+            </div>
+            <div class="shareMessage confirmation-message">
+                Share only with your successor. Please Keep it Confidential.
+            </div>
+            <button class="Sharebutton" id="shareButton">Share</button>
+            <button class="Sharebutton" id="okkkButton" style="background-color: grey;">OK</button>
+        </div>
+
+        <footer id="foot"
+            style="margin-left: -0.625rem; justify-content: space-evenly; z-index:2; bottom: 0.025rem; width: 100%; background-color: white; color: #333; text-align: center; padding: 0.5rem 0;">
+            <p style="margin: 0; font-size: 0.7625rem;">
+                App crafted by <a href="https://melamrahul.github.io/" style="text-decoration: none; color: #197afe;">
+                    Rahul</a>
+            </p>
+        </footer>
+    </span>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const restrictedRoles = ["North Girls EBS I/C", "Maharanipet EBS I/C"];
+            const exclusiveBBSRole = "BC Hostel BBS I/C";
+            const userRole = localStorage.getItem("bbsRole");
+
+            const ebsOption = document.getElementById("ebsOption");
+            const bbsOption = document.getElementById("bbsOption");
+            const selectElement = document.getElementById("type");
+            const labelElement = document.getElementById("typeLabel");
+
+            if (restrictedRoles.includes(userRole)) {
+                // Only allow EBS (hide BBS)
+                bbsOption.style.display = "none";
+                ebsOption.selected = true;
+                labelElement.textContent = "Bible Study Type: EBS";
+            } else if (userRole === exclusiveBBSRole) {
+                // Only allow BBS (hide EBS)
+                ebsOption.style.display = "none";
+                bbsOption.selected = true;
+                labelElement.textContent = "Bible Study Type: BBS";
+            }
+        });
+        const greet = localStorage.getItem('bbsRole');
+        if (greet) {
+            document.getElementById('greet').textContent = `${greet} ✨`;
+            document.getElementById('greetings').textContent = `${greet} ✨`;
+        }
+        // DOM Elements
+        const menuButton = document.getElementById('menuButton');
+        const navDrawer = document.getElementById('navDrawer');
+        const overlay = document.getElementById('overlay');
+
+        // Dialog boxes
+        const roleDialogBox = document.getElementById('roleDialogBox');
+        const nameDialogBox = document.getElementById('nameDialogBox');
+        const confirmationDialog = document.getElementById('confirmationDialog');
+
+        // Buttons
+        const confirmRoleBtn = document.getElementById('confirmRoleBtn');
+        const confirmNameBtn = document.getElementById('confirmNameBtn');
+        const okButton = document.getElementById('okButton');
+
+        // Form elements
+        const roleDropdown = document.getElementById('roleDropdown');
+        const nameInput = document.getElementById('nameInput');
+
+        // Display elements
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        const selectedRoleDisplay = document.getElementById('selectedRoleDisplay');
+        const selectedNameDisplay = document.getElementById('selectedNameDisplay');
+
+        // Navigation buttons
+        const submitDataBtn = document.getElementById('submitDataBtn');
+        const editReviewBtn = document.getElementById('editReviewBtn');
+        const genReportBtn = document.getElementById('genReportBtn');
+        const chooseBBSRoleBtn = document.getElementById('chooseBBSRoleBtn');
+        const setBBSNameBtn = document.getElementById('setBBSNameBtn');
+        const mailNameBtn = document.getElementById('mail');
+        const waNameBtn = document.getElementById('wa');
+
+        function Redirect(element, url = null) {
+            // Get bbsRole and bbsName from localStorage
+            const bbsRole = localStorage.getItem('bbsRole') || 'unknown';
+            const bbsName = localStorage.getItem('bbsName') || 'unknown';
+
+            let finalUrl = url;
+
+            // If the URL is for generating a report, add name and role parameters
+            if (url === '/au-zone/bbs/gen-report') {
+                finalUrl = `${url}?name=${encodeURIComponent(bbsName)}&role=${encodeURIComponent(bbsRole)}`;
+            } else {
+                // Default behavior: Only pass utm_source
+                finalUrl = `${url}?utm_source=${encodeURIComponent(bbsRole)}`;
+            }
+
+            // Redirect to the final URL
+            window.location.href = finalUrl;
+
+            // Close the navigation drawer (assuming it's a sidebar menu)
+            toggleDrawer();
+        }
+        function openMail() {
+            const email = 'mrahul.eu@gmail.com';
+            window.location.href = `mailto:${email}`;
+        }
+
+        // Function to open WhatsApp chat in a new tab
+        function openWhatsApp() {
+            const phoneNumber = '9347450441';
+            const message = encodeURIComponent("Hello!"); // Optional initial message
+            const url = `https://wa.me/9347450441?text=Hello%20Rahul,%20I%20need%20some%20assistance%20Regarding%20BBS%20Portal.`;
+            window.open(url, '_blank');
+        }
+
+
+        // Toggle Navigation Drawer
+        function toggleDrawer() {
+            navDrawer.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        // Show Role Dialog Box
+        function showRoleDialog() {
+            roleDialogBox.classList.add('active');
+            overlay.classList.add('active');
+            if (navDrawer.classList.contains('open')) {
+                navDrawer.classList.remove('open');
+            }
+        }
+
+        // Show Name Dialog Box
+        function showNameDialog() {
+            nameDialogBox.classList.add('active');
+            overlay.classList.add('active');
+            if (navDrawer.classList.contains('open')) {
+                navDrawer.classList.remove('open');
+            }
+        }
+
+        // Show Confirmation Dialog
+        function showConfirmationDialog(message) {
+            confirmationMessage.textContent = message;
+            confirmationDialog.classList.add('active');
+
+            // Ensure no multiple event listeners are attached
+            okButton.removeEventListener('click', handleOkClick);
+            okButton.addEventListener('click', handleOkClick);
+        }
+
+        // Hide Dialogs
+        function hideDialogs() {
+            roleDialogBox.classList.remove('active');
+            nameDialogBox.classList.remove('active');
+            confirmationDialog.classList.remove('active');
+
+            if (!navDrawer.classList.contains('open')) {
+                overlay.classList.remove('active');
+            }
+        }
+
+        function handleOkClick() {
+            hideDialogs();
+            window.location.reload(); // Reload only when OK is clicked
+        }
+
+        // Confirm Role Selection
+        function confirmRole() {
+            const selectedRole = roleDropdown.value;
+            if (selectedRole) {
+                localStorage.setItem('bbsRole', selectedRole);
+                hideDialogs();
+                showConfirmationDialog(`Your Role: ${roleDropdown.options[roleDropdown.selectedIndex].text}`);
+            } else {
+                alert("Please select a role");
+            }
+        }
+
+        // Confirm Name Entry
+        function confirmName() {
+            const enteredName = nameInput.value.trim();
+            if (enteredName) {
+                localStorage.setItem('bbsName', enteredName);
+                hideDialogs();
+                showConfirmationDialog(`Your name: ${enteredName}`);
+            } else {
+                alert("Please enter your name");
+            }
+        }
+
+        const savedRole = localStorage.getItem('bbsRole');
+        const savedName = localStorage.getItem('bbsName');
+
+        selectedRoleDisplay.textContent = savedRole || 'Role not selected';
+        selectedNameDisplay.textContent = savedName || 'Name not Added';
+
+        // Event Listeners
+        menuButton.addEventListener('click', toggleDrawer);
+
+        overlay.addEventListener('click', function () {
+            if (navDrawer.classList.contains('open')) {
+                toggleDrawer();
+            }
+            hideDialogs();
+        });
+
+        editReviewBtn.addEventListener('click', function () {
+
+        });
+
+        genReportBtn.addEventListener('click', function () {
+
+        });
+
+        chooseBBSRoleBtn.addEventListener('click', showRoleDialog);
+        setBBSNameBtn.addEventListener('click', showNameDialog);
+
+        confirmRoleBtn.addEventListener('click', confirmRole);
+        confirmNameBtn.addEventListener('click', confirmName);
+
+        /* DATA UPLOADING CODE FROM HERE */
+
+        var firebaseConfig = {
+            apiKey: "AIzaSyDGS4dCnRS7ywHWRBjnaOpDmL28323flw8",
+            authDomain: "melamrahul.firebaseapp.com",
+            databaseURL: "https://melamrahul-default-rtdb.firebaseio.com",
+            projectId: "melamrahul",
+            storageBucket: "melamrahul.appspot.com",
+            messagingSenderId: "721100209859",
+            appId: "1:721100209859:web:52b007dd6becf1d54c6c76",
+            measurementId: "G-8ZH6Z66ESH"
+        };
+
+        // Hide the dialog when "Okay" is clicked
+        document.getElementById('okkButton').addEventListener('click', function () {
+            const dialog = document.getElementById('confirmationDialo');
+            dialog.classList.remove('active');
+            opencloseContainer.style.display = 'block';
+        });
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Get elements
+        var opencloseContainer = document.getElementById('openclose');
+        var successMessage = document.getElementById('confirmationDialo');
+
+        // Get the bbsRole from localStorage
+        var bbsRole = localStorage.getItem('bbsRole');
+
+        // Determine the path based on bbsRole
+        let bibleStudyRef;
+
+        switch (bbsRole) {
+            case "North Boys BBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/North/Boys/');
+                break;
+            case "North Girls BBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/North/Girls/BBS/');
+                break;
+            case "North Girls EBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/North/Girls/EBS/');
+                break;
+            case "North Womens BBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/North/Womens/');
+                break;
+            case "South Boys BBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Boys/');
+                break;
+            case "South Girls BBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Girls/');
+                break;
+            case "Maharanipet BBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Maharanipet/BBS/');
+                break;
+            case "Maharanipet EBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Maharanipet/EBS/');
+                break;
+            case "BC Hostel BBS I/C":
+                bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/BCHostel/BBS/');
+                break;
+            default:
+                console.error("Invalid bbsRole. Please check the localStorage value.");
+                break;
+        }
+
+        // Listen for form submission
+        document.getElementById('bibleStudyForm').addEventListener('submit', submitForm);
+
+        function submitForm(e) {
+            e.preventDefault();
+
+            // Get values from the form
+            var hostel_name = getInputVal('hostel_name');
+            var speaker_name = getInputVal('speaker_name');
+            var topic = getInputVal('topic');
+            var std_count = getInputVal('std_count');
+            var date = getInputVal('date');
+            var time = getInputVal('time');
+            var day = getInputVal('day');
+            var type = getInputVal('type');
+
+            // Save data to Firebase
+            saveData(hostel_name, speaker_name, topic, std_count, date, time, day, type);
+
+            // Reset the form
+            document.getElementById('bibleStudyForm').reset();
+        }
+
+        // Function to get form values
+        function getInputVal(id) {
+            return document.getElementById(id).value;
+        }
+
+        // Function to save data to Firebase
+        function saveData(hostel_name, speaker_name, topic, std_count, date, time, day, type) {
+            if (!bibleStudyRef) {
+                console.error("Database path is not set. Invalid bbsRole.");
+                return;
+            }
+
+            bibleStudyRef.once('value', function (snapshot) {
+                let nextKey = 1;
+
+                // Find the highest existing key number
+                if (snapshot.exists()) {
+                    const keys = Object.keys(snapshot.val()).map(key => parseInt(key)).filter(key => !isNaN(key));
+                    if (keys.length > 0) {
+                        nextKey = Math.max(...keys) + 1;
+                    }
+                }
+
+                // Save data with the next sequential key
+                bibleStudyRef.child(nextKey).set({
+                    hostel_name,
+                    speaker_name,
+                    topic,
+                    std_count,
+                    date,
+                    time,
+                    day,
+                    type
+                }).then(function () {
+                    console.log('Data saved successfully');
+                    opencloseContainer.style.display = 'none';
+                    successMessage.classList.add('active');
+                }).catch(function (error) {
+                    console.error('Error saving data: ', error);
+                });
+            });
+        }
+
+        // Show the dialog
+        function showDialog() {
+            toggleDrawer();
+            const dialog = document.getElementById('share-dialog');
+            dialog.classList.add('active');
+        }
+
+        // Hide the dialog
+        function hideDialog() {
+            const dialog = document.getElementById('share-dialog');
+            dialog.classList.remove('active');
+        }
+
+        // Share the content using Web Share API
+        async function shareContent() {
+            const dialog = document.getElementById('share-dialog');
+            dialog.classList.remove('active');
+
+            const bbsRole = localStorage.getItem('bbsRole') || "Member"; // fallback if bbsRole is null
+
+            // Define passwords
+            const passwords = {
+                "South Boys BBS I/C": "southboysbbs",
+                "South Girls BBS I/C": "southgirlsbbs",
+                "North Boys BBS I/C": "northboysbbs",
+                "North Girls BBS I/C": "northgirlsbbs",
+                "North Girls EBS I/C": "northgirlsebs",
+                "North Womens BBS I/C": "northwomensbbs",
+                "Maharanipet BBS I/C": "maharanipetbbs",
+                "Maharanipet EBS I/C": "maharanipetebs",
+                "BC Hostel BBS I/C": "bchotelbbs"
+            };
+
+            const password = passwords[bbsRole] || "No password assigned";
+
+            if (navigator.share) {
+                try {
+                    const title = document.querySelector('meta[property="og:title"]').content;
+                    const description = document.querySelector('meta[property="og:description"]').content;
+                    const url = "https://uesiap.github.io/au-zone/bbs/app";
+                    const urlDesk = "https://uesiap.github.io/au-zone/bbs/desktop";
+
+                    const introMessage = `Hi, Thank you for joining with AU-Zone Committee Member as a *${bbsRole}*.\n\n`;
+
+                    const message = `${introMessage}Name: *${title}*\n\nUsage: *${description}*\n\nPassword: *${password}*\n\n*${url}*\n\n*${urlDesk}*`;
+
+                    await navigator.share({
+                        title: title,
+                        text: message,
+                    });
+
+                    console.log('App shared successfully');
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                }
+            } else {
+                alert('Sharing Not Working.');
+            }
+        }
+
+
+        /*
+        // Optional redirection if needed
+        if (bbsRole) {
+            const baseUrl = "https://rahul.serv00.net/AMS/BS";
+            const finalUrl = `${baseUrl}?utm_source=${encodeURIComponent(bbsRole)}`;
+            window.location.href = finalUrl;
+        } else {
+            console.error("No Portfolio found.");
+        }
+        */
+
+
+        // Event Listeners
+        document.getElementById('shareButton').addEventListener('click', shareContent);
+        document.getElementById('okkkButton').addEventListener('click', hideDialog);
+
+        let temporalChronicle = new Date();
+        let lunarPhaseIndex = temporalChronicle.getMonth(); // 0 for Jan, 1 for Feb, etc.
+
+        // Check if it's March (2) or April (3)
+        if (lunarPhaseIndex === 2 || lunarPhaseIndex === 3 || lunarPhaseIndex === 4 || lunarPhaseIndex === 5) {
+            let portalOfSharing = document.getElementById('share-app');
+            portalOfSharing.style.display = 'block';
+        }
+    </script>
+    <script>
+        let deferredPrompt;
+
+        // Function to hide both banners
+        function hideBanners() {
+            const appBanner = document.getElementById('app-banner');
+            const appBannerOpen = document.getElementById('app-banner-open');
+
+            if (appBanner) appBanner.style.display = 'none';
+            if (appBannerOpen) appBannerOpen.style.display = 'none';
+        }
+
+        // Function to show the open app banner
+        function showOpenAppBanner() {
+            const appBanner = document.getElementById('app-banner');
+            const appBannerOpen = document.getElementById('app-banner-open');
+
+            if (appBanner) appBanner.style.display = 'none';
+            if (appBannerOpen) appBannerOpen.style.display = 'flex';
+        }
+
+        // Capture the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            // Prevent the mini-infobar from appearing
+            e.preventDefault();
+            // Stash the event so it can be triggered later
+            deferredPrompt = e;
+
+            const appBanner = document.getElementById('app-banner');
+            const appBannerOpen = document.getElementById('app-banner-open');
+
+            // Show install banner if not in standalone mode
+            if (!isRunningAsPWA()) {
+                if (appBanner) appBanner.style.display = 'flex';
+                if (appBannerOpen) appBannerOpen.style.display = 'none';
+            }
+        });
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/au-zone/bbs/service-worker.js')
+                .then(() => console.log('Service Worker Registered'))
+                .catch(error => console.error('Service Worker Registration Failed:', error));
+        }
+
+        // Handle button clicks
+        document.addEventListener('DOMContentLoaded', () => {
+            const installButtons = document.querySelectorAll('.install-btn');
+
+            installButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    if (button.textContent.toLowerCase() === 'install') {
+                        // Install app
+                        if (deferredPrompt) {
+                            deferredPrompt.prompt();
+                            deferredPrompt.userChoice.then((choiceResult) => {
+                                if (choiceResult.outcome === 'accepted') {
+                                    console.log('User accepted the install prompt');
+                                } else {
+                                    console.log('User dismissed the install prompt');
+                                }
+                                deferredPrompt = null;
+
+                                // Hide install banner
+                                const appBanner = document.getElementById('app-banner');
+                                if (appBanner) appBanner.style.display = 'none';
+                            });
+                        }
+                    } else if (button.textContent.toLowerCase() === 'open') {
+                        // Open app in new tab
+                        window.open('https://uesiap.github.io/au-zone/bbs/', '_blank');
+                    }
+                });
+            });
+
+            // Show open app banner only when not in PWA mode
+            if (!isRunningAsPWA()) {
+                showOpenAppBanner();
+            }
+        });
+
+        // Detect if app is already running as PWA
+        function isRunningAsPWA() {
+            return window.matchMedia('(display-mode: standalone)').matches ||
+                navigator.standalone ||
+                window.navigator.standalone === true;
+        }
+
+        // Always hide banners if running as PWA
+        if (isRunningAsPWA()) {
+            hideBanners();
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AU ZONE MPCs List 2025-26</title>
+    <meta name="description" content="List of MPCs in AU ZONE for the academic year 2025-26.">
+    <!-- Firebase v8.10.0 SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: Google Sans, sans-serif;
+            background-color: #f9f9f9;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 0 auto;
+            max-width: 1200px;
+
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        td.meet-count {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="margin-top: -1.5rem; background-color: white; padding: 10px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.2); position: fixed; width: 100%;height: 70px; z-index: 1000;">
+        <div style="display: flex; align-items: center;">
+            <img src="https://i.ibb.co/7bm6tMK/au-logo.png" width="75" height="75"
+                style="margin-left: 12px; padding: 5px;" alt="AU ZONE">
+            <h2 style="margin: 0 0 0 5px; font-family: 'Google Sans', sans-serif; font-size: 24px; color: black;">
+                AU ZONE MPCs List
+            </h2>
+        </div>
+    </div><br><br><br><br>
+    <table id="mpcTable">
+        <thead>
+            <tr>
+                <th>Sl No.</th>
+                <th>Graduate</th>
+                <th>Students</th>
+                <th>No. of times Met</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be dynamically populated here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGS4dCnRS7ywHWRBjnaOpDmL28323flw8",
+            authDomain: "melamrahul.firebaseapp.com",
+            databaseURL: "https://melamrahul-default-rtdb.firebaseio.com",
+            projectId: "melamrahul",
+            storageBucket: "melamrahul.appspot.com",
+            messagingSenderId: "721100209859",
+            appId: "1:721100209859:web:52b007dd6becf1d54c6c76",
+            measurementId: "G-8ZH6Z66ESH"
+        };
+
+        // Initialize Firebase (v8)
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Function to populate table
+        function populateTable(data) {
+            const tbody = document.querySelector('#mpcTable tbody');
+            tbody.innerHTML = '';
+
+            const cells = [];
+            for (const key in data) {
+                if (key.startsWith('Cell-')) {
+                    const num = parseInt(key.split('-')[1], 10);
+                    if (!isNaN(num)) {
+                        cells.push({ num, key, data: data[key] });
+                    }
+                }
+            }
+
+            cells.sort((a, b) => a.num - b.num);
+
+            cells.forEach(cell => {
+                const students = Object.values(cell.data.Students || {}).filter(Boolean);
+                const numRows = Math.max(students.length, 1);
+
+                students.forEach((student, index) => {
+                    const row = document.createElement('tr');
+
+                    // Sl No. (only on first row)
+                    if (index === 0) {
+                        const slNoTd = document.createElement('td');
+                        slNoTd.textContent = cell.num;
+                        slNoTd.rowSpan = numRows;
+                        row.appendChild(slNoTd);
+
+                        // Graduate (rowspan)
+                        const gradTd = document.createElement('td');
+                        gradTd.textContent = cell.data.Graduate || 'Unknown';
+                        gradTd.rowSpan = numRows;
+                        row.appendChild(gradTd);
+                    }
+
+                    // Student name
+                    const studentTd = document.createElement('td');
+                    studentTd.textContent = student || 'None';
+                    row.appendChild(studentTd);
+
+                    // No. of times met (rowspan, only first row)
+                    if (index === 0) {
+                        const freqTd = document.createElement('td');
+                        freqTd.classList.add('meet-count');
+                        freqTd.textContent = cell.data.Freq || 0;
+                        freqTd.rowSpan = numRows;
+                        row.appendChild(freqTd);
+                    }
+
+                    tbody.appendChild(row);
+                });
+
+                // Handle case where no students exist
+                if (students.length === 0) {
+                    const row = document.createElement('tr');
+
+                    const slNoTd = document.createElement('td');
+                    slNoTd.textContent = cell.num;
+                    row.appendChild(slNoTd);
+
+                    const gradTd = document.createElement('td');
+                    gradTd.textContent = cell.data.Graduate || 'Unknown';
+                    row.appendChild(gradTd);
+
+                    const studentTd = document.createElement('td');
+                    studentTd.textContent = 'None';
+                    row.appendChild(studentTd);
+
+                    const freqTd = document.createElement('td');
+                    freqTd.classList.add('meet-count');
+                    freqTd.textContent = cell.data.Freq || 0;
+                    row.appendChild(freqTd);
+
+                    tbody.appendChild(row);
+                }
+            });
+        }
+
+        // Real-time listener
+        document.addEventListener('DOMContentLoaded', () => {
+            db.ref('MPC').on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    populateTable(data);
+                } else {
+                    console.log('No data found at /MPC');
+                }
+            }, (error) => {
+                console.error('Firebase error:', error.message);
+            });
+        });
+    </script>
+</body>
+
+</html>

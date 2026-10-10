@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        (function () {
+            // Keys to retain in localStorage
+            const keysToRetain = ["bbsRole", "bbsName"];
+
+            // Retrieve the values of the keys to retain
+            const valuesToRetain = {};
+            keysToRetain.forEach((key) => {
+                const value = localStorage.getItem(key);
+                if (value !== null) {
+                    valuesToRetain[key] = value;
+                }
+            });
+
+            // Clear all keys in localStorage except the specified keys
+            Object.keys(localStorage).forEach((key) => {
+                if (!keysToRetain.includes(key)) {
+                    localStorage.removeItem(key);
+                }
+            });
+
+            // Restore the retained key-value pairs
+            Object.keys(valuesToRetain).forEach((key) => {
+                localStorage.setItem(key, valuesToRetain[key]);
+            });
+
+            console.log("LocalStorage cleared except for:", keysToRetain);
+
+            // Clear sessionStorage
+            sessionStorage.clear();
+            console.log("SessionStorage cleared.");
+
+            // Clear IndexedDB data
+            const clearIndexedDB = () => {
+                if (!window.indexedDB) {
+                    console.warn("IndexedDB is not supported by this browser.");
+                    return;
+                }
+                indexedDB.databases().then((databases) => {
+                    databases.forEach((db) => {
+                        indexedDB.deleteDatabase(db.name);
+                        console.log(`Deleted IndexedDB: ${db.name}`);
+                    });
+                }).catch((error) => {
+                    console.error("Error clearing IndexedDB:", error);
+                });
+            };
+
+            // Clear browser cache
+            const clearCache = () => {
+                if ("caches" in window) {
+                    caches.keys().then((cacheNames) => {
+                        cacheNames.forEach((cacheName) => {
+                            caches.delete(cacheName);
+                            console.log(`Deleted Cache: ${cacheName}`);
+                        });
+                    }).catch((error) => {
+                        console.error("Error clearing cache:", error);
+                    });
+                } else {
+                    console.warn("Cache API is not supported by this browser.");
+                }
+            };
+
+            // Execute cleanup functions
+            clearIndexedDB();
+            clearCache();
+
+            console.log(`All data cleared except for ${keysToRetain.join(", ")} in localStorage.`);
+        })();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Bible Study Report</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://rahul.com/bible-study-report" />
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;700&family=Nunito:wght@400;700&display=swap">
+    <style>
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            background: #fff;
+            -webkit-tap-highlight-color: transparent;
+            tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        header,
+        footer {
+            display: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0px;
+
+            background-color: #fff;
+            border-radius: 10px;
+
+        }
+
+        .container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #007bff;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-bottom: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            border-radius: 20px;
+            border: 1px solid #333;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #333;
+            text-align: center;
+        }
+
+        th {
+            color: black;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        u {
+            color: black;
+        }
+
+        .h22 {
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: -10px;
+        }
+
+        .h23 {
+            text-align: center;
+            margin-top: -2px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        p {
+            margin-left: 10px;
+        }
+
+        hr {
+            color: black;
+        }
+
+        .side-heading {
+            text-align: left;
+            margin-left: 10px;
+        }
+
+        .conclusion {
+            text-align: right;
+            margin-right: 20px;
+            margin-bottom: -20px;
+        }
+
+        .page-head {
+            display: flex;
+            flex-direction: row;
+            gap: 11%;
+            text-align: center;
+            align-items: center;
+            justify-content: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="error-message" style="display:none;"></div>
+
+    <div class="page-head">
+        <img src="https://i.ibb.co/23WF40Fq/20241222-163905.jpg" style="width: 100px; height: 45px; align-items: left;">
+        <h2 style="font-weight: bold">AU ZONE - <span id="campus"></span> Bible Study Report</h2>
+    </div>
+    <h4 class="h23" style="color: red; display: none;" id="wrong">Wrong Details Passed here, once check wheather you
+        selected your portfolio and Name in the Home page.</h4>
+    <h4 class="h23">ACADEMIC YEAR <span id="y1">2025</span> - <span id="y2">2026</span></h4>
+    <h4 class="h23">Bible Study Report for the <span id="selectedNumber">6</span><span
+            id="selectedNumber-ordinal"></span> Committee Meeting - <span id="date">16/02/2025</span></h4>
+
+    <p>Dear Brothers and Sisters, Greetings to you In the name of our <strong style="color: black">LORD and Saviour
+            Jesus Christ.</strong></p>
+
+    <span id="BbsMainTable">
+        <u style="color: black">
+            <h3 class="side-heading" style="color: black">Believers Bible Studies</h3>
+        </u>
+        <div class="container">
+            <div class="table-wrapper">
+                <table id="bbsTable">
+                    <thead>
+                        <tr>
+                            <th>Hostel/Venue</th>
+                            <th>Speaker</th>
+                            <th>Topic or Passage Name</th>
+                            <th>Stds Att</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Day</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr style="border: 1px solid orange;">
+    </span>
+    <span id="EbsMainTable">
+        <u style="color: black">
+            <h3 class="side-heading" style="color: black">Evangelistic Bible Studies</h3>
+        </u>
+        <div class="container">
+            <div class="table-wrapper">
+                <table id="ebsTable">
+                    <thead>
+                        <tr>
+                            <th>Hostel/Venue</th>
+                            <th>Speaker</th>
+                            <th>Topic or Passage Name</th>
+                            <th>Stds Att</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Day</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <hr style="border: 1px solid orange;">
+    </span>
+
+    <span id="bs-cells-main" style="display: none;">
+        <u>
+            <h3 class="side-heading" style="color: black">No. of Active BS Cells</h3>
+        </u>
+        <div class="container">
+            <div class="table-wrapper">
+                <table id="bsCellsTable">
+                    <thead>
+                        <tr>
+                            <th>Sl.No</th>
+                            <th>BBS Cells</th>
+                            <th>EBS Cells</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </span>
+
+    <span id="bs-cells-hr" style="display: none;">
+        <hr style="border: 1px solid orange;">
+    </span>
+
+    <span id="praise-points-main" style="display: none;">
+        <h3 style="margin-left: 20px;">Praising Points:</h3>
+        <ul id="praise-points">
+            <li></li>
+        </ul>
+    </span>
+
+    <span id="prayer-points-main" style="display: none;">
+        <h3 style="margin-left: 20px;">Praying Points:</h3>
+        <ul id="prayer-points">
+            <li></li>
+        </ul>
+    </span>
+
+    <br>
+
+    <h4 class="conclusion" style="color: black; margin-right: 30px;">Your's in Christ,</h4>
+    <h4 class="conclusion" style="margin-right: 30px; color: black; bottom: -5px;" id="name">I/C Name</h4>
+    <h4 class="conclusion" style="margin-right: 20px; color: black; bottom: -10px;">NORTH BOYS BBS I/C.</h4>
+    <button onclick="hidePrint(this)" style="display: block; margin: 20px auto;">Print</button>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGS4dCnRS7ywHWRBjnaOpDmL28323flw8",
+            authDomain: "melamrahul.firebaseapp.com",
+            databaseURL: "https://melamrahul-default-rtdb.firebaseio.com",
+            projectId: "melamrahul",
+            storageBucket: "melamrahul.appspot.com",
+            messagingSenderId: "721100209859",
+            appId: "1:721100209859:web:52b007dd6becf1d54c6c76",
+            measurementId: "G-8ZH6Z66ESH"
+        };
+
+        // Function to initialize Firebase and set up database listener
+        function initFirebase() {
+            // Check if Firebase is available
+            if (typeof firebase === 'undefined') {
+                throw new Error('Firebase scripts not loaded');
+            }
+
+            try {
+                // Initialize Firebase
+                firebase.initializeApp(firebaseConfig);
+
+                // Get URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const role = urlParams.get('role') || 'North Boys BBS I/C';
+                const startDateParam = urlParams.get('startDate');
+                const endDateParam = urlParams.get('endDate');
+
+                // Set up date range for filtering
+                let startDate = null;
+                let endDate = null;
+
+                if (startDateParam) {
+                    startDate = new Date(startDateParam);
+                    startDate.setHours(0, 0, 0, 0); // Start of day
+                }
+
+                if (endDateParam) {
+                    endDate = new Date(endDateParam);
+                    endDate.setHours(23, 59, 59, 999); // End of day
+                }
+
+                // Determine Firebase path based on role
+                let bibleStudyRef;
+                switch (role) {
+                    case "North Boys BBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/North/Boys/');
+                        document.getElementById('campus').textContent = 'NORTH Boys';
+                        document.getElementById('page-title').textContent = 'NORTH Boys - Bible Study Report';
+                        break;
+                    case "North Girls BBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/North/Girls/BBS/');
+                        document.getElementById('campus').textContent = 'NORTH Girls BBS';
+                        document.getElementById('page-title').textContent = 'NORTH Girls - BBS Report';
+                        break;
+                    case "North Girls EBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/North/Girls/EBS/');
+                        document.getElementById('campus').textContent = 'NORTH Girls EBS';
+                        document.getElementById('page-title').textContent = 'NORTH Girls - EBS Report';
+                        break;
+                    case "North Womens BBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/North/Womens/');
+                        document.getElementById('campus').textContent = 'NORTH Womens';
+                        document.getElementById('page-title').textContent = 'NORTH Womens - Bible Study Report';
+                        break;
+                    case "South Boys BBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Boys/');
+                        document.getElementById('campus').textContent = 'SOUTH Boys';
+                        document.getElementById('page-title').textContent = 'SOUTH Boys - Bible Study Report';
+                        break;
+                    case "South Girls BBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Girls/');
+                        document.getElementById('campus').textContent = 'SOUTH Girls';
+                        document.getElementById('page-title').textContent = 'SOUTH Girls - Bible Study Report';
+                        break;
+                    case "Maharanipet BBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Maharanipet/BBS/');
+                        document.getElementById('campus').textContent = 'Maharanipet BBS';
+                        document.getElementById('page-title').textContent = 'Maharanipet - BBS Report';
+                        break;
+                    case "Maharanipet EBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/South/Maharanipet/EBS/');
+                        document.getElementById('campus').textContent = 'Maharanipet EBS';
+                        document.getElementById('page-title').textContent = 'Maharanipet - EBS Report';
+                        break;
+                    case "BC Hostel BBS I/C":
+                        bibleStudyRef = firebase.database().ref('AU-Zone/BibleStudy/BCHostel/BBS/');
+                        document.getElementById('campus').textContent = 'BC Hostel BBS';
+                        document.getElementById('page-title').textContent = 'BC Hostel - BBS Report';
+                        break;
+                    default:
+                        bibleStudyRef = firebase.database().ref('');
+                        document.getElementById('wrong').style.display = 'block';
+                        document.getElementById('campus').textContent = 'Portfolio Not Selected';
+                        document.getElementById('page-title').textContent = 'Portfolio Not Selected';
+                }
+
+                // Listen for changes in the database
+                bibleStudyRef.on('value', function (snapshot) {
+                    const bbsTableBody = document.getElementById('bbsTable').getElementsByTagName('tbody')[0];
+                    const ebsTableBody = document.getElementById('ebsTable').getElementsByTagName('tbody')[0];
+                    const bbsMainTable = document.getElementById('BbsMainTable');
+                    const ebsMainTable = document.getElementById('EbsMainTable');
+
+                    // Clear existing table rows
+                    bbsTableBody.innerHTML = '';
+                    ebsTableBody.innerHTML = '';
+
+                    // Create arrays to hold our data before sorting
+                    const bbsRows = [];
+                    const ebsRows = [];
+
+                    snapshot.forEach(function (childSnapshot) {
+                        const data = childSnapshot.val();
+
+                        // Skip if data is invalid
+                        if (!data || !data.date) return;
+
+                        // Convert the record's date to a JavaScript Date object
+                        const recordDate = new Date(data.date);
+
+                        // Apply date filtering if dates are provided
+                        if (startDate && recordDate < startDate) return;
+                        if (endDate && recordDate > endDate) return;
+
+                        // Format date as DD/MM/YYYY
+                        const formattedDate = `${recordDate.getDate().toString().padStart(2, '0')}/${(recordDate.getMonth() + 1).toString().padStart(2, '0')}/${recordDate.getFullYear()}`;
+
+                        // Create row data object
+                        const rowData = {
+                            cells: [
+                                data.hostel_name || '---',
+                                data.speaker_name || '---',
+                                data.topic || '---',
+                                data.std_count || '---',
+                                formattedDate,
+                                data.time || '---',
+                                data.day || '---'
+                            ],
+                            // Add hostel_name for sorting
+                            hostel_name: data.hostel_name || ''
+                        };
+
+                        // Add to appropriate array based on type
+                        if (data.type === 'BBS') {
+                            bbsRows.push(rowData);
+                        } else if (data.type === 'EBS') {
+                            ebsRows.push(rowData);
+                        }
+                    });
+
+                    // Check if we have BBS or EBS data and show/hide tables accordingly
+                    if (bbsRows.length > 0) {
+                        bbsMainTable.style.display = 'block';
+
+                        // Sort BBS rows alphabetically by hostel name
+                        bbsRows.sort((a, b) => {
+                            const nameA = a.hostel_name.toUpperCase();
+                            const nameB = b.hostel_name.toUpperCase();
+                            if (nameA < nameB) return -1;
+                            if (nameA > nameB) return 1;
+                            return 0;
+                        });
+
+                        // Add sorted BBS rows to table
+                        bbsRows.forEach(rowData => {
+                            const row = bbsTableBody.insertRow();
+                            rowData.cells.forEach((cellData, index) => {
+                                const cell = row.insertCell(index);
+                                cell.textContent = cellData;
+                            });
+                        });
+                    } else {
+                        bbsMainTable.style.display = 'none';
+                    }
+
+                    if (ebsRows.length > 0) {
+                        ebsMainTable.style.display = 'block';
+
+                        // Sort EBS rows alphabetically by hostel name
+                        ebsRows.sort((a, b) => {
+                            const nameA = a.hostel_name.toUpperCase();
+                            const nameB = b.hostel_name.toUpperCase();
+                            if (nameA < nameB) return -1;
+                            if (nameA > nameB) return 1;
+                            return 0;
+                        });
+
+                        // Add sorted EBS rows to table
+                        ebsRows.forEach(rowData => {
+                            const row = ebsTableBody.insertRow();
+                            rowData.cells.forEach((cellData, index) => {
+                                const cell = row.insertCell(index);
+                                cell.textContent = cellData;
+                            });
+                        });
+                    } else {
+                        ebsMainTable.style.display = 'none';
+                    }
+                }, function (error) {
+                    // Handle any errors with database connection
+                    console.error('Firebase database error:', error);
+                    document.getElementById('error-message').textContent = 'Error loading Bible study data: ' + error.message;
+                    document.getElementById('error-message').style.display = 'block';
+                });
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                document.getElementById('error-message').textContent = 'Error initializing Firebase: ' + error.message;
+                document.getElementById('error-message').style.display = 'block';
+            }
+        }
+
+        // Function to populate BS Cells table
+        function populateBsCellsTable(bbsHostels, ebsHostels) {
+            const bsCellsTableBody = document.querySelector('#bsCellsTable tbody');
+            bsCellsTableBody.innerHTML = '';
+
+            // Split the comma-separated lists into arrays
+            const bbsList = bbsHostels ? bbsHostels.split(',').map(item => item.trim()) : [];
+            const ebsList = ebsHostels ? ebsHostels.split(',').map(item => item.trim()) : [];
+
+            // Determine the maximum length between the two lists
+            const maxLength = Math.max(bbsList.length, ebsList.length);
+
+            // Create rows for each item
+            for (let i = 0; i < maxLength; i++) {
+                const row = bsCellsTableBody.insertRow();
+
+                // Sl.No column
+                const slNoCell = row.insertCell(0);
+                slNoCell.textContent = i + 1;
+
+                // BBS Cells column
+                const bbsCell = row.insertCell(1);
+                bbsCell.textContent = bbsList[i] || '---';
+
+                // EBS Cells column
+                const ebsCell = row.insertCell(2);
+                ebsCell.textContent = ebsList[i] || '---';
+            }
+        }
+
+        // URL Parameter Handling
+        function handleUrlParameters() {
+            // Function to get URL parameters
+            function getUrlParameter(name) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(name) || '';
+            }
+
+            // Function to add ordinal suffix
+            function getOrdinalSuffix(n) {
+                if (!n || isNaN(n)) return '';
+                n = parseInt(n);
+                const s = ["th", "st", "nd", "rd"];
+                const v = n % 100;
+                return (s[(v - 20) % 10] || s[v] || s[0]);
+            }
+
+            // Populate name and role
+            const name = getUrlParameter('name');
+            const role = getUrlParameter('role');
+            const y1 = getUrlParameter('y1');
+            const y2 = getUrlParameter('y2');
+            const selectedNumber = getUrlParameter('selectedNumber');
+
+            // Populate dynamic elements
+            if (name) document.getElementById('name').textContent = name;
+            if (role) document.querySelector('.conclusion:last-of-type').textContent = role;
+            if (y1) document.getElementById('y1').textContent = y1;
+            if (y2) document.getElementById('y2').textContent = y2;
+            if (selectedNumber) {
+                document.getElementById('selectedNumber').textContent = selectedNumber;
+                const ordinalSuffix = getOrdinalSuffix(selectedNumber);
+                document.getElementById('selectedNumber-ordinal').textContent = ordinalSuffix;
+            }
+
+            // Date handling
+            const startDate = getUrlParameter('endDate');
+            if (startDate) {
+                const dateObj = new Date(startDate);
+                if (!isNaN(dateObj.getTime())) {
+                    const formattedDate = dateObj.toLocaleDateString('en-GB', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
+                    document.getElementById('date').textContent = formattedDate;
+                }
+            }
+
+            // BBS/EBS Cells
+            const bbsHostels = getUrlParameter('bbs-hostels');
+            const ebsHostels = getUrlParameter('ebs-hostels');
+            const bbsCellsContainer = document.getElementById('bs-cells-main');
+            const bbsCellsHr = document.getElementById('bs-cells-hr');
+
+            if (bbsHostels || ebsHostels) {
+                populateBsCellsTable(bbsHostels, ebsHostels);
+                bbsCellsContainer.style.display = 'block';
+                bbsCellsHr.style.display = 'block';
+            } else {
+                bbsCellsContainer.style.display = 'none';
+                bbsCellsHr.style.display = 'none';
+            }
+
+            // Praise Points
+            const praisePoints = getUrlParameter('praise-points');
+            const praisePointsContainer = document.getElementById('praise-points-main');
+            const praisePointsList = document.getElementById('praise-points');
+
+            if (praisePoints) {
+                praisePointsList.innerHTML = praisePoints.split(',').map(point => `<li>${point.trim()}</li>`).join('');
+                praisePointsContainer.style.display = 'block';
+            } else {
+                praisePointsContainer.style.display = 'none';
+            }
+
+            // Prayer Points
+            const prayerPoints = getUrlParameter('prayer-points');
+            const prayerPointsContainer = document.getElementById('prayer-points-main');
+            const prayerPointsList = document.getElementById('prayer-points');
+
+            if (prayerPoints) {
+                prayerPointsList.innerHTML = prayerPoints.split(',').map(point => `<li>${point.trim()}</li>`).join('');
+                prayerPointsContainer.style.display = 'block';
+            } else {
+                prayerPointsContainer.style.display = 'none';
+            }
+        }
+
+        // Wait for DOM to be fully loaded and scripts to be available
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if Firebase scripts are loaded
+            const firebaseScriptCheck = setInterval(function () {
+                if (typeof firebase !== 'undefined') {
+                    clearInterval(firebaseScriptCheck);
+                    initFirebase();
+                    handleUrlParameters();
+                }
+            }, 100);
+
+            // Fallback timeout
+            setTimeout(function () {
+                clearInterval(firebaseScriptCheck);
+                if (typeof firebase === 'undefined') {
+                    document.getElementById('error-message').textContent = 'Error: Firebase scripts failed to load';
+                    document.getElementById('error-message').style.display = 'block';
+                }
+            }, 5000);
+        });
+        function hidePrint(button) {
+            // Store the current URL
+            const originalUrl = window.location.href;
+            const cleanUrl = window.location.origin + window.location.pathname;
+
+            // Remove URL parameters
+            window.history.pushState({}, document.title, cleanUrl);
+
+            // Hide the button
+            button.style.display = 'none';
+
+            // Print the page
+            window.print();
+
+            // Restore the original URL and show the button after 2 seconds
+            setTimeout(() => {
+                window.history.pushState({}, document.title, originalUrl);
+                button.style.display = 'block';
+            }, 2000);
+        }
+    </script>
+</body>
+
+</html>

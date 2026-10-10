@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    // Function to get the URL parameter
+    function getPhoneNumberFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      const num = params.get("num");
+      if (num) {
+        // Add country code manually if needed
+        const phoneNumber = "+91" + num;
+        window.location.href = "tel:" + phoneNumber;
+      } else {
+      }
+    }
+    window.onload = getPhoneNumberFromURL;
+  </script>
+</head>
+<body>
+</body>
+</html>
