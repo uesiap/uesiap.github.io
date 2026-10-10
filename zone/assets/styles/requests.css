@@ -202,8 +202,11 @@ footer {
     margin: 20px 0;
 }
 
-/* Print layout: title centered at the top, both tables on one page.
-   Paper orientation (@page) is set in each page's HTML. */
+/* Print: A4 landscape, title centered at the top, both tables on one page */
+@page {
+    size: A4 landscape;
+    margin: 8mm;
+}
 
 @media print {
     .no-print {
