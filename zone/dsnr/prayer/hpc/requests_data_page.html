@@ -15,7 +15,130 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="/zone/assets/styles/requests.css?v={{ site.github.build_revision }}">
-    <style>@page {size: A4 landscape;margin: 8mm;}
+    <style>
+        /* A4 landscape for printing: the HPC table has nine columns */
+        @page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
+        @media print {
+            body {
+                font-size: 10pt;
+                line-height: 1.3;
+                background: #fff;
+            }
+
+            /* Print header: logo, zone name, and one line per section */
+            .print-only {
+                display: block;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .print-only img {
+                width: 50px;
+                height: 50px;
+                display: block;
+                margin: 0 auto 4px;
+            }
+
+            .print-only h2 {
+                margin: 0 0 6px;
+                font-size: 17pt;
+                font-weight: bold;
+                color: #000;
+            }
+
+            .print-only .print-sub {
+                font-size: 12pt;
+                color: #000;
+                margin-top: 2px;
+            }
+
+            /* Sections can break across pages; rows are kept whole */
+            .section-block {
+                page-break-inside: auto;
+                border-bottom: 2px solid #777;
+                padding-bottom: 8px;
+                margin-bottom: 10px;
+            }
+
+            .section-block:last-child {
+                border-bottom: none;
+            }
+
+            .section-heading {
+                font-size: 13pt;
+                margin: 6px 0 4px;
+                page-break-after: avoid;
+            }
+
+            .print-empty {
+                display: none;
+                font-size: 11pt;
+                font-style: italic;
+                padding: 6px 0;
+            }
+
+            .section-block.is-empty .table-wrap {
+                display: none;
+            }
+
+            .section-block.is-empty .print-empty {
+                display: block;
+            }
+
+            .table-wrap {
+                box-shadow: none;
+                overflow: visible;
+                border-radius: 0;
+            }
+
+            table.hpc-table {
+                width: 100%;
+                min-width: 0;
+                table-layout: fixed;
+                font-size: 9pt;
+            }
+
+            table.hpc-table thead {
+                display: table-header-group;
+            }
+
+            table.hpc-table tr {
+                page-break-inside: avoid;
+            }
+
+            table.hpc-table th,
+            table.hpc-table td {
+                border: 1px solid #777;
+                padding: 3px 4px;
+                vertical-align: top;
+                text-align: left;
+            }
+
+            table.hpc-table th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+                text-align: center;
+            }
+
+            table.hpc-table ul {
+                padding-left: 1rem;
+                margin: 0;
+            }
+
+            table.hpc-table li {
+                margin-bottom: 0;
+            }
+
+            .page-wrap {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+        }
     </style>
 </head>
 
@@ -25,10 +148,12 @@
         <h2>Hyderabad Pioneering Cell</h2>
     </div>
 
-    <!-- Title shown only when printing: logo and title centered at the top -->
+    <!-- Print header: shown only when printing -->
     <div class="print-only">
         <img src="https://uesiap.github.io/au-zone/prayer/uesi-logo.jpg" alt="DSNR Zone logo">
         <h2>Hyderabad HPC Prayer &amp; Praising Points</h2>
+        <div class="print-sub"><strong>Students</strong> - Prayer and Praising Points</div>
+        <div class="print-sub"><strong>Graduate/Staff</strong> - Prayer and Praising Points</div>
     </div>
 
     <div class="page-wrap">
@@ -66,6 +191,7 @@
             <!-- Students -->
             <div class="section-block">
                 <div class="section-heading">Students</div>
+                <div class="print-empty">No submissions</div>
                 <div class="table-wrap">
                     <table class="hpc-table">
                         <colgroup>
@@ -104,6 +230,7 @@
             <!-- Graduates/Staff -->
             <div class="section-block">
                 <div class="section-heading">Graduate/Staff</div>
+                <div class="print-empty">No submissions</div>
                 <div class="table-wrap">
                     <table class="hpc-table">
                         <colgroup>

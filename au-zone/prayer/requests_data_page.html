@@ -16,10 +16,127 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <link rel="stylesheet" href="/au-zone/assets/styles/prayer/requests.css?v={{ site.github.build_revision }}">
     <style>
-        /* A4 portrait for printing. Table and layout styles are in requests.css. */
+        /* A4 portrait for printing */
         @page {
             size: A4 portrait;
             margin: 8mm;
+        }
+
+        @media print {
+            body {
+                font-size: 10pt;
+                line-height: 1.3;
+                background: #fff;
+            }
+
+            /* Print header: logo, zone name, and one line per section */
+            .print-only {
+                display: block;
+                text-align: center;
+                margin-bottom: 12px;
+            }
+
+            .print-only img {
+                width: 50px;
+                height: 50px;
+                display: block;
+                margin: 0 auto 4px;
+            }
+
+            .print-only h2 {
+                margin: 0 0 6px;
+                font-size: 17pt;
+                font-weight: bold;
+                color: #000;
+            }
+
+            .print-only .print-sub {
+                font-size: 12pt;
+                color: #000;
+                margin-top: 2px;
+            }
+
+            /* Sections can break across pages; rows are kept whole */
+            .section-block {
+                page-break-inside: auto;
+                border-bottom: 2px solid #777;
+                padding-bottom: 10px;
+                margin-bottom: 12px;
+            }
+
+            .section-block:last-child {
+                border-bottom: none;
+            }
+
+            .section-heading {
+                font-size: 13pt;
+                margin: 8px 0 4px;
+                page-break-after: avoid;
+            }
+
+            .print-empty {
+                display: none;
+                font-size: 11pt;
+                font-style: italic;
+                padding: 6px 0;
+            }
+
+            .section-block.is-empty .table-wrap {
+                display: none;
+            }
+
+            .section-block.is-empty .print-empty {
+                display: block;
+            }
+
+            .table-wrap {
+                box-shadow: none;
+                overflow: visible;
+                border-radius: 0;
+            }
+
+            table.hpc-table {
+                width: 100%;
+                min-width: 0;
+                table-layout: fixed;
+                font-size: 10pt;
+            }
+
+            table.hpc-table thead {
+                display: table-header-group;
+            }
+
+            table.hpc-table tr {
+                page-break-inside: avoid;
+            }
+
+            table.hpc-table th,
+            table.hpc-table td {
+                border: 1px solid #777;
+                padding: 4px 5px;
+                vertical-align: top;
+                text-align: left;
+            }
+
+            table.hpc-table th {
+                background-color: #f8f9fa;
+                font-weight: bold;
+            }
+
+            table.hpc-table ul {
+                padding-left: 1rem;
+                margin: 0;
+            }
+
+            table.hpc-table li {
+                margin-bottom: 0;
+            }
+
+            .page-wrap {
+                max-width: 100%;
+                margin: 0;
+                padding: 0;
+            }
         }
     </style>
 </head>
@@ -30,10 +147,12 @@
         <h2>ICEU AU ZONE - Prayer & Praising Points</h2>
     </div>
 
-    <!-- Title shown only when printing: logo and title centered at the top -->
+    <!-- Print header: shown only when printing -->
     <div class="print-only">
         <img src="/au-zone/prayer/uesi-logo.jpg" alt="AU ZONE">
-        <h2>ICEU AU ZONE - Praising & Prayer Points</h2>
+        <h2>ICEU AU ZONE</h2>
+        <div class="print-sub"><strong>Students</strong> - Prayer and Praising Points</div>
+        <div class="print-sub"><strong>Graduates</strong> - Prayer and Praising Points</div>
     </div>
 
     <div class="page-wrap">
