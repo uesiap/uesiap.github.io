@@ -114,14 +114,19 @@ function entries(val) {
 // ---------- Load both tables ----------
 async function loadGroup(group) {
     const body = document.getElementById(group.bodyId);
+    const section = body.closest('.section-block');
     const snapshot = await dbRef(BASE_PATH, year, month, group.key).once('value');
-    const list = entries(snapshot.val() || {});
+    const rows = entries(snapshot.val() || {});
 
-    if (list.length === 0) {
+    // Empty section: on print, show "No submissions" instead of the table
+    if (rows.length === 0) {
+        section.classList.add('is-empty');
         body.innerHTML = `<tr><td colspan="10" class="text-center">No ${group.label} found for this month.</td></tr>`;
         return;
     }
-    body.innerHTML = list.map((e, i) => rowHTML(group.key, e, i + 1)).join('');
+
+    section.classList.remove('is-empty');
+    body.innerHTML = rows.map((e, i) => rowHTML(group.key, e, i + 1)).join('');
 }
 
 async function retrieveData() {
