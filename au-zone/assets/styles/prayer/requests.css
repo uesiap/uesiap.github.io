@@ -107,6 +107,13 @@ table.hpc-table li {
     display: none;
 }
 
+/* Empty section message: hidden on screen, shown only when printing an empty section */
+.print-empty {
+    display: none;
+    font-style: italic;
+    padding: 6px 0;
+}
+
 tr.selected {
     background-color: #e8f0fe;
 }
@@ -190,12 +197,7 @@ footer {
     margin: 20px 0;
 }
 
-/* Print: A4 landscape, title centered at the top, both tables on one page */
-@page {
-    size: A4 landscape;
-    margin: 8mm;
-}
-
+/* Print layout. Paper size (@page) is set in the page HTML, not here. */
 @media print {
     .no-print {
         display: none !important;
@@ -203,7 +205,8 @@ footer {
 
     body {
         background: #fff;
-        font-size: 8pt;
+        font-size: .8rem;
+        line-height: 1.2;
     }
 
     .page-wrap {
@@ -249,14 +252,28 @@ footer {
     }
 
     table.hpc-table {
-        min-width: 0;
         width: 100%;
-        font-size: 7.5pt;
+        min-width: 0;
+        table-layout: fixed;
+        font-size: .8rem;
     }
 
     table.hpc-table th,
     table.hpc-table td {
-        padding: 2px 3px;
+        border: 1px solid #777;
+        padding: .5rem;
+        vertical-align: top;
+        text-align: left;
+    }
+
+    table.hpc-table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    table.hpc-table ul {
+        padding-left: 1rem;
+        margin: 0;
     }
 
     table.hpc-table li {
@@ -265,5 +282,14 @@ footer {
 
     tr.selected {
         background: none;
+    }
+
+    /* Empty section: print the heading and message instead of the table */
+    .section-block.is-empty .table-wrap {
+        display: none;
+    }
+
+    .section-block.is-empty .print-empty {
+        display: block;
     }
 }
