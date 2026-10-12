@@ -119,6 +119,13 @@ table.hpc-table li {
     display: none;
 }
 
+/* Empty section message: hidden on screen, shown only when printing an empty section */
+.print-empty {
+    display: none;
+    font-style: italic;
+    padding: 6px 0;
+}
+
 tr.selected {
     background-color: #e8f0fe;
 }
@@ -202,12 +209,7 @@ footer {
     margin: 20px 0;
 }
 
-/* Print: A4 landscape, title centered at the top, both tables on one page */
-@page {
-    size: A4 landscape;
-    margin: 8mm;
-}
-
+/* Print layout. Paper size (@page) is set in each page's HTML, not here. */
 @media print {
     .no-print {
         display: none !important;
@@ -277,5 +279,14 @@ footer {
 
     tr.selected {
         background: none;
+    }
+
+    /* Empty section: print the heading and message instead of the table */
+    .section-block.is-empty .table-wrap {
+        display: none;
+    }
+
+    .section-block.is-empty .print-empty {
+        display: block;
     }
 }

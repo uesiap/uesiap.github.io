@@ -128,28 +128,32 @@ function dsnrEntries(val) {
 // ---------- Load both tables ----------
 async function loadGroup(group) {
     const body = document.getElementById(group.bodyId);
+    const section = body.closest('.section-block');
     const snapshot = await db.ref(`${BASE_PATH}/${year}/${month}/${group.key}`).once('value');
     const val = snapshot.val() || {};
 
+    let html = '';
+    let count = 0;
+
     if (FORM_TYPE === 'dsnr') {
-        const entries = dsnrEntries(val);
-        if (entries.length === 0) {
-            body.innerHTML = `<tr><td colspan="10" class="text-center">No ${group.label} found for this month.</td></tr>`;
-            return;
-        }
-        body.innerHTML = entries.map((e, i) => dsnrRowHTML(group.key, e, i + 1)).join('');
-        return;
+        const rows = dsnrEntries(val);
+        count = rows.length;
+        html = rows.map((e, i) => dsnrRowHTML(group.key, e, i + 1)).join('');
+    } else {
+        const rows = Object.entries(val);
+        count = rows.length;
+        html = rows.map(([id, d], i) => hpcRowHTML(group.key, id, d, i + 1)).join('');
     }
 
-    // HPC
-    const keys = Object.keys(val);
-    if (keys.length === 0) {
+    // Empty section: on print, show "No submissions" instead of the table
+    if (count === 0) {
+        section.classList.add('is-empty');
         body.innerHTML = `<tr><td colspan="10" class="text-center">No ${group.label} found for this month.</td></tr>`;
         return;
     }
-    body.innerHTML = Object.entries(val)
-        .map(([id, d], i) => hpcRowHTML(group.key, id, d, i + 1))
-        .join('');
+
+    section.classList.remove('is-empty');
+    body.innerHTML = html;
 }
 
 async function retrieveData() {
